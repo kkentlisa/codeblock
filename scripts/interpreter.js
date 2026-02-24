@@ -1,4 +1,4 @@
-const variables = {};
+let variables = {};
 
 function SetVariable(name, value) {
     variables[name] = value;
@@ -159,5 +159,26 @@ function ExecuteBlock(block) {
                 });
             }
 
+    }
+}
+
+function RunProgram(){
+    const startBlock = blocksInWorkSpace.find(b => b.type === "start");
+    if (!startBlock) {
+        // пока просто вывод в консоль
+        console.log("Нет стартового блока!");
+        return;
+    }
+
+    variables = {};
+
+    let currentBlockId = startBlock.child;
+
+    while (currentBlockId) {
+        const currentBlock = blocksInWorkSpace.find(b => b.id === currentBlockId);
+        if (!currentBlock) return;
+
+        ExecuteBlock(currentBlock);
+        currentBlockId = currentBlock.child;
     }
 }

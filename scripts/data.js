@@ -5,15 +5,20 @@ function CreateBlock(type, x, y){
     let data = {};
 
     if (type === "start"){
-        data.childBlocks = [];
+        const existingStart = blocksInWorkSpace.find(b => b.type === "start");
+        if (existingStart){
+            // пока просто вывод в консоль
+            console.log("Стартовый блок уже существует!");
+            return null;
+        }
     }
 
     else if (type === "input"){
-        data.message = "";
+        data.value = "";
     }
 
     else if (type === "print"){
-        data.value = "";
+        data.variable = "";
     }
 
     else if (type === "variableInit"){
