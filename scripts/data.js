@@ -178,4 +178,5 @@ function ResetAllBlocks(){
     blockId = 0;
 
     sessionStorage.removeItem("blocksInWorkSpace");
+    ClearOutputPanel()
 }

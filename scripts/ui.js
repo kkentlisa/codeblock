@@ -55,3 +55,9 @@ function LogToOutputPanel(message){
     messageElement.textContent = message;
     outputPanel.appendChild(messageElement);
 }
+
+function ClearOutputPanel(){
+    const outputPanel = document.querySelector('.outputPanel');
+    outputPanel.innerHTML = '<h3>Консоль вывода</h3>';
+
+}

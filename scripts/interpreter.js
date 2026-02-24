@@ -167,6 +167,8 @@ function ExecuteBlock(block) {
 }
 
 function RunProgram(){
+    ClearOutputPanel();
+
     const startBlock = blocksInWorkSpace.find(b => b.type === "start");
     if (!startBlock) {
         LogToOutputPanel("Нет стартового блока!");
