@@ -41,11 +41,18 @@ function ResetButtonClick(){
     });
 }
 
+function RunButtonClick(){
+    const runButton = document.querySelector('.workSpaceButton[data-type="run"]');
+    runButton.addEventListener("click", RunProgram);
+}
+
+
 window.addEventListener('load', function() {
     LoadBlocksFromStorage();
     renderAllBlocks(blocksInWorkSpace);
     BlockButtonClick();
     ResetButtonClick();
+    RunButtonClick();
 })
 
 function LogToOutputPanel(message){
