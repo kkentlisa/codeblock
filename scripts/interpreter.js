@@ -41,8 +41,7 @@ function EvaluateExpression(block) {
         const rightValue = EvaluateExpression(block.data.right);
 
         if (rightValue === 0) {
-            // пока просто вывод в консоль
-            console.log("Деление на 0!")
+            LogToOutputPanel("Деление на 0!")
             return 0;
         }
 
@@ -54,8 +53,7 @@ function EvaluateExpression(block) {
         const rightValue = EvaluateExpression(block.data.right);
 
         if (rightValue === 0) {
-            // пока просто вывод в консоль
-            console.log("Деление на 0!")
+            LogToOutputPanel("Деление на 0!")
             return 0;
         }
 
@@ -158,6 +156,12 @@ function ExecuteBlock(block) {
                     if (childBlock) ExecuteBlock(childBlock);
                 });
             }
+            break;
+        case "print": {
+            const value = GetVariable(block.data.variable);
+            LogToOutputPanel(String(value));
+            break;
+        }
 
     }
 }
@@ -165,8 +169,7 @@ function ExecuteBlock(block) {
 function RunProgram(){
     const startBlock = blocksInWorkSpace.find(b => b.type === "start");
     if (!startBlock) {
-        // пока просто вывод в консоль
-        console.log("Нет стартового блока!");
+        LogToOutputPanel("Нет стартового блока!");
         return;
     }
 

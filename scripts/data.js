@@ -7,8 +7,7 @@ function CreateBlock(type, x, y){
     if (type === "start"){
         const existingStart = blocksInWorkSpace.find(b => b.type === "start");
         if (existingStart){
-            // пока просто вывод в консоль
-            console.log("Стартовый блок уже существует!");
+            LogToOutputPanel("Стартовый блок уже существует!");
             return null;
         }
     }

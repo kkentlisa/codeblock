@@ -47,3 +47,11 @@ window.addEventListener('load', function() {
     BlockButtonClick();
     ResetButtonClick();
 })
+
+function LogToOutputPanel(message){
+    const outputPanel = document.querySelector('.outputPanel');
+
+    const messageElement = document.createElement('p');
+    messageElement.textContent = message;
+    outputPanel.appendChild(messageElement);
+}
