@@ -1,4 +1,4 @@
-const variables = {};
+let variables = {};
 
 function SetVariable(name, value) {
     variables[name] = value;
@@ -41,8 +41,7 @@ function EvaluateExpression(block) {
         const rightValue = EvaluateExpression(block.data.right);
 
         if (rightValue === 0) {
-            // пока просто вывод в консоль
-            console.log("Деление на 0!")
+            LogToOutputPanel("Деление на 0!")
             return 0;
         }
 
@@ -54,8 +53,7 @@ function EvaluateExpression(block) {
         const rightValue = EvaluateExpression(block.data.right);
 
         if (rightValue === 0) {
-            // пока просто вывод в консоль
-            console.log("Деление на 0!")
+            LogToOutputPanel("Деление на 0!")
             return 0;
         }
 
@@ -158,6 +156,34 @@ function ExecuteBlock(block) {
                     if (childBlock) ExecuteBlock(childBlock);
                 });
             }
+            break;
+        case "print": {
+            const value = GetVariable(block.data.variable);
+            LogToOutputPanel(String(value));
+            break;
+        }
 
+    }
+}
+
+function RunProgram(){
+    ClearOutputPanel();
+
+    const startBlock = blocksInWorkSpace.find(b => b.type === "start");
+    if (!startBlock) {
+        LogToOutputPanel("Нет стартового блока!");
+        return;
+    }
+
+    variables = {};
+
+    let currentBlockId = startBlock.child;
+
+    while (currentBlockId) {
+        const currentBlock = blocksInWorkSpace.find(b => b.id === currentBlockId);
+        if (!currentBlock) return;
+
+        ExecuteBlock(currentBlock);
+        currentBlockId = currentBlock.child;
     }
 }
