@@ -7,12 +7,14 @@
 }
 body {
     font-family: "Comic Sans MS", cursive;
+    height: 100vh;
+    overflow: hidden;
 }
 main{
     display: grid;
     grid-template-rows: auto 1fr;
-    gap: 10px;
     height: 100vh;
+    gap: 10px;
     padding: 10px;
 }
 h1{
@@ -29,22 +31,26 @@ h1 span:not(:first-child):hover {
 .code{
     display: grid;
     width: 100%;
+    height: 100%;
     grid-row: auto;
     grid-template-columns: 25% 1fr;
     grid-auto-rows: 1fr 1fr 1fr 1fr;
     gap: 10px;
+    min-height: 0;
 }
 .blockPanel{
     border: 2px solid dodgerblue;
     grid-row: 1/span 4;
-    height: 656px;
     background-color: rgba(30, 144, 255, 0.15);
     display: flex;
     flex-direction: column;
+    height: 100%;
     overflow-y: scroll;
-
+    scroll-behavior: smooth;
 }
-.blockPanel::-webkit-scrollbar {
+.blockPanel::-webkit-scrollbar,
+.workSpace::-webkit-scrollbar,
+.outputPanel::-webkit-scrollbar {
     width: 0;
 }
 h2{
@@ -61,6 +67,7 @@ h2{
     border-radius: 15px;
     text-align: center;
     font-family: "Comic Sans MS";
+    user-select: none;
 }
 .blockPanelButton[data-type="start"],
 .blockPanelButton[data-type="input"],
@@ -142,6 +149,8 @@ h2{
     grid-row: 1/span 3;
     background-color: rgba(255, 20, 147, 0.1);
     display: flex;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
 }
 .blockWorkSpaceButton{
     position: absolute;
@@ -215,6 +224,12 @@ h2{
     grid-row: 4/span 1;
     background-color: rgba(50, 205, 50, 0.15);
     color: white;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    padding: 0 5px;
+}
+.outputPanel p {
+    background-color: transparent !important;;
 }
 h3{
     text-align: left;
