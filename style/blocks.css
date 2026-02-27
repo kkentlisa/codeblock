@@ -43,16 +43,12 @@
     border: 2px solid #cd00cd;
     background-color: plum;
 }
-.block:hover{
-    border-width: 4px;
-    transform: translateY(-2px);
-}
 .block-container{
     position: absolute;
     background-color: transparent;
     display: grid;
     place-items: center;
-    user-select: auto;
+    user-select: none;
 }
 .delete-btn{
     position: absolute;
@@ -70,6 +66,5 @@
     cursor: pointer;
 }
 .block-container:hover .block {
-    border-width: 4px;
-    transform: translateY(-2px);
+    border-width: 3px;
 }
