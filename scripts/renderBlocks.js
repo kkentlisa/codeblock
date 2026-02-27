@@ -45,7 +45,7 @@ function renderBlock(blockData) {
         input.type = 'text';
         input.className = 'blocks-input';
         input.value = blockData.data.message || '';
-        input.placeholder = 'Текст для пользователя';
+        input.placeholder = 'введите переменную';
 
         input.addEventListener('input', function(e) {
             blockData.data.message = e.target.value;
@@ -62,7 +62,7 @@ function renderBlock(blockData) {
         nameInput.type = 'text';
         nameInput.className = 'blocks-input';
         nameInput.value = blockData.data.name || '';
-        nameInput.placeholder = 'Имя переменной';
+        nameInput.placeholder = 'имя переменной';
 
         nameInput.addEventListener('input', function(e) {
             blockData.data.name = e.target.value;
@@ -79,11 +79,11 @@ function renderBlock(blockData) {
         const valueInput = document.createElement('input');
         valueInput.type = 'text';
         valueInput.className = 'blocks-input';
-        valueInput.value = blockData.data.value !== null ? blockData.data.value : '';
-        valueInput.placeholder = 'Значение переменной';
+        valueInput.variable = blockData.data.variable !== null ? blockData.data.variable : '';
+        valueInput.placeholder = 'имя переменной';
 
         valueInput.addEventListener('input', function(e) {
-            blockData.data.value = e.target.value;
+            blockData.data.variable = e.target.variable;
             SaveBlocksToStorage();
         });
 
@@ -92,6 +92,24 @@ function renderBlock(blockData) {
         });
 
         block.appendChild(valueInput);
+    }
+    else if (blockData.type === 'print') {
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.className = 'blocks-input';
+        nameInput.variable = blockData.data.name || '';
+        nameInput.placeholder = 'имя переменной';
+
+        nameInput.addEventListener('input', function(e) {
+            blockData.data.name = e.target.variable;
+            SaveBlocksToStorage();
+        });
+
+        nameInput.addEventListener('mousedown', function(e) {
+            e.stopPropagation();
+        });
+
+        block.appendChild(nameInput);
     }
 
     const deleteBtn = document.createElement('span');

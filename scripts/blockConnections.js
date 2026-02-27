@@ -66,10 +66,29 @@ function connectBlocks(parentId, childId) {
 
     if (!canConnect(parent, child)) return;
 
+    if (child.parent !== null) {
+        const oldParentIndex = blocksInWorkSpace.findIndex(b => b.id === child.parent);
+        if (oldParentIndex !== -1) {
+            blocksInWorkSpace[oldParentIndex].child = null;
+        }
+    }
+
     parent.child = childId;
     child.parent = parentId;
 
-    updateChildPosition(parent, child);
+    const childGroup = getBlockGroup(childId, 'down');
+
+    const parentElement = document.querySelector(`[data-id="${parent.id}"]`);
+    if (!parentElement) return;
+
+    const parentRect = parentElement.getBoundingClientRect();
+
+    const deltaY = (parent.position.y + parentRect.height - 10) - child.position.y;
+
+    childGroup.forEach(block => {
+        block.position.y += deltaY;
+        block.position.x = parent.position.x; // Выравниваем по X
+    })
     SaveBlocksToStorage();
     renderAllBlocks(blocksInWorkSpace);
 }
@@ -82,7 +101,7 @@ function updateChildPosition(parent, child) {
         const parentRect = parentElement.getBoundingClientRect();
 
         child.position.x = parent.position.x;
-        child.position.y = parent.position.y + parentRect.height - 20;
+        child.position.y = parent.position.y + parentRect.height ;
 
         childElement.style.left = child.position.x + 'px';
         childElement.style.top = child.position.y + 'px';
