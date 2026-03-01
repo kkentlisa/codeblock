@@ -1,52 +1,3 @@
-function setupDraggable(element) {
-    if (typeof interact === 'undefined') return;
-
-    let isDragging = false;
-
-    interact(element).draggable({
-        modifiers: [
-            interact.modifiers.restrictRect({
-                restriction: 'parent',
-                endOnly: true
-            })
-        ],
-        onstart: function(event) {
-            const blockId = parseInt(event.target.dataset.id);
-            const block = blocksInWorkSpace.find(b => b.id === blockId);
-
-            if (!block) return;
-
-            isDragging = true;
-
-            if (block.parent !== null) {
-                disconnectBlock(blockId);
-            }
-        },
-
-        onmove: function(event) {
-            if (!isDragging) return;
-
-            const target = event.target;
-            const blockId = parseInt(target.dataset.id);
-
-            moveBlockGroup(blockId, event.dx, event.dy, 'all');
-            updateAllBlockPositions();
-            SaveBlocksToStorage();
-        },
-
-        onend: function(event) {
-            if (!isDragging) {
-                isDragging = false;
-                return;
-            }
-
-            isDragging = false;
-
-            const blockId = parseInt(event.target.dataset.id);
-            checkForConnection(blockId);
-        }
-    });
-}
 function canConnect(parentBlock, childBlock) {
     if (childBlock.type === 'start') return false;
     if (parentBlock.type === 'print') return false;
@@ -72,6 +23,12 @@ function connectBlocks(parentId, childId) {
             blocksInWorkSpace[oldParentIndex].child = null;
         }
     }
+    if (parent.child !== null) {
+        const oldChildIndex=blocksInWorkSpace.findIndex(b => b.id === parent.child);
+        if (oldChildIndex !== -1) {
+            blocksInWorkSpace[oldChildIndex].parent = null;
+        }
+    }
 
     parent.child = childId;
     child.parent = parentId;
@@ -83,29 +40,14 @@ function connectBlocks(parentId, childId) {
 
     const parentRect = parentElement.getBoundingClientRect();
 
-    const deltaY = (parent.position.y + parentRect.height - 10) - child.position.y;
+    const dy = (parent.position.y + parentRect.height - 12) - child.position.y;
 
     childGroup.forEach(block => {
-        block.position.y += deltaY;
-        block.position.x = parent.position.x; // Выравниваем по X
+        block.position.y += dy;
+        block.position.x = parent.position.x;
     })
     SaveBlocksToStorage();
     renderAllBlocks(blocksInWorkSpace);
-}
-
-function updateChildPosition(parent, child) {
-    const parentElement = document.querySelector(`[data-id="${parent.id}"]`);
-    const childElement = document.querySelector(`[data-id="${child.id}"]`);
-
-    if (parentElement && childElement) {
-        const parentRect = parentElement.getBoundingClientRect();
-
-        child.position.x = parent.position.x;
-        child.position.y = parent.position.y + parentRect.height ;
-
-        childElement.style.left = child.position.x + 'px';
-        childElement.style.top = child.position.y + 'px';
-    }
 }
 
 function disconnectBlock(blockId) {
@@ -124,15 +66,6 @@ function disconnectBlock(blockId) {
 
     SaveBlocksToStorage();
     renderAllBlocks(blocksInWorkSpace);
-}
-ß
-function moveBlockGroup(blockId, deltaX, deltaY, direction = 'all') {
-    const groupBlocks = getBlockGroup(blockId, direction);
-
-    groupBlocks.forEach(block => {
-        block.position.x += deltaX;
-        block.position.y += deltaY;
-    });
 }
 
 function checkForConnection(movedBlockId) {
@@ -156,28 +89,16 @@ function checkForConnection(movedBlockId) {
         const horizontalProximity = Math.abs(movedRect.left - otherRect.left);
 
         const CONNECTION_THRESHOLD = 20;
-        if (verticalProximity < CONNECTION_THRESHOLD &&
-            horizontalProximity < CONNECTION_THRESHOLD) {
+        if (verticalProximity < CONNECTION_THRESHOLD && horizontalProximity < CONNECTION_THRESHOLD) {
             if (canConnect(otherBlock, movedBlock)) {
                 connectBlocks(otherBlock.id, movedBlock.id);
             }
         }
 
-        if (Math.abs(movedRect.bottom - otherRect.top) < CONNECTION_THRESHOLD &&
-            Math.abs(movedRect.left - otherRect.left) < CONNECTION_THRESHOLD) {
+        if (Math.abs(movedRect.bottom - otherRect.top) < CONNECTION_THRESHOLD && Math.abs(movedRect.left - otherRect.left) < CONNECTION_THRESHOLD) {
             if (canConnect(movedBlock, otherBlock)) {
                 connectBlocks(movedBlock.id, otherBlock.id);
             }
-        }
-    });
-}
-
-function updateAllBlockPositions() {
-    blocksInWorkSpace.forEach(block => {
-        const element = document.querySelector(`[data-id="${block.id}"]`);
-        if (element) {
-            element.style.left = block.position.x + 'px';
-            element.style.top = block.position.y + 'px';
         }
     });
 }
@@ -196,6 +117,7 @@ function getBlockGroup(blockId, direction = 'all') {
     }
 
     group.push(block);
+
     if (direction === 'all' || direction === 'down') {
         let current = block;
         while (current.child !== null) {
