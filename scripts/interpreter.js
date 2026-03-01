@@ -130,7 +130,7 @@ function ExecuteBlock(block) {
         case "if":
             if (EvaluateCondition(block.data.condition)) {
                 block.data.thenBlocks.forEach(id =>{
-                    const childBlock = blocksInWorkSpace.find(b => b.id === id);
+                    const childBlock = GetBlockById(id);
                     if (childBlock) ExecuteBlock(childBlock);
                 });
             }
@@ -138,13 +138,13 @@ function ExecuteBlock(block) {
         case "ifElse":
             if (EvaluateCondition(block.data.condition)) {
                 block.data.thenBlocks.forEach(id =>{
-                    const childBlock = blocksInWorkSpace.find(b => b.id === id);
+                    const childBlock = GetBlockById(id);
                     if (childBlock) ExecuteBlock(childBlock);
                 });
             }
             else {
                 block.data.elseBlocks.forEach(id =>{
-                    const childBlock = blocksInWorkSpace.find(b => b.id === id);
+                    const childBlock = GetBlockById(id);
                     if (childBlock) ExecuteBlock(childBlock);
                 });
             }
@@ -152,7 +152,7 @@ function ExecuteBlock(block) {
         case "while":
             while (EvaluateCondition(block.data.condition)){
                 block.data.bodyBlocks.forEach(id =>{
-                    const childBlock = blocksInWorkSpace.find(b => b.id === id);
+                    const childBlock = GetBlockById(id);
                     if (childBlock) ExecuteBlock(childBlock);
                 });
             }
@@ -180,7 +180,7 @@ function RunProgram(){
     let currentBlockId = startBlock.child;
 
     while (currentBlockId) {
-        const currentBlock = blocksInWorkSpace.find(b => b.id === currentBlockId);
+        const currentBlock = GetBlockById(currentBlockId);
         if (!currentBlock) return;
 
         ExecuteBlock(currentBlock);
