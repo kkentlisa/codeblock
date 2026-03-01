@@ -1,6 +1,33 @@
 let blocksInWorkSpace = [];
 let blockId = 0;
 
+const VALUE_CONTAINERS = ['assignValue','add', 'subtract', 'multiply', 'div',
+'mod', 'if', 'ifElse', 'while', 'gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not'];
+const BODY_CONTAINERS = ['if', 'ifElse', 'while'];
+const VALUE_BLOCKS = ['input', 'add', 'subtract', 'multiply', 'div', 'mod',
+'gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not'];
+
+const BLOCK_SLOTS = {
+    'assignValue': ['value'],
+    'add': ['left', 'right'],
+    'subtract': ['left', 'right'],
+    'multiply': ['left', 'right'],
+    'div': ['left', 'right'],
+    'mod': ['left', 'right'],
+    'if': ['condition'],
+    'ifElse': ['condition'],
+    'while': ['condition'],
+    'gt': ['left', 'right'],
+    'lt': ['left', 'right'],
+    'eq': ['left', 'right'],
+    'neq': ['left', 'right'],
+    'gte': ['left', 'right'],
+    'lte': ['left', 'right'],
+    'and': ['left', 'right'],
+    'or': ['left', 'right'],
+    'not': ['operand']
+}
+
 function CreateBlock(type, x, y){
     let data = {};
 
@@ -150,7 +177,20 @@ function CreateBlock(type, x, y){
     return newBlock;
 }
 
+function GetBlockById(id){
+    return blocksInWorkSpace.find(block => block.id === id);
+}
+
 function DeleteBlock(id){
+    const previousBlock = blocksInWorkSpace.find(block => block.child === id);
+    if (previousBlock) {
+        previousBlock.child = null;
+    }
+    const nextBlock = blocksInWorkSpace.find(block => block.parent === id);
+    if (nextBlock) {
+        nextBlock.parent = null;
+    }
+
     const index = blocksInWorkSpace.findIndex(block => block.id === id);
     if (index !== -1){
         blocksInWorkSpace.splice(index, 1);
