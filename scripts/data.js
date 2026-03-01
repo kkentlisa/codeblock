@@ -151,6 +151,15 @@ function CreateBlock(type, x, y){
 }
 
 function DeleteBlock(id){
+    const previousBlock = blocksInWorkSpace.find(block => block.child === id);
+    if (previousBlock) {
+        previousBlock.child = null;
+    }
+    const nextBlock = blocksInWorkSpace.find(block => block.parent === id);
+    if (nextBlock) {
+        nextBlock.parent = null;
+    }
+
     const index = blocksInWorkSpace.findIndex(block => block.id === id);
     if (index !== -1){
         blocksInWorkSpace.splice(index, 1);
