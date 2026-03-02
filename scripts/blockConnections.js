@@ -7,26 +7,23 @@ function canConnect(parentBlock, childBlock) {
 }
 
 function connectBlocks(parentId, childId) {
-    const parentIndex = GetBlockById(parentId);
-    const childIndex = GetBlockById(childId);
+    const parent = GetBlockById(parentId);
+    const child = GetBlockById(childId);
 
-    if (parentIndex === -1 || childIndex === -1) return;
-
-    const parent = blocksInWorkSpace[parentIndex];
-    const child = blocksInWorkSpace[childIndex];
+    if (!parent || !child) return;
 
     if (!canConnect(parent, child)) return;
 
     if (child.parent !== null) {
-        const oldParentIndex = GetBlockById(child.parent);
-        if (oldParentIndex !== -1) {
-            blocksInWorkSpace[oldParentIndex].child = null;
+        const oldParent = GetBlockById(child.parent);
+        if (oldParent) {
+            oldParent.child = null;
         }
     }
     if (parent.child !== null) {
-        const oldChildIndex=GetBlockById(parent.child);
-        if (oldChildIndex !== -1) {
-            blocksInWorkSpace[oldChildIndex].parent = null;
+        const oldChild=GetBlockById(parent.child);
+        if (oldChild ) {
+            oldChild.parent = null;
         }
     }
 
@@ -51,15 +48,13 @@ function connectBlocks(parentId, childId) {
 }
 
 function disconnectBlock(blockId) {
-    const blockIndex = GetBlockById(blockId);
-    if (blockIndex === -1) return;
-
-    const block = blocksInWorkSpace[blockIndex];
+    const block = GetBlockById(blockId);
+    if (!block) return;
 
     if (block.parent !== null) {
-        const parentIndex = GetBlockById(block.parent);
-        if (parentIndex !== -1) {
-            blocksInWorkSpace[parentIndex].child = null;
+        const parent = GetBlockById(block.parent);
+        if (parent) {
+            parent.child = null;
         }
         block.parent = null;
     }
