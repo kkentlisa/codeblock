@@ -10,7 +10,7 @@ function setupDraggable(element) {
         ],
         onstart: function(e) {
             const blockId = parseInt(e.target.dataset.id);
-            const block = blocksInWorkSpace.find(b => b.id === blockId);
+            const block = GetBlockById(id);
 
             if (!block) return;
 
@@ -41,7 +41,8 @@ function setupDraggable(element) {
             isDragging = false;
 
             const blockId = parseInt(e.target.dataset.id);
-            checkForConnection(blockId);
+            checkForConnection(blockId, e);
+
         }
     });
 }

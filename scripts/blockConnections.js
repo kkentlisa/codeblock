@@ -7,8 +7,8 @@ function canConnect(parentBlock, childBlock) {
 }
 
 function connectBlocks(parentId, childId) {
-    const parentIndex = blocksInWorkSpace.findIndex(b => b.id === parentId);
-    const childIndex = blocksInWorkSpace.findIndex(b => b.id === childId);
+    const parentIndex = GetBlockById(parentId);
+    const childIndex = GetBlockById(childId);
 
     if (parentIndex === -1 || childIndex === -1) return;
 
@@ -18,13 +18,13 @@ function connectBlocks(parentId, childId) {
     if (!canConnect(parent, child)) return;
 
     if (child.parent !== null) {
-        const oldParentIndex = blocksInWorkSpace.findIndex(b => b.id === child.parent);
+        const oldParentIndex = GetBlockById(child.parent);
         if (oldParentIndex !== -1) {
             blocksInWorkSpace[oldParentIndex].child = null;
         }
     }
     if (parent.child !== null) {
-        const oldChildIndex=blocksInWorkSpace.findIndex(b => b.id === parent.child);
+        const oldChildIndex=GetBlockById(parent.child);
         if (oldChildIndex !== -1) {
             blocksInWorkSpace[oldChildIndex].parent = null;
         }
@@ -51,13 +51,13 @@ function connectBlocks(parentId, childId) {
 }
 
 function disconnectBlock(blockId) {
-    const blockIndex = blocksInWorkSpace.findIndex(b => b.id === blockId);
+    const blockIndex = GetBlockById(blockId);
     if (blockIndex === -1) return;
 
     const block = blocksInWorkSpace[blockIndex];
 
     if (block.parent !== null) {
-        const parentIndex = blocksInWorkSpace.findIndex(b => b.id === block.parent);
+        const parentIndex = GetBlockById(block.parent);
         if (parentIndex !== -1) {
             blocksInWorkSpace[parentIndex].child = null;
         }
@@ -68,8 +68,8 @@ function disconnectBlock(blockId) {
     renderAllBlocks(blocksInWorkSpace);
 }
 
-function checkForConnection(movedBlockId) {
-    const movedBlock = blocksInWorkSpace.find(b => b.id === movedBlockId);
+function checkForConnection(movedBlockId, e) {
+    const movedBlock = GetBlockById(movedBlockId);
     if (!movedBlock) return;
 
     const movedElement = document.querySelector(`[data-id="${movedBlockId}"]`);
@@ -77,8 +77,17 @@ function checkForConnection(movedBlockId) {
 
     const movedRect = movedElement.getBoundingClientRect();
 
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+
     blocksInWorkSpace.forEach(otherBlock => {
         if (otherBlock.id === movedBlockId) return;
+
+        const slotName = findSlotByPosition(otherBlock.id, mouseX, mouseY);
+        if (slotName && isSlotFree(otherBlock.id, slotName) && VALUE_BLOCKS.includes(movedBlock.type)) {
+            connectToSlot(otherBlock.id, movedBlock.id, slotName);
+            return;
+        }
 
         const otherElement = document.querySelector(`[data-id="${otherBlock.id}"]`);
         if (!otherElement) return;
@@ -105,13 +114,13 @@ function checkForConnection(movedBlockId) {
 
 function getBlockGroup(blockId, direction = 'all') {
     const group = [];
-    const block = blocksInWorkSpace.find(b => b.id === blockId);
+    const block = GetBlockById(blockId);
     if (!block) return group;
 
     if (direction === 'all' || direction === 'up') {
         let current = block;
         while (current.parent !== null) {
-            current = blocksInWorkSpace.find(b => b.id === current.parent);
+            current =GetBlockById(current.parent);
             if (current) group.push(current);
         }
     }
@@ -121,10 +130,57 @@ function getBlockGroup(blockId, direction = 'all') {
     if (direction === 'all' || direction === 'down') {
         let current = block;
         while (current.child !== null) {
-            current = blocksInWorkSpace.find(b => b.id === current.child);
+            current = GetBlockById(current.child);
             if (current) group.push(current);
         }
     }
 
     return group;
+}
+
+function findSlotByPosition(containerId, mouseX, mouseY) {
+    const container=GetBlockById(containerId);
+    if(!container) return null;
+
+    const containerElement=document.querySelector(`[data-id="${containerId}"]`);
+    if (!containerElement) return null;
+
+    const rect=containerElement.getBoundingClientRect();
+    const slots = BLOCK_SLOTS[container.type] || []
+
+    if (slots.includes('left')){
+        const leftZone ={
+            x1: rect.left - 40,
+            x2: rect.left,
+            y1: rect.top - 20,
+            y2: rect.bottom + 20,
+        };
+        if(mouseX>=leftZone.x1 && mouseX<=leftZone.x2 && mouseY>=leftZone.y1 && mouseY<=leftZone.y2){
+            return 'left';
+        }
+    }
+    if (slots.includes('right')){
+        const rightZone ={
+            x1: rect.right,
+            x2: rect.right + 40,
+            y1: rect.top - 20,
+            y2: rect.bottom + 20,
+        };
+        if(mouseX>=rightZone.x1 && mouseX<=rightZone.x2 && mouseY>=rightZone.y1 && mouseY<=rightZone.y2){
+            return 'right';
+        }
+    }
+
+    const topSlots = slots.filter(s=> ['condition', 'value', 'operand'].includes(s));
+    if(topSlots.length > 0) {
+        const topZone = {
+            x1: rect.left - 20,
+            x2: rect.right + 20,
+            y1: rect.top - 40,
+            y2: rect.top
+        };
+        if (mouseX >= topZone.x1 && mouseX <= topZone.x2 && mouseY >= topZone.y1 && mouseY <= topZone.y2) {
+            return topSlots[0];
+        }
+    }
 }
