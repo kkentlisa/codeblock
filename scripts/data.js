@@ -279,3 +279,18 @@ function IsSlotFree(parentId, slotName){
     }
     return parentBlock.data[slotName] === null;
 }
+
+function GetNestingLevel(blockId){
+        const block = GetBlockById(blockId);
+        if (!block){
+            return;
+        }
+        let level = 0;
+        let current = block;
+
+        while(current.parent !== null){
+            current = GetBlockById(current.parent);
+            level++;
+        }
+        return level;
+}
