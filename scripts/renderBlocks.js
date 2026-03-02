@@ -14,13 +14,11 @@ function renderBlock(blockData) {
     block.classList.add(`block-${blockData.type}`);
     block.dataset.id = blockData.id;
 
-    block.innerHTML = '';
-
-    const typeNames = {
+    window.typeNames = {
         'start': 'Старт',
         'input': 'Ввод',
         'print': 'Вывод',
-        'variableInit': 'Объявить переменную',
+        'variableInit': 'Объявление переменной',
         'assignValue': 'Присваивание',
         'if': 'Условие if',
         'if-else': 'Условие if-else',
@@ -33,18 +31,21 @@ function renderBlock(blockData) {
         'gt': 'Больше',
         'lt': 'Меньше',
         'eq': 'Равно',
+        'neq': 'Не равно',
+        'gte': 'Больше или равно',
+        'lte': 'Меньше или равно',
         'and': 'И',
         'or': 'ИЛИ',
         'not': 'НЕ',
     };
 
-    block.textContent = typeNames[blockData.type] || blockData.type;
+    block.textContent = typeNames[blockData.type];
 
     if (blockData.type === 'input') {
         const input = document.createElement('input');
         input.type = 'text';
         input.className = 'blocks-input';
-        input.value = blockData.data.message || '';
+        input.value = blockData.data.message;
         input.placeholder = 'введите переменную';
 
         input.addEventListener('input', function(e) {
@@ -61,7 +62,7 @@ function renderBlock(blockData) {
         const nameInput = document.createElement('input');
         nameInput.type = 'text';
         nameInput.className = 'blocks-input';
-        nameInput.value = blockData.data.name || '';
+        nameInput.value = blockData.data.name;
         nameInput.placeholder = 'имя переменной';
 
         nameInput.addEventListener('input', function(e) {
@@ -79,11 +80,11 @@ function renderBlock(blockData) {
         const valueInput = document.createElement('input');
         valueInput.type = 'text';
         valueInput.className = 'blocks-input';
-        valueInput.variable = blockData.data.variable !== null ? blockData.data.variable : '';
+        valueInput.value = blockData.data.variable;
         valueInput.placeholder = 'имя переменной';
 
         valueInput.addEventListener('input', function(e) {
-            blockData.data.variable = e.target.variable;
+            blockData.data.variable = e.target.value;
             SaveBlocksToStorage();
         });
 
@@ -97,11 +98,11 @@ function renderBlock(blockData) {
         const nameInput = document.createElement('input');
         nameInput.type = 'text';
         nameInput.className = 'blocks-input';
-        nameInput.variable = blockData.data.name || '';
+        nameInput.value = blockData.data.name;
         nameInput.placeholder = 'имя переменной';
 
         nameInput.addEventListener('input', function(e) {
-            blockData.data.name = e.target.variable;
+            blockData.data.name = e.target.value;
             SaveBlocksToStorage();
         });
 
@@ -114,7 +115,7 @@ function renderBlock(blockData) {
 
     const deleteBtn = document.createElement('span');
     deleteBtn.className = 'delete-btn';
-    deleteBtn.textContent = '✖';
+    deleteBtn.textContent = '⛌';
 
     container.appendChild(deleteBtn);
     container.appendChild(block);
