@@ -271,3 +271,46 @@ function RemoveFromBody(parentId, childId){
     childBlock.parent = null;
     SaveBlocksToStorage();
 }
+
+function IsSlotFree(parentId, slotName){
+    const parentBlock = GetBlockById(parentId);
+    if (!parentBlock){
+        return false;
+    }
+    return parentBlock.data[slotName] === null;
+}
+
+function GetNestingLevel(blockId){
+        const block = GetBlockById(blockId);
+        if (!block){
+            return;
+        }
+        let level = 0;
+        let current = block;
+
+        while(current.parent !== null){
+            current = GetBlockById(current.parent);
+            level++;
+        }
+        return level;
+}
+
+function DisconnectFromSlot(blockId){
+    const block = GetBlockById(blockId);
+    if (!block || !block.parent){
+        return;
+    }
+    const parentBlock = GetBlockById(block.parent);
+    if (!parentBlock){
+        return
+    }
+
+    for (let slotName in parentBlock.data){
+        if (parentBlock.data[slotName]?.id === block.id){
+            parentBlock.data[slotName] = null;
+            block.parent = null;
+            SaveBlocksToStorage();
+            return;
+        }
+    }
+}
