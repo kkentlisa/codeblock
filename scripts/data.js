@@ -220,3 +220,54 @@ function ResetAllBlocks(){
     sessionStorage.removeItem("blocksInWorkSpace");
     ClearOutputPanel()
 }
+
+function AddToBody(parentId, childId){
+    const parentBlock = GetBlockById(parentId);
+    const childBlock = GetBlockById(childId);
+    if (!parentBlock || !childBlock){
+        return;
+    }
+    if (parentBlock.type === "if"){
+        parentBlock.data.thenBlocks.push(childId);
+    }
+    else if (parentBlock.type === "ifElse"){
+        parentBlock.data.thenBlocks.push(childId);
+    }
+    else if (parentBlock.type === "while"){
+        parentBlock.data.bodyBlocks.push(childId);
+    }
+    childBlock.parent = parentId;
+    SaveBlocksToStorage();
+}
+
+function RemoveFromBody(parentId, childId){
+    const parentBlock = GetBlockById(parentId);
+    const childBlock = GetBlockById(childId);
+    if (!parentBlock || !childBlock){
+        return;
+    }
+    if (parentBlock.type === "if"){
+        const index = parentBlock.data.thenBlocks.indexOf(childId);
+        if (index !== -1){
+            parentBlock.data.thenBlocks.splice(index, 1);
+        }
+    }
+    else if (parentBlock.type === "ifElse"){
+        const thenIndex = parentBlock.data.thenBlocks.indexOf(childId);
+        if (thenIndex !== -1){
+            parentBlock.data.thenBlocks.splice(thenIndex, 1);
+        }
+        const elseIndex = parentBlock.data.elseBlocks.indexOf(childId);
+        if (elseIndex !== -1){
+            parentBlock.data.elseBlocks.splice(elseIndex, 1);
+        }
+    }
+    else if (parentBlock.type === "while"){
+        const index = parentBlock.data.bodyBlocks.indexOf(childId);
+        if (index !== -1) {
+            parentBlock.data.bodyBlocks.splice(index, 1);
+        }
+    }
+    childBlock.parent = null;
+    SaveBlocksToStorage();
+}
