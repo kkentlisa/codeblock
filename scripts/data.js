@@ -271,3 +271,11 @@ function RemoveFromBody(parentId, childId){
     childBlock.parent = null;
     SaveBlocksToStorage();
 }
+
+function IsSlotFree(parentId, slotName){
+    const parentBlock = GetBlockById(parentId);
+    if (!parentBlock){
+        return false;
+    }
+    return parentBlock.data[slotName] === null;
+}
