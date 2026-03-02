@@ -1,5 +1,9 @@
 let variables = {};
 
+function GetBlockName(block) {
+    return window.typeNames?.[block.type];
+}
+
 function SetVariable(name, value) {
     variables[name] = value;
 }
@@ -10,14 +14,14 @@ function GetVariable(name) {
 
 function validateOperands(block){
     if (!block.data.left || !block.data.right) {
-        LogToOutputPanel(`Ошибка в блоке ${block.type}: не все операнды заполнены`);
+        LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не все операнды заполнены`);
         throw new Error(`Не все операнды заполнены`);
     }
 }
 
 function validateCondition(block){
     if (!block.data.condition) {
-        LogToOutputPanel(`Ошибка в блоке ${block.type}: не заполнено условие`);
+        LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не заполнено условие`);
         throw new Error(`Не заполнено условие`);
     }
 }
@@ -28,7 +32,7 @@ function EvaluateExpression(block) {
         if (isNaN(value)) {
             const variableValue =  GetVariable(value);
             if (variableValue === undefined){
-                LogToOutputPanel(`Ошибка в блоке ${block.type}: переменная "${value}" не найдена`);
+                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: переменная "${value}" не найдена`);
                 throw new Error(`Переменная "${value}" не найдена`);
             }
             return variableValue;
@@ -64,7 +68,7 @@ function EvaluateExpression(block) {
         const rightValue = EvaluateExpression(block.data.right);
 
         if (rightValue === 0) {
-            LogToOutputPanel(`Ошибка в блоке ${block.type}: деление на 0`);
+            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: деление на 0`);
             throw new Error(`Деление на 0`);
         }
 
@@ -77,7 +81,7 @@ function EvaluateExpression(block) {
         const rightValue = EvaluateExpression(block.data.right);
 
         if (rightValue === 0) {
-            LogToOutputPanel(`Ошибка в блоке ${block.type}: деление на 0`);
+            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: деление на 0`);
             throw new Error(`Деление на 0`);
         }
 
@@ -144,7 +148,7 @@ function EvaluateCondition(block) {
 
     else if (block.type === "not") {
         if (!block.data.operand) {
-            LogToOutputPanel(`Ошибка в блоке ${block.type}: операнд не заполнен`);
+            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: операнд не заполнен`);
             throw new Error(`Операнд не заполнен`);
         }
         const operandValue = EvaluateCondition(block.data.operand);
@@ -161,7 +165,7 @@ function ExecuteBlock(block) {
             break;
         case "assignValue":
             if (!block.data.value) {
-                LogToOutputPanel(`Ошибка в блоке ${block.type}: не заполнено значение для присваивания`);
+                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не заполнено значение для присваивания`);
                 throw new Error(`Не заполнено значение для присваивания`);
             }
             const value = EvaluateExpression(block.data.value);
@@ -203,7 +207,7 @@ function ExecuteBlock(block) {
         case "print": {
             const value = GetVariable(block.data.variable);
             if (value === undefined){
-                LogToOutputPanel(`Ошибка в блоке ${block.type}: переменная "${block.data.variable}" не найдена`);
+                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: переменная "${block.data.variable}" не найдена`);
                 throw new Error(`Переменная "${block.data.variable}" не найдена`);
             }
             else {
