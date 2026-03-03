@@ -1,4 +1,6 @@
-.blocks-input{
+.blocks-input,
+.slot-left,
+.slot-right{
     background-color: white;
     border: 1px solid #1a1a1a;
     border-radius: 15px;
@@ -10,4 +12,17 @@
 }
 .blocks-input:hover{
     border-width: 2px;
+}
+.slot-left{
+    position: absolute;
+    left: -10px;
+    top: -10px;
+
+}
+.slot-right{
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    padding: 10px;
+    width: min(30px);
 }

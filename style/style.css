@@ -96,7 +96,10 @@ h2{
 }
 .blockPanelButton[data-type="gt"],
 .blockPanelButton[data-type="lt"],
-.blockPanelButton[data-type="eq"]{
+.blockPanelButton[data-type="eq"],
+.blockPanelButton[data-type="neq"],
+.blockPanelButton[data-type="gte"],
+.blockPanelButton[data-type="lte"]{
     background-color: lightblue;
     border: 3px solid dodgerblue;
 }
@@ -134,7 +137,10 @@ h2{
 }
 .blockPanelButton:hover[data-type="gt"],
 .blockPanelButton:hover[data-type="lt"],
-.blockPanelButton:hover[data-type="eq"]{
+.blockPanelButton:hover[data-type="eq"],
+.blockPanelButton:hover[data-type="neq"],
+.blockPanelButton:hover[data-type="gte"],
+.blockPanelButton:hover[data-type="lte"]{
     background-color: dodgerblue;
 }
 .blockPanelButton:hover[data-type="and"],

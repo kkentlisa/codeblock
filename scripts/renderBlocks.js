@@ -1,29 +1,29 @@
 const workspace = document.querySelector('.workSpace');
 
-window.typeNames = {
-    'start': 'Старт',
-    'input': 'Ввод',
-    'print': 'Вывод',
-    'variableInit': 'Объявление переменной',
-    'assignValue': 'Присваивание',
-    'if': 'Условие if',
-    'if-else': 'Условие if-else',
-    'while': 'Цикл while',
-    'add': 'Сложение',
-    'subtract': 'Вычитание',
-    'multiply': 'Умножение',
-    'div': 'Деление',
-    'mod': 'Остаток',
-    'gt': 'Больше',
-    'lt': 'Меньше',
-    'eq': 'Равно',
-    'neq': 'Не равно',
-    'gte': 'Больше или равно',
-    'lte': 'Меньше или равно',
-    'and': 'И',
-    'or': 'ИЛИ',
-    'not': 'НЕ',
-};
+    window.typeNames = {
+        'start': 'Старт',
+        'input': 'Ввод',
+        'print': 'Вывод',
+        'variableInit': 'Объявление переменной',
+        'assignValue': 'Присваивание',
+        'if': 'Условие if',
+        'if-else': 'Условие if-else',
+        'while': 'Цикл while',
+        'add': '+',
+        'subtract': '-',
+        'multiply': '*',
+        'div': '/',
+        'mod': 'Остаток',
+        'gt': '>',
+        'lt': '<',
+        'eq': '=',
+        'neq': '≠',
+        'gte': '≥',
+        'lte': '≤',
+        'and': 'И',
+        'or': 'ИЛИ',
+        'not': 'НЕ',
+    };
 
 function renderBlock(blockData) {
     const container = document.createElement('div');
@@ -40,6 +40,18 @@ function renderBlock(blockData) {
     block.dataset.id = blockData.id;
 
     block.textContent = typeNames[blockData.type];
+
+    if (['add', 'subtract', 'multiply', 'div', 'gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or'].includes(blockData.type)){
+        const leftSlot = document.createElement('div');
+        leftSlot.className = 'slot-left';
+        block.appendChild(leftSlot);
+
+        block.textContent = typeNames[blockData.type];
+
+        const rightSlot = document.createElement('div');
+        rightSlot.className = 'slot-right';
+        block.appendChild(rightSlot);
+    }
 
     if (blockData.type === 'input') {
         const input = document.createElement('input');

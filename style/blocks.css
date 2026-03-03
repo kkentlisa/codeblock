@@ -1,5 +1,6 @@
 .block{
     position: relative;
+    display: inline-block;
     border-radius: 10px;
     padding: 2px 5px;
     margin: 5px;
@@ -9,7 +10,7 @@
 .block-start,
 .block-input,
 .block-print{
-    border: 3px solid #ff033e;
+    border: 2px solid #ff033e;
     background-color: lightcoral;
 }
 .block-variableInit,
@@ -33,9 +34,13 @@
 }
 .block-gt,
 .block-lt,
-.block-eq{
+.block-eq,
+.block-neq,
+.block-gte,
+.block-lte{
     border: 2px solid dodgerblue;
     background-color: lightskyblue;
+    text-align: center;
 }
 .block-and,
 .block-or,
