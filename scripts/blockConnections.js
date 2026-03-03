@@ -147,12 +147,6 @@ function getBlockGroup(blockId, direction = 'all') {
 }
 
 function connectToSlot(parentId, childId, slotName) {
-    if (!IsSlotFree(parentId, slotName)) {
-        const parent = GetBlockById(parentId);
-        const oldBlock = parent.data[slotName];
-        if (oldBlock) DisconnectFromSlot(oldBlock.id);
-    }
-
     const parent = GetBlockById(parentId);
     const child = GetBlockById(childId);
     if (!parent || !child) return;
@@ -160,11 +154,20 @@ function connectToSlot(parentId, childId, slotName) {
     parent.data[slotName] = child;
     child.parent = parentId;
 
+    const childElement = document.querySelector(`[data-id="${childId}"]`);
+    if (childElement) {
+        const rect = childElement.getBoundingClientRect();
+        if (!parent.slotSizes) parent.slotSizes = {};
+        parent.slotSizes[slotName] = {
+            width: rect.width,
+            height: rect.height
+        };
+    }
+
     positionBlockInSlot(parentId, childId, slotName);
     SaveBlocksToStorage();
     renderAllBlocks(blocksInWorkSpace);
 }
-
 function rectsIntersect(rect1, rect2){
     return !(rect2.left > rect1.right||
     rect2.right < rect1.left||
@@ -173,6 +176,11 @@ function rectsIntersect(rect1, rect2){
 }
 
 function findSlotByPosition(containerId, movedRect) {
+    if (typeof movedRect === 'number' || typeof movedRect === 'string') {
+        const el = document.querySelector(`[data-id="${movedRect}"]`);
+        if (!el) return null;
+        movedRect = el.getBoundingClientRect();
+    }
     const container = GetBlockById(containerId);
     if (!container) return null;
 
@@ -249,18 +257,72 @@ function positionBlockInSlot(parentId, childId, slotName) {
 
     const parentElement = document.querySelector(`[data-id="${parentId}"]`);
     const childElement = document.querySelector(`[data-id="${childId}"]`);
-    if (!parentElement || !childElement) return;
+    const slotElement = parentElement ? parentElement.querySelector(`.slot-${slotName}`) : null;
+    if (!parentElement || !childElement|| !slotElement) return;
 
-    const parentRect = parentElement.getBoundingClientRect();
+    const workspaceRect = document.querySelector('.workSpace').getBoundingClientRect();
+    const slotRect = slotElement.getBoundingClientRect();
+
+    child.position.x = slotRect.left - workspaceRect.left;
+    child.position.y = slotRect.top - workspaceRect.top;
+
     const childRect = childElement.getBoundingClientRect();
-    if (slotName === 'left') {
-        child.position.x = parent.position.x - childRect.width - 10;
-        child.position.y = parent.position.y + (parentRect.height - childRect.height) / 2;
-    } else if (slotName === 'right') {
-        child.position.x = parent.position.x + parentRect.width + 10;
-        child.position.y = parent.position.y + (parentRect.height - childRect.height) / 2;
-    } else {
-        child.position.x = parent.position.x + (parentRect.width - childRect.width) / 2;
-        child.position.y = parent.position.y - childRect.height - 10;
+    child.position.x += (slotRect.width - childRect.width) / 2;
+    child.position.y += (slotRect.height - childRect.height) / 2;
+}
+
+function updateSlotExpansion(movedBlockId) {
+    const movedElement = document.querySelector(`[data-id="${movedBlockId}"]`);
+    if (!movedElement) return;
+
+    const movedRect = movedElement.getBoundingClientRect();
+
+    blocksInWorkSpace.forEach(parentBlock => {
+        const slots = BLOCK_SLOTS[parentBlock.type] || [];
+        slots.forEach(slotName => {
+            const childBlock = parentBlock.data[slotName];
+            if (childBlock) {
+                const parentEl = document.querySelector(`[data-id="${parentBlock.id}"]`);
+                const childEl = document.querySelector(`[data-id="${childBlock.id}"]`);
+                const slotEl = parentEl ? parentEl.querySelector(`.slot-${slotName}`) : null;
+
+                if (slotEl && childEl) {
+                    const childRect = childEl.getBoundingClientRect();
+                    slotEl.style.width = childRect.width + 'px';
+                    slotEl.style.height = childRect.height + 'px';
+                }
+            }
+        });
+    });
+
+    document.querySelectorAll('[class^="slot-"]').forEach(slot => {
+        const container = slot.closest('.block-container');
+        const bId = parseInt(container.dataset.id);
+        const blockObj = GetBlockById(bId);
+        const slotType = slot.className.replace('slot-', '');
+
+        if (blockObj && !blockObj.data[slotType]) {
+            slot.style.width = '30px';
+            slot.style.height = '30px';
+        }
+    });
+
+    for (const otherBlock of blocksInWorkSpace) {
+        if (otherBlock.id === movedBlockId) continue;
+
+        const slotName = findSlotByPosition(otherBlock.id, movedRect);
+
+        if (slotName) {
+            if (otherBlock.data[slotName]) continue;
+
+            const container = document.querySelector(`[data-id="${otherBlock.id}"]`);
+            const slotElement = container.querySelector(`.slot-${slotName}`);
+
+            if (slotElement) {
+                slotElement.style.width = movedRect.width + 'px';
+                slotElement.style.height = movedRect.height + 'px';
+                break;
+            }
+        }
     }
 }

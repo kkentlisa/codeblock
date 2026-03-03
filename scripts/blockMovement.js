@@ -29,6 +29,7 @@ function setupDraggable(element) {
 
             moveBlockGroup(blockId, e.dx, e.dy, 'all');
             updateAllBlockPositions();
+            updateSlotExpansion(blockId);
             SaveBlocksToStorage();
         },
 
