@@ -10,7 +10,7 @@ function setupDraggable(element) {
         ],
         onstart: function(e) {
             const blockId = parseInt(e.target.dataset.id);
-            const block = GetBlockById(id);
+            const block = GetBlockById(blockId);
 
             if (!block) return;
 
