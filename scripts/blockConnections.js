@@ -54,7 +54,12 @@ function disconnectBlock(blockId) {
     if (block.parent !== null) {
         const parent = GetBlockById(block.parent);
         if (parent) {
-            parent.child = null;
+            if(VALUE_CONTAINERS.includes(parent.type)){
+                DisconnectFromSlot(blockId)
+            }
+            else {
+                parent.child = null;
+            }
         }
         block.parent = null;
     }
@@ -75,36 +80,44 @@ function checkForConnection(movedBlockId, e) {
     const mouseX = e.clientX;
     const mouseY = e.clientY;
 
-    blocksInWorkSpace.forEach(otherBlock => {
-        if (otherBlock.id === movedBlockId) return;
+    if (VALUE_BLOCKS.includes(movedBlock.type)) {
+        for (const otherBlock of blocksInWorkSpace) {
+            if (otherBlock.id === movedBlockId) continue;
 
-        const slotName = findSlotByPosition(otherBlock.id, mouseX, mouseY);
-        if (slotName && isSlotFree(otherBlock.id, slotName) && VALUE_BLOCKS.includes(movedBlock.type)) {
-            connectToSlot(otherBlock.id, movedBlock.id, slotName);
-            return;
+            const slotName = findSlotByPosition(otherBlock.id, mouseX, mouseY);
+            if (slotName && IsSlotFree(otherBlock.id, slotName)) {
+                connectToSlot(otherBlock.id, movedBlock.id, slotName);
+                return;
+            }
         }
+    }
+    if (!VALUE_BLOCKS.includes(movedBlock.type)) {
+        for (const otherBlock of blocksInWorkSpace) {
+            if (otherBlock.id === movedBlockId) continue;
 
-        const otherElement = document.querySelector(`[data-id="${otherBlock.id}"]`);
-        if (!otherElement) return;
+            const otherElement = document.querySelector(`[data-id="${otherBlock.id}"]`);
+            if (!otherElement) continue;
 
-        const otherRect = otherElement.getBoundingClientRect();
+            const otherRect = otherElement.getBoundingClientRect();
+            const verticalProximity = Math.abs(movedRect.top - otherRect.bottom);
+            const horizontalProximity = Math.abs(movedRect.left - otherRect.left);
 
-        const verticalProximity = Math.abs(movedRect.top - otherRect.bottom);
-        const horizontalProximity = Math.abs(movedRect.left - otherRect.left);
+            const CONNECTION_THRESHOLD = 30;
 
-        const CONNECTION_THRESHOLD = 20;
-        if (verticalProximity < CONNECTION_THRESHOLD && horizontalProximity < CONNECTION_THRESHOLD) {
-            if (canConnect(otherBlock, movedBlock)) {
+            if (verticalProximity < CONNECTION_THRESHOLD &&
+                horizontalProximity < CONNECTION_THRESHOLD &&
+                canConnect(otherBlock, movedBlock)) {
                 connectBlocks(otherBlock.id, movedBlock.id);
+                return;
             }
-        }
-
-        if (Math.abs(movedRect.bottom - otherRect.top) < CONNECTION_THRESHOLD && Math.abs(movedRect.left - otherRect.left) < CONNECTION_THRESHOLD) {
-            if (canConnect(movedBlock, otherBlock)) {
+            if (Math.abs(movedRect.bottom - otherRect.top) < CONNECTION_THRESHOLD &&
+                Math.abs(movedRect.left - otherRect.left) < CONNECTION_THRESHOLD &&
+                canConnect(movedBlock, otherBlock)) {
                 connectBlocks(movedBlock.id, otherBlock.id);
+                return;
             }
         }
-    });
+    }
 }
 
 function getBlockGroup(blockId, direction = 'all') {
@@ -133,49 +146,3 @@ function getBlockGroup(blockId, direction = 'all') {
     return group;
 }
 
-function findSlotByPosition(containerId, mouseX, mouseY) {
-    const container=GetBlockById(containerId);
-    if(!container) return null;
-
-    const containerElement=document.querySelector(`[data-id="${containerId}"]`);
-    if (!containerElement) return null;
-
-    const rect=containerElement.getBoundingClientRect();
-    const slots = BLOCK_SLOTS[container.type] || []
-
-    if (slots.includes('left')){
-        const leftZone ={
-            x1: rect.left - 40,
-            x2: rect.left,
-            y1: rect.top - 20,
-            y2: rect.bottom + 20,
-        };
-        if(mouseX>=leftZone.x1 && mouseX<=leftZone.x2 && mouseY>=leftZone.y1 && mouseY<=leftZone.y2){
-            return 'left';
-        }
-    }
-    if (slots.includes('right')){
-        const rightZone ={
-            x1: rect.right,
-            x2: rect.right + 40,
-            y1: rect.top - 20,
-            y2: rect.bottom + 20,
-        };
-        if(mouseX>=rightZone.x1 && mouseX<=rightZone.x2 && mouseY>=rightZone.y1 && mouseY<=rightZone.y2){
-            return 'right';
-        }
-    }
-
-    const topSlots = slots.filter(s=> ['condition', 'value', 'operand'].includes(s));
-    if(topSlots.length > 0) {
-        const topZone = {
-            x1: rect.left - 20,
-            x2: rect.right + 20,
-            y1: rect.top - 40,
-            y2: rect.top
-        };
-        if (mouseX >= topZone.x1 && mouseX <= topZone.x2 && mouseY >= topZone.y1 && mouseY <= topZone.y2) {
-            return topSlots[0];
-        }
-    }
-}

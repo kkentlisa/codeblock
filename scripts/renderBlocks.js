@@ -41,15 +41,30 @@ function renderBlock(blockData) {
 
     block.textContent = typeNames[blockData.type];
 
+    const slots = BLOCK_SLOTS[blockData.type] || [];
+    slots.forEach(slotName => {
+        const slotElement = document.createElement('div');
+        slotElement.className = `block-slot slot-${slotName}`;
+
+        if (!blockData.data[slotName]) {
+            slotElement.textContent = slotName;
+            slotElement.classList.add('slot-empty');
+        } else {
+            slotElement.classList.add('slot-filled');
+        }
+
+        block.appendChild(slotElement);
+    });
+
     if (blockData.type === 'input') {
         const input = document.createElement('input');
         input.type = 'text';
         input.className = 'blocks-input';
-        input.value = blockData.data.message;
+        input.value = blockData.data.value;
         input.placeholder = 'введите переменную';
 
         input.addEventListener('input', function(e) {
-            blockData.data.message = e.target.value;
+            blockData.data.value = e.target.value;
             SaveBlocksToStorage();
         });
         input.addEventListener('mousedown', function(e) {
@@ -98,11 +113,11 @@ function renderBlock(blockData) {
         const nameInput = document.createElement('input');
         nameInput.type = 'text';
         nameInput.className = 'blocks-input';
-        nameInput.value = blockData.data.name;
+        nameInput.value = blockData.data.variable;
         nameInput.placeholder = 'имя переменной';
 
         nameInput.addEventListener('input', function(e) {
-            blockData.data.name = e.target.value;
+            blockData.data.variable = e.target.value;
             SaveBlocksToStorage();
         });
 
