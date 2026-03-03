@@ -6,6 +6,7 @@
     margin: 5px;
     font-size: 12px;
     width: auto;
+    height: auto;
 }
 .block-start,
 .block-input,
@@ -13,10 +14,19 @@
     border: 2px solid #ff033e;
     background-color: lightcoral;
 }
-.block-variableInit,
+.block-variableInit{
+    border: 2px solid orangered;
+    background-color: lightsalmon;
+}
 .block-assignValue{
     border: 2px solid orangered;
     background-color: lightsalmon;
+    text-align: center;
+    min-width: 210px;
+    width: auto;
+    height: auto;
+    padding-right: 35px;
+    padding-left: 0;
 }
 .block-if,
 .block-if-else,
@@ -31,6 +41,11 @@
 .block-mod{
     border: 2px solid limegreen;
     background-color: lightgreen;
+    text-align: center;
+    min-width: 90px;
+    min-height: 31px;
+    width: auto;
+    height: auto;
 }
 .block-gt,
 .block-lt,
@@ -43,10 +58,22 @@
     text-align: center;
 }
 .block-and,
-.block-or,
+.block-or{
+    border: 2px solid #cd00cd;
+    background-color: plum;
+    text-align: center;
+    min-width: 90px;
+    min-height: 31px;
+    width: auto;
+    height: auto;
+}
 .block-not{
     border: 2px solid #cd00cd;
     background-color: plum;
+    min-width: 65px;
+    min-height: 31px;
+    width: auto;
+    height: auto;
 }
 .block-container{
     position: absolute;
@@ -59,7 +86,7 @@
     position: absolute;
     background-color: red;
     color: white;
-    right: -20px;
+    right: -23px;
     top: 50%;
     transform: translateY(-55%);
     border-radius: 50%;

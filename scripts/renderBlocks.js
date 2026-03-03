@@ -5,7 +5,7 @@ const workspace = document.querySelector('.workSpace');
         'input': 'Ввод',
         'print': 'Вывод',
         'variableInit': 'Объявление переменной',
-        'assignValue': 'Присваивание',
+        'assignValue': '=',
         'if': 'Условие if',
         'if-else': 'Условие if-else',
         'while': 'Цикл while',
@@ -39,21 +39,38 @@ function renderBlock(blockData) {
     block.classList.add(`block-${blockData.type}`);
     block.dataset.id = blockData.id;
 
-    block.textContent = typeNames[blockData.type];
-
     if (['add', 'subtract', 'multiply', 'div', 'gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or'].includes(blockData.type)){
         const leftSlot = document.createElement('div');
         leftSlot.className = 'slot-left';
         block.appendChild(leftSlot);
 
-        block.textContent = typeNames[blockData.type];
+        const textSpan = document.createElement('span');
+        textSpan.textContent = typeNames[blockData.type];
+        textSpan.className = 'block-text';
+        block.appendChild(textSpan);
 
         const rightSlot = document.createElement('div');
         rightSlot.className = 'slot-right';
         block.appendChild(rightSlot);
     }
 
-    if (blockData.type === 'input') {
+    else if(blockData.type === 'not'){
+        const textSpan = document.createElement('span');
+        textSpan.textContent = typeNames[blockData.type];
+        textSpan.className = 'block-text';
+        block.appendChild(textSpan);
+
+        const operandSlot = document.createElement('div');
+        operandSlot.className = 'slot-operand';
+        block.appendChild(operandSlot);
+    }
+
+    else if (blockData.type === 'input') {
+        const textSpan = document.createElement('span');
+        textSpan.textContent = typeNames[blockData.type];
+        textSpan.className = 'block-text';
+        block.appendChild(textSpan);
+
         const input = document.createElement('input');
         input.type = 'text';
         input.className = 'blocks-input';
@@ -71,6 +88,11 @@ function renderBlock(blockData) {
         block.appendChild(input);
     }
     else if (blockData.type === 'variableInit') {
+        const textSpan = document.createElement('span');
+        textSpan.textContent = typeNames[blockData.type];
+        textSpan.className = 'block-text';
+        block.appendChild(textSpan);
+
         const nameInput = document.createElement('input');
         nameInput.type = 'text';
         nameInput.className = 'blocks-input';
@@ -105,8 +127,88 @@ function renderBlock(blockData) {
         });
 
         block.appendChild(valueInput);
+
+        const textSpan = document.createElement('span');
+        textSpan.textContent = typeNames[blockData.type];
+        textSpan.className = 'block-text';
+        block.appendChild(textSpan);
+
+        const valueSlot = document.createElement('div');
+        valueSlot.className = 'slot-value';
+        block.appendChild(valueSlot);
     }
+
+    else if (blockData.type === 'if') {
+        const textSpan = document.createElement('span');
+        textSpan.textContent = "Если";
+        textSpan.className = 'block-text';
+        block.appendChild(textSpan);
+
+        const conditionSlot = document.createElement('div');
+        conditionSlot.className = 'slot-condition';
+        block.appendChild(conditionSlot);
+
+        const text = document.createElement('span');
+        text.textContent = ", то";
+        text.className = 'block-text';
+        block.appendChild(text);
+
+        const bodyArea = document.createElement('div');
+        bodyArea.className = 'block-body';
+        block.appendChild(bodyArea);
+    }
+
+    else if (blockData.type === 'if-else'){
+        const textSpan = document.createElement('span');
+        textSpan.textContent = "Если";
+        textSpan.className = 'block-text';
+        block.appendChild(textSpan);
+
+        const conditionSlot = document.createElement('div');
+        conditionSlot.className = 'slot-condition';
+        block.appendChild(conditionSlot);
+
+        const text = document.createElement('span');
+        text.textContent = ", то";
+        text.className = 'block-text';
+        block.appendChild(text);
+
+        const bodyArea = document.createElement('div');
+        bodyArea.className = 'block-body';
+        block.appendChild(bodyArea);
+
+        const textBlock = document.createElement('span');
+        textBlock.textContent = ", иначе";
+        textBlock.className = 'block-text';
+        block.appendChild(textBlock);
+    }
+
+    else if (blockData.type === 'while'){
+        const textSpan = document.createElement('span');
+        textSpan.textContent = "Пока";
+        textSpan.className = 'block-text';
+        block.appendChild(textSpan);
+
+        const conditionSlot = document.createElement('div');
+        conditionSlot.className = 'slot-condition';
+        block.appendChild(conditionSlot);
+
+        const text = document.createElement('span');
+        text.textContent = ", выполнить";
+        text.className = 'block-text';
+        block.appendChild(text);
+
+        const bodyArea = document.createElement('div');
+        bodyArea.className = 'block-body';
+        block.appendChild(bodyArea);
+    }
+
     else if (blockData.type === 'print') {
+        const textSpan = document.createElement('span');
+        textSpan.textContent = typeNames[blockData.type];
+        textSpan.className = 'block-text';
+        block.appendChild(textSpan);
+
         const nameInput = document.createElement('input');
         nameInput.type = 'text';
         nameInput.className = 'blocks-input';
@@ -123,6 +225,12 @@ function renderBlock(blockData) {
         });
 
         block.appendChild(nameInput);
+    }
+    else{
+        const textSpan = document.createElement('span');
+        textSpan.textContent = typeNames[blockData.type];
+        textSpan.className = 'block-text';
+        block.appendChild(textSpan);
     }
 
     const deleteBtn = document.createElement('span');
