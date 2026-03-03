@@ -1,5 +1,30 @@
 const workspace = document.querySelector('.workSpace');
 
+window.typeNames = {
+    'start': 'Старт',
+    'input': 'Ввод',
+    'print': 'Вывод',
+    'variableInit': 'Объявление переменной',
+    'assignValue': 'Присваивание',
+    'if': 'Условие if',
+    'if-else': 'Условие if-else',
+    'while': 'Цикл while',
+    'add': 'Сложение',
+    'subtract': 'Вычитание',
+    'multiply': 'Умножение',
+    'div': 'Деление',
+    'mod': 'Остаток',
+    'gt': 'Больше',
+    'lt': 'Меньше',
+    'eq': 'Равно',
+    'neq': 'Не равно',
+    'gte': 'Больше или равно',
+    'lte': 'Меньше или равно',
+    'and': 'И',
+    'or': 'ИЛИ',
+    'not': 'НЕ',
+};
+
 function renderBlock(blockData) {
     const container = document.createElement('div');
 
@@ -13,31 +38,6 @@ function renderBlock(blockData) {
     block.classList.add('block');
     block.classList.add(`block-${blockData.type}`);
     block.dataset.id = blockData.id;
-
-    window.typeNames = {
-        'start': 'Старт',
-        'input': 'Ввод',
-        'print': 'Вывод',
-        'variableInit': 'Объявление переменной',
-        'assignValue': 'Присваивание',
-        'if': 'Условие if',
-        'if-else': 'Условие if-else',
-        'while': 'Цикл while',
-        'add': 'Сложение',
-        'subtract': 'Вычитание',
-        'multiply': 'Умножение',
-        'div': 'Деление',
-        'mod': 'Остаток',
-        'gt': 'Больше',
-        'lt': 'Меньше',
-        'eq': 'Равно',
-        'neq': 'Не равно',
-        'gte': 'Больше или равно',
-        'lte': 'Меньше или равно',
-        'and': 'И',
-        'or': 'ИЛИ',
-        'not': 'НЕ',
-    };
 
     block.textContent = typeNames[blockData.type];
 
