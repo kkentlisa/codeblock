@@ -12,6 +12,7 @@ function connectToSlot(parentId, childId, slotName) {
     parent.data[slotName] = child;
     child.parent = parentId;
 
+    positionBlockInSlot(parentId, childId, slotName);
     SaveBlocksToStorage();
     renderAllBlocks(blocksInWorkSpace);
 }
@@ -74,4 +75,26 @@ function findSlotByPosition(containerId, movedBlockId) {
     }
     return null;
 }
+function positionBlockInSlot(parentId, childId, slotName) {
+    const parent = GetBlockById(parentId);
+    const child = GetBlockById(childId);
+    if (!parent || !child) return;
 
+    const parentElement = document.querySelector(`[data-id="${parentId}"]`);
+    const childElement = document.querySelector(`[data-id="${childId}"]`);
+    if (!parentElement || !childElement) return;
+
+    const parentRect = parentElement.getBoundingClientRect();
+    const childRect = childElement.getBoundingClientRect();
+
+    if (slotName === 'left') {
+        child.position.x = parent.position.x - childRect.width - 10;
+        child.position.y = parent.position.y + (parentRect.height - childRect.height) / 2;
+    } else if (slotName === 'right') {
+        child.position.x = parent.position.x + parentRect.width + 10;
+        child.position.y = parent.position.y + (parentRect.height - childRect.height) / 2;
+    } else {
+        child.position.x = parent.position.x + (parentRect.width - childRect.width) / 2;
+        child.position.y = parent.position.y - childRect.height - 10;
+    }
+}
