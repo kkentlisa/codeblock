@@ -8,6 +8,39 @@
     padding: 4px;
     width: auto;
 }
-.blocks-input:hover{
+.block-text{
+    background-color: transparent;
+    padding: 2px;
+}
+.slot-left,
+.slot-right,
+.slot-operand,
+.slot-value,
+.slot-condition{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-65%);
+    width: 30px;
+    padding: 10px;
+    margin: 3px;
+    background-color: white;
+    border: 1px solid #1a1a1a;
+    border-radius: 15px;
+}
+.slot-left{
+    left: 0;
+
+}
+.slot-right,
+.slot-operand,
+.slot-value{
+    right: 0;
+}
+.blocks-input:hover,
+.slot-left:hover,
+.slot-right:hover,
+.slot-operand:hover,
+.slot-value:hover,
+.slot-condition:hover{
     border-width: 2px;
 }
