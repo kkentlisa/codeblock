@@ -3,6 +3,7 @@ function canConnect(parentBlock, childBlock) {
     if (parentBlock.type === 'print') return false;
     if (parentBlock.child !== null) return false;
     if (childBlock.parent !== null) return false;
+    if(VALUE_BLOCKS.includes(childBlock.type)) return false;
     return true;
 }
 
