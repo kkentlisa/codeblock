@@ -1,19 +1,5 @@
 const workspace = document.querySelector('.workSpace');
 
-function renderBlock(blockData) {
-    const container = document.createElement('div');
-
-    container.className = 'block-container';
-    container.dataset.id = blockData.id;
-    container.style.position = 'absolute';
-    container.style.left = blockData.position.x + 'px';
-    container.style.top = blockData.position.y + 'px';
-
-    const block = document.createElement('div');
-    block.classList.add('block');
-    block.classList.add(`block-${blockData.type}`);
-    block.dataset.id = blockData.id;
-
     window.typeNames = {
         'start': 'Старт',
         'input': 'Ввод',
@@ -38,6 +24,20 @@ function renderBlock(blockData) {
         'or': 'ИЛИ',
         'not': 'НЕ',
     };
+
+function renderBlock(blockData) {
+    const container = document.createElement('div');
+
+    container.className = 'block-container';
+    container.dataset.id = blockData.id;
+    container.style.position = 'absolute';
+    container.style.left = blockData.position.x + 'px';
+    container.style.top = blockData.position.y + 'px';
+
+    const block = document.createElement('div');
+    block.classList.add('block');
+    block.classList.add(`block-${blockData.type}`);
+    block.dataset.id = blockData.id;
 
     block.textContent = typeNames[blockData.type];
 
