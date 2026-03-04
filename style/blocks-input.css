@@ -14,22 +14,26 @@
     background-color: transparent;
     padding: 2px;
     position: relative;
-    display: inline-block;
+    display: flex;
+    flex-direction: row;
 }
 .slot-left,
 .slot-right,
 .slot-operand,
 .slot-value,
 .slot-condition{
-    position: absolute;
-    top: 50%;
-    transform: translateY(-65%);
+    position: relative;
+    top: 0;
+    transform: none;
+    display: flex;
+    flex-direction: row;
     width: 30px;
     padding: 10px;
     margin: 3px;
     background-color: white;
     border: 1px solid #1a1a1a;
     border-radius: 15px;
+    transition: all 0.2s ease;
 }
 .slot-left{
     left: 0;
@@ -54,5 +58,4 @@
     left: 0 !important;
     top: 0 !important;
     margin: 0;
-    display: inline-block;
 }
