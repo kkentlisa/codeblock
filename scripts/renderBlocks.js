@@ -254,7 +254,22 @@ function renderBlock(blockData) {
         container.remove();
     };
 
-    return container;
+    if (blockData.slotSizes) {
+        Object.keys(blockData.slotSizes).forEach(slotName => {
+            const size = blockData.slotSizes[slotName];
+            const slotElement = block.querySelector(`.slot-${slotName}`);
+            if (slotElement) {
+                slotElement.style.width = size.width + 'px';
+                slotElement.style.height = size.height + 'px';
+
+                block.style.width = 'auto';
+                block.style.minWidth = (size.width + 40) + 'px';
+                block.style.minHeight = (size.height + 20) + 'px';
+            }
+        });
+    }
+        return container;
+
 }
 
 function renderAllBlocks(blocksArray) {
@@ -262,7 +277,7 @@ function renderAllBlocks(blocksArray) {
 
     const blocks = workspace.querySelectorAll('.block-container');
     blocks.forEach(block => block.remove());
-    
+
     blocksArray.forEach(blockData => {
         const containerElement = renderBlock(blockData);
         workspace.appendChild(containerElement);
