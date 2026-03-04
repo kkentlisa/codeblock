@@ -3,14 +3,18 @@
     border: 1px solid #1a1a1a;
     border-radius: 15px;
     color: dimgray;
+    font-size: 10px;
     font-family: monospace;
     margin: 3px 0 3px 5px;
     padding: 4px;
     width: auto;
+    min-width: 16ch;
 }
 .block-text{
     background-color: transparent;
     padding: 2px;
+    position: relative;
+    display: inline-block;
 }
 .slot-left,
 .slot-right,

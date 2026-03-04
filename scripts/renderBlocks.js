@@ -4,7 +4,7 @@ const workspace = document.querySelector('.workSpace');
         'start': 'Старт',
         'input': 'Ввод',
         'print': 'Вывод',
-        'variableInit': 'Объявление переменной',
+        'variableInit': 'Новая переменная',
         'assignValue': '=',
         'if': 'Условие if',
         'if-else': 'Условие if-else',
@@ -77,6 +77,8 @@ function renderBlock(blockData) {
         input.value = blockData.data.value;
         input.placeholder = 'введите переменную';
 
+        input.size = Math.max(5, blockData.data.value.length + 2);
+
         input.addEventListener('input', function(e) {
             blockData.data.value = e.target.value;
             SaveBlocksToStorage();
@@ -99,6 +101,8 @@ function renderBlock(blockData) {
         nameInput.value = blockData.data.name;
         nameInput.placeholder = 'имя переменной';
 
+        nameInput.size = Math.max(5, blockData.data.name.length + 2);
+
         nameInput.addEventListener('input', function(e) {
             blockData.data.name = e.target.value;
             SaveBlocksToStorage();
@@ -116,6 +120,8 @@ function renderBlock(blockData) {
         valueInput.className = 'blocks-input';
         valueInput.value = blockData.data.variable;
         valueInput.placeholder = 'имя переменной';
+
+        valueInput.size = Math.max(5, blockData.data.variable.length + 2);
 
         valueInput.addEventListener('input', function(e) {
             blockData.data.variable = e.target.value;
@@ -214,6 +220,8 @@ function renderBlock(blockData) {
         nameInput.className = 'blocks-input';
         nameInput.value = blockData.data.variable;
         nameInput.placeholder = 'имя переменной';
+
+        nameInput.size = Math.max(5, blockData.data.variable.length + 2);
 
         nameInput.addEventListener('input', function(e) {
             blockData.data.variable = e.target.value;
