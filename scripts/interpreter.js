@@ -1,4 +1,5 @@
 let variables = {};
+let arrays = {};
 
 function GetBlockName(block) {
     return window.typeNames?.[block.type];
@@ -86,6 +87,46 @@ function EvaluateExpression(block) {
         }
 
         return leftValue % rightValue;
+    }
+    else if (["gt", "lt", "eq", "neq", "gte", "lte", "and", "or", "not"].includes(block.type)) {
+        return EvaluateCondition(block);
+    }
+    else if (block.type === "arrayGet") {
+        const arrayName = block.data.name;
+        if (!arrayName) {
+            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя массива`);
+            throw new Error(`Не указано имя массива`);
+        }
+        if (!arrays[arrayName]) {
+            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: массив ${arrayName} не найден`);
+            throw new Error(`Массив ${arrayName} не найден`);
+        }
+        if (!block.data.index) {
+            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указан индекс для чтения из массива`);
+            throw new Error(`Не указан индекс для записи в массив`);
+        }
+        const index = EvaluateExpression(block.data.index);
+        if (!Number.isInteger(index)) {
+            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: индекс должен быть целым числом`);
+            throw new Error(`Индекс должен быть целым числом`);
+        }
+        if (index < 0 || index > arrays[arrayName].length - 1) {
+            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: индекс вне границ массива`);
+            throw new Error(`Индекс вне границ массива`);
+        }
+        return arrays[arrayName][index];
+    }
+    else if (block.type === "arrayLength") {
+        const arrayName = block.data.name;
+        if (!arrayName) {
+            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя массива`);
+            throw new Error(`Не указано имя массива`);
+        }
+        if (!arrays[arrayName]) {
+            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: массив ${arrayName} не найден`);
+            throw new Error(`Массив ${arrayName} не найден`);
+        }
+        return arrays[arrayName].length;
     }
 }
 
@@ -215,7 +256,34 @@ function ExecuteBlock(block) {
             }
             break;
         }
-
+        case "arrayDeclare":
+            arrays[block.data.name] = new Array(block.data.size).fill(0);
+            break;
+        case "arrayAssignByIndex":
+            const arrayName = block.data.name;
+            if (!arrayName) {
+                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя массива`);
+                throw new Error(`Не указано имя массива`);
+            }
+            if (!arrays[arrayName]) {
+                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: массив ${arrayName} не найден`);
+                throw new Error(`Массив ${arrayName} не найден`);
+            }
+            if (!block.data.index) {
+                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указан индекс для записи в массив`);
+                throw new Error(`Не указан индекс для записи в массив`);
+            }
+            const index = EvaluateExpression(block.data.index);
+            if (!Number.isInteger(index)) {
+                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: индекс должен быть целым числом`);
+                throw new Error(`Индекс должен быть целым числом`);
+            }
+            if (index < 0 || index > arrays[arrayName].length - 1) {
+                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: индекс вне границ массива`);
+                throw new Error(`Индекс вне границ массива`);
+            }
+            arrays[arrayName][index] = EvaluateExpression(block.data.value);
+            break;
     }
 }
 
@@ -229,6 +297,7 @@ function RunProgram(){
     }
 
     variables = {};
+    arrays = {};
 
     let currentBlockId = startBlock.child;
 

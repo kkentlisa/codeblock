@@ -2,10 +2,10 @@ let blocksInWorkSpace = [];
 let blockId = 0;
 
 const VALUE_CONTAINERS = ['assignValue','add', 'subtract', 'multiply', 'div',
-'mod', 'if', 'ifElse', 'while', 'gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not'];
+'mod', 'if', 'ifElse', 'while', 'gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not', 'arrayGet', 'arrayAssignByIndex'];
 const BODY_CONTAINERS = ['if', 'ifElse', 'while'];
 const VALUE_BLOCKS = ['input', 'add', 'subtract', 'multiply', 'div', 'mod',
-'gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not'];
+'gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not', 'arrayGet', 'arrayLength'];
 
 const BLOCK_SLOTS = {
     'assignValue': ['value'],
@@ -25,7 +25,9 @@ const BLOCK_SLOTS = {
     'lte': ['left', 'right'],
     'and': ['left', 'right'],
     'or': ['left', 'right'],
-    'not': ['operand']
+    'not': ['operand'],
+    'arrayAssignByIndex': ['index', 'value'],
+    'arrayGet': ['index']
 }
 
 function CreateBlock(type, x, y){
@@ -145,18 +147,17 @@ function CreateBlock(type, x, y){
     else if (type === "arrayDeclare"){
         data.name = "";
         data.size = 3;
-        data.elements = [];
     }
 
     else if (type === "arrayAssignByIndex"){
         data.name = "";
-        data.index = "";
-        data.value = "";
+        data.index = null;
+        data.value = null;
     }
 
     else if (type === "arrayGet"){
         data.name = "";
-        data.index = "";
+        data.index = null;
     }
 
     else if (type === "arrayLength"){

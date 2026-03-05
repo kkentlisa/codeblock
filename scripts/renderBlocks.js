@@ -23,6 +23,10 @@ const workspace = document.querySelector('.workSpace');
         'and': 'И',
         'or': 'ИЛИ',
         'not': 'НЕ',
+        'arrayDeclare': 'Новый массив',
+        'arrayAssignByIndex': 'Записать в массив',
+        'arrayGet': 'Чтение из массива',
+        'arrayLength': 'Длина массива'
     };
 
 function renderBlock(blockData) {
