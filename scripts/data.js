@@ -315,3 +315,18 @@ function DisconnectFromSlot(blockId){
         }
     }
 }
+
+function IsBlockInSlot(blockId){
+    const block = GetBlockById(blockId);
+    if (!block) return false;
+    if (block.parent !== null){
+        const parent = GetBlockById(block.parent);
+        if (!parent) return false;
+        for (let slotName in parent.data){
+            if (parent.data[slotName]?.id === block.id){
+                return true;
+            }
+        }
+    }
+    return false;
+}
