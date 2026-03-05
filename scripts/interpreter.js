@@ -16,6 +16,7 @@ function GetVariable(name) {
 function validateOperands(block){
     if (!block.data.left || !block.data.right) {
         LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не все операнды заполнены`);
+        highlightErrorBlock(block.id);
         throw new Error(`Не все операнды заполнены`);
     }
 }
@@ -23,6 +24,7 @@ function validateOperands(block){
 function validateCondition(block){
     if (!block.data.condition) {
         LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не заполнено условие`);
+        highlightErrorBlock(block.id);
         throw new Error(`Не заполнено условие`);
     }
 }
@@ -34,6 +36,7 @@ function EvaluateExpression(block) {
             const variableValue =  GetVariable(value);
             if (variableValue === undefined){
                 LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: переменная "${value}" не найдена`);
+                highlightErrorBlock(block.id);
                 throw new Error(`Переменная "${value}" не найдена`);
             }
             return variableValue;
@@ -70,6 +73,7 @@ function EvaluateExpression(block) {
 
         if (rightValue === 0) {
             LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: деление на 0`);
+            highlightErrorBlock(block.id);
             throw new Error(`Деление на 0`);
         }
 
@@ -83,6 +87,7 @@ function EvaluateExpression(block) {
 
         if (rightValue === 0) {
             LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: деление на 0`);
+            highlightErrorBlock(block.id);
             throw new Error(`Деление на 0`);
         }
 
@@ -95,23 +100,28 @@ function EvaluateExpression(block) {
         const arrayName = block.data.name;
         if (!arrayName) {
             LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя массива`);
+            highlightErrorBlock(block.id);
             throw new Error(`Не указано имя массива`);
         }
         if (!arrays[arrayName]) {
             LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: массив ${arrayName} не найден`);
+            highlightErrorBlock(block.id);
             throw new Error(`Массив ${arrayName} не найден`);
         }
         if (!block.data.index) {
             LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указан индекс для чтения из массива`);
+            highlightErrorBlock(block.id);
             throw new Error(`Не указан индекс для записи в массив`);
         }
         const index = EvaluateExpression(block.data.index);
         if (!Number.isInteger(index)) {
             LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: индекс должен быть целым числом`);
+            highlightErrorBlock(block.id);
             throw new Error(`Индекс должен быть целым числом`);
         }
         if (index < 0 || index > arrays[arrayName].length - 1) {
             LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: индекс вне границ массива`);
+            highlightErrorBlock(block.id);
             throw new Error(`Индекс вне границ массива`);
         }
         return arrays[arrayName][index];
@@ -120,10 +130,12 @@ function EvaluateExpression(block) {
         const arrayName = block.data.name;
         if (!arrayName) {
             LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя массива`);
+            highlightErrorBlock(block.id);
             throw new Error(`Не указано имя массива`);
         }
         if (!arrays[arrayName]) {
             LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: массив ${arrayName} не найден`);
+            highlightErrorBlock(block.id);
             throw new Error(`Массив ${arrayName} не найден`);
         }
         return arrays[arrayName].length;
@@ -190,6 +202,7 @@ function EvaluateCondition(block) {
     else if (block.type === "not") {
         if (!block.data.operand) {
             LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: операнд не заполнен`);
+            highlightErrorBlock(block.id);
             throw new Error(`Операнд не заполнен`);
         }
         const operandValue = EvaluateCondition(block.data.operand);
@@ -207,6 +220,7 @@ function ExecuteBlock(block) {
         case "assignValue":
             if (!block.data.value) {
                 LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не заполнено значение для присваивания`);
+                highlightErrorBlock(block.id);
                 throw new Error(`Не заполнено значение для присваивания`);
             }
             const value = EvaluateExpression(block.data.value);
@@ -249,6 +263,7 @@ function ExecuteBlock(block) {
             const value = GetVariable(block.data.variable);
             if (value === undefined){
                 LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: переменная "${block.data.variable}" не найдена`);
+                highlightErrorBlock(block.id);
                 throw new Error(`Переменная "${block.data.variable}" не найдена`);
             }
             else {
@@ -263,23 +278,28 @@ function ExecuteBlock(block) {
             const arrayName = block.data.name;
             if (!arrayName) {
                 LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя массива`);
+                highlightErrorBlock(block.id);
                 throw new Error(`Не указано имя массива`);
             }
             if (!arrays[arrayName]) {
                 LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: массив ${arrayName} не найден`);
+                highlightErrorBlock(block.id);
                 throw new Error(`Массив ${arrayName} не найден`);
             }
             if (!block.data.index) {
                 LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указан индекс для записи в массив`);
+                highlightErrorBlock(block.id);
                 throw new Error(`Не указан индекс для записи в массив`);
             }
             const index = EvaluateExpression(block.data.index);
             if (!Number.isInteger(index)) {
                 LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: индекс должен быть целым числом`);
+                highlightErrorBlock(block.id);
                 throw new Error(`Индекс должен быть целым числом`);
             }
             if (index < 0 || index > arrays[arrayName].length - 1) {
                 LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: индекс вне границ массива`);
+                highlightErrorBlock(block.id);
                 throw new Error(`Индекс вне границ массива`);
             }
             arrays[arrayName][index] = EvaluateExpression(block.data.value);
@@ -288,6 +308,10 @@ function ExecuteBlock(block) {
 }
 
 function RunProgram(){
+    document.querySelectorAll('.block-error').forEach((block) => {
+        block.classList.remove('block-error');
+    });
+
     ClearOutputPanel();
 
     const startBlock = blocksInWorkSpace.find(b => b.type === "start");

@@ -68,3 +68,10 @@ function ClearOutputPanel(){
     outputPanel.innerHTML = '<h3>Консоль вывода</h3>';
 
 }
+
+function highlightErrorBlock(blockId){
+    const block = document.querySelector(`[data-id="${blockId}"]`);
+    if (block){
+        block.classList.add('block-error');
+    }
+}
