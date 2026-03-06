@@ -113,3 +113,17 @@
 .block-container:hover .block {
     border-width: 3px;
 }
+.block-error .block{
+    animation: colorPulse 1.75s infinite;
+}
+@keyframes colorPulse {
+    0%{
+        filter: saturate(100%);
+    }
+    50%{
+        filter: saturate(400%) brightness(120%);
+    }
+    100%{
+        filter: saturate(100%);
+    }
+}
