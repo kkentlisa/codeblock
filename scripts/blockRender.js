@@ -33,7 +33,7 @@ function renderBlock(blockData){
     container.className='block-container';
     container.dataset.id = blockData.id;
 
-    if(blockData.parent === null){
+    if(blockData.parent === null && blockData.previous === null){
         container.style.position = 'absolute';
         container.style.left = blockData.position.x + 'px';
         container.style.top = blockData.position.y + 'px';
@@ -109,13 +109,14 @@ function renderBlock(blockData){
     container.appendChild(deleteBtn);
     container.appendChild(blockBody);
 
-    if(blockData.child !== null){
-        const nextBlockData = GetBlockById(blockData.child);
+    if(blockData.next !== null){
+        const nextBlockData = GetBlockById(blockData.next);
         if(nextBlockData){
             const nextElement=renderBlock(nextBlockData);
             container.appendChild(nextElement);
         }
     }
+    setupDraggable(container);
     return container;
 }
 
@@ -125,13 +126,11 @@ function renderAllBlocks(blocksArray) {
     const UIButtons =workspace.querySelector('.blockWorkSpaceButton');
     workspace.innerHTML='';
     if(UIButtons) workspace.appendChild(UIButtons);
-    const rootBlocks = blocksArray.filter(b => b.parent === null);
+    const rootBlocks = blocksArray.filter(b => b.parent === null && b.previous === null);
 
     rootBlocks.forEach(blockData => {
         const element = renderBlock(blockData);
         workspace.appendChild(element);
-
-        setupDraggable(element);
     })
 }
 
