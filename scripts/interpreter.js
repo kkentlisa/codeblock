@@ -32,6 +32,11 @@ function validateCondition(block){
 function EvaluateExpression(block) {
     if (block.type === "input") {
         const value = block.data.value;
+        if (!value){
+            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не введено значение`);
+            highlightErrorBlock(block.id);
+            throw new Error(`Не введено значение`);
+        }
         if (isNaN(value)) {
             const variableValue =  GetVariable(value);
             if (variableValue === undefined){
@@ -66,7 +71,6 @@ function EvaluateExpression(block) {
     }
 
     else if (block.type === "multiply") {
-        validateOperands(block);
         validateOperands(block);
         const leftBlock=GetBlockById(block.data.left);
         const rightBlock=GetBlockById(block.data.right);
@@ -258,9 +262,19 @@ function ExecuteBlock(block) {
 
     switch (block.type) {
         case "variableInit":
+            if (!block.data.name){
+                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя переменной`);
+                highlightErrorBlock(block.id);
+                throw new Error(`Не указано имя переменной`);
+            }
             SetVariable(block.data.name, block.data.value);
             break;
         case "assignValue":
+            if (!block.data.variable){
+                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя переменной`);
+                highlightErrorBlock(block.id);
+                throw new Error(`Не указано имя переменной`);
+            }
             if (!block.data.value) {
                 LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не заполнено значение для присваивания`);
                 highlightErrorBlock(block.id);
@@ -272,7 +286,7 @@ function ExecuteBlock(block) {
             break;
         case "if":
             validateCondition(block);
-            if (EvaluateCondition(GetBlockById(block.data.value))) {
+            if (EvaluateCondition(GetBlockById(block.data.condition))) {
                 block.data.thenBlocks.forEach(id =>{
                     const childBlock = GetBlockById(id);
                     if (childBlock) ExecuteBlock(childBlock);
@@ -282,7 +296,7 @@ function ExecuteBlock(block) {
         case "ifElse":
             validateCondition(block);
 
-            if (EvaluateCondition(GetBlockById(block.data.value))) {
+            if (EvaluateCondition(GetBlockById(block.data.condition))) {
                 block.data.thenBlocks.forEach(id =>{
                     const childBlock = GetBlockById(id);
                     if (childBlock) ExecuteBlock(childBlock);
@@ -297,7 +311,7 @@ function ExecuteBlock(block) {
             break;
         case "while":
             validateCondition(block);
-            while (EvaluateCondition(GetBlockById(block.data.value))){
+            while (EvaluateCondition(GetBlockById(block.data.condition))) {
                 block.data.bodyBlocks.forEach(id =>{
                     const childBlock = GetBlockById(id);
                     if (childBlock) ExecuteBlock(childBlock);
@@ -305,6 +319,11 @@ function ExecuteBlock(block) {
             }
             break;
         case "print": {
+            if (!block.data.variable){
+                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя переменной`);
+                highlightErrorBlock(block.id);
+                throw new Error(`Не указано имя переменной`);
+            }
             const value = GetVariable(block.data.variable);
             if (value === undefined){
                 LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: переменная "${block.data.variable}" не найдена`);
@@ -336,7 +355,7 @@ function ExecuteBlock(block) {
                 highlightErrorBlock(block.id);
                 throw new Error(`Не указан индекс для записи в массив`);
             }
-            const index = EvaluateExpression(block.data.index);
+            const index = EvaluateExpression(GetBlockById(block.data.index));
             if (!Number.isInteger(index)) {
                 LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: индекс должен быть целым числом`);
                 highlightErrorBlock(block.id);
