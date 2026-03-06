@@ -15,6 +15,7 @@ function connectToSlot(parentId, childId, slotName) {
             height: rect.height
         };
     }
+    SaveBlocksToStorage();
 }
 
 function findSlotByPosition(containerId, movedBlockId, slotName) {
