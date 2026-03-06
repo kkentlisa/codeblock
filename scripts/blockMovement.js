@@ -15,22 +15,26 @@ function setupDraggable(element) {
 
             isDragging = true;
 
-            if (block.parent !== null) {
-                if(IsBlockInSlot(blockId)){
+            if (block.parent !== null || block.previous !== null) {
+
+                const rect = e.target.getBoundingClientRect();
+                const workspace = document.querySelector('.workSpace');
+                const wsRect = workspace.getBoundingClientRect();
+
+                if(block.parent !== null){
                     DisconnectFromSlot(blockId);
                 }
                 else{
                     disconnectBlock(blockId);
                 }
 
-                const workspace =document.querySelector('.workSpace');
                 workspace.appendChild(e.target);
-
-                const rect = e.target.getBoundingClientRect();
-                const wsRect= workspace.getBoundingClientRect();
 
                 block.position.x = rect.left - wsRect.left;
                 block.position.y = rect.top - wsRect.top;
+
+                e.target.style.position = 'absolute';
+                e.target.style.margin = '0';
                 e.target.style.left = block.position.x + 'px';
                 e.target.style.top = block.position.y + 'px';
             }
@@ -40,9 +44,12 @@ function setupDraggable(element) {
             if (!isDragging) return;
             const target = e.target;
             const blockId = parseInt(target.dataset.id);
+            const block = GetBlockById(blockId);
 
-            moveBlockGroup(blockId, e.dx, e.dy, 'down');
-            updateAllBlockPositions();
+            block.position.x += e.dx;
+            block.position.y += e.dy;
+            target.style.left = block.position.x + 'px';
+            target.style.top = block.position.y + 'px';
         },
 
         onend: function(e) {
@@ -52,23 +59,6 @@ function setupDraggable(element) {
             checkForConnection(blockId, e);
             SaveBlocksToStorage();
             renderAllBlocks(blocksInWorkSpace);
-        }
-    });
-}
-function moveBlockGroup(blockId, dx, dy, direction = 'down') {
-    const groupBlocks = getBlockGroup(blockId, direction);
-
-    groupBlocks.forEach(block => {
-        block.position.x += dx;
-        block.position.y += dy;
-    });
-}
-function updateAllBlockPositions() {
-    blocksInWorkSpace.forEach(block => {
-        const element = document.querySelector(`[data-id="${block.id}"]`);
-        if (element) {
-            element.style.left = block.position.x + 'px';
-            element.style.top = block.position.y + 'px';
         }
     });
 }
