@@ -11,39 +11,47 @@ function setupDraggable(element) {
         onstart: function(e) {
             const blockId = parseInt(e.target.dataset.id);
             const block = GetBlockById(blockId);
-
             if (!block) return;
 
             isDragging = true;
 
             if (block.parent !== null) {
-                disconnectBlock(blockId);
+                if(IsBlockInSlot(blockId)){
+                    DisconnectFromSlot(blockId);
+                }
+                else{
+                    disconnectBlock(blockId);
+                }
+
+                const workspace =document.querySelector('.workSpace');
+                workspace.appendChild(e.target);
+
+                const rect = e.target.getBoundingClientRect();
+                const wsRect= workspace.getBoundingClientRect();
+
+                block.position.x = rect.left - wsRect.left;
+                block.position.y = rect.top - wsRect.top;
+                e.target.style.left = block.position.x + 'px';
+                e.target.style.top = block.position.y + 'px';
             }
         },
 
         onmove: function(e) {
             if (!isDragging) return;
-
             const target = e.target;
             const blockId = parseInt(target.dataset.id);
 
-            moveBlockGroup(blockId, e.dx, e.dy, 'all');
+            moveBlockGroup(blockId, e.dx, e.dy, 'down');
             updateAllBlockPositions();
-            updateSlotExpansion(blockId);
-            SaveBlocksToStorage();
         },
 
         onend: function(e) {
-            if (!isDragging) {
-                isDragging = false;
-                return;
-            }
-
             isDragging = false;
 
             const blockId = parseInt(e.target.dataset.id);
             checkForConnection(blockId, e);
-
+            SaveBlocksToStorage();
+            renderAllBlocks(blocksInWorkSpace);
         }
     });
 }
