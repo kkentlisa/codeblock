@@ -47,29 +47,42 @@ function EvaluateExpression(block) {
 
     else if (block.type === "add") {
         validateOperands(block);
-        const leftValue = EvaluateExpression(block.data.left);
-        const rightValue = EvaluateExpression(block.data.right);
+        const leftBlock=GetBlockById(block.data.left);
+        const rightBlock=GetBlockById(block.data.right);
+
+        const leftValue = EvaluateExpression(leftBlock);
+        const rightValue = EvaluateExpression(rightBlock);
         return leftValue + rightValue;
     }
 
     else if (block.type === "subtract") {
         validateOperands(block);
-        const leftValue = EvaluateExpression(block.data.left);
-        const rightValue = EvaluateExpression(block.data.right);
+        const leftBlock=GetBlockById(block.data.left);
+        const rightBlock=GetBlockById(block.data.right);
+
+        const leftValue = EvaluateExpression(leftBlock);
+        const rightValue = EvaluateExpression(rightBlock);
         return leftValue - rightValue;
     }
 
     else if (block.type === "multiply") {
         validateOperands(block);
-        const leftValue = EvaluateExpression(block.data.left);
-        const rightValue = EvaluateExpression(block.data.right);
+        validateOperands(block);
+        const leftBlock=GetBlockById(block.data.left);
+        const rightBlock=GetBlockById(block.data.right);
+
+        const leftValue = EvaluateExpression(leftBlock);
+        const rightValue = EvaluateExpression(rightBlock);
         return leftValue * rightValue;
     }
 
     else if (block.type === "div") {
         validateOperands(block);
-        const leftValue = EvaluateExpression(block.data.left);
-        const rightValue = EvaluateExpression(block.data.right);
+        const leftBlock=GetBlockById(block.data.left);
+        const rightBlock=GetBlockById(block.data.right);
+
+        const leftValue = EvaluateExpression(leftBlock);
+        const rightValue = EvaluateExpression(rightBlock);
 
         if (rightValue === 0) {
             LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: деление на 0`);
@@ -82,8 +95,11 @@ function EvaluateExpression(block) {
 
     else if (block.type === "mod") {
         validateOperands(block);
-        const leftValue = EvaluateExpression(block.data.left);
-        const rightValue = EvaluateExpression(block.data.right);
+        const leftBlock=GetBlockById(block.data.left);
+        const rightBlock=GetBlockById(block.data.right);
+
+        const leftValue = EvaluateExpression(leftBlock);
+        const rightValue = EvaluateExpression(rightBlock);
 
         if (rightValue === 0) {
             LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: деление на 0`);
@@ -113,7 +129,10 @@ function EvaluateExpression(block) {
             highlightErrorBlock(block.id);
             throw new Error(`Не указан индекс для записи в массив`);
         }
-        const index = EvaluateExpression(block.data.index);
+
+        const indexBlock = GetBlockById(block.data.index);
+        const index = EvaluateExpression(indexBlock);
+
         if (!Number.isInteger(index)) {
             LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: индекс должен быть целым числом`);
             highlightErrorBlock(block.id);
@@ -145,57 +164,80 @@ function EvaluateExpression(block) {
 function EvaluateCondition(block) {
     if (block.type === "gt") {
         validateOperands(block);
-        const leftValue = EvaluateExpression(block.data.left);
-        const rightValue = EvaluateExpression(block.data.right);
+        const leftBlock=GetBlockById(block.data.left);
+        const rightBlock=GetBlockById(block.data.right);
+
+        const leftValue = EvaluateExpression(leftBlock);
+        const rightValue = EvaluateExpression(rightBlock);
         return leftValue > rightValue;
     }
 
     else if (block.type === "lt") {
         validateOperands(block);
-        const leftValue = EvaluateExpression(block.data.left);
-        const rightValue = EvaluateExpression(block.data.right);
+        const leftBlock=GetBlockById(block.data.left);
+        const rightBlock=GetBlockById(block.data.right);
+
+        const leftValue = EvaluateExpression(leftBlock);
+        const rightValue = EvaluateExpression(rightBlock);
         return leftValue < rightValue;
     }
 
     else if (block.type === "eq") {
-        validateOperands(block);
-        const leftValue = EvaluateExpression(block.data.left);
-        const rightValue = EvaluateExpression(block.data.right);
+        const leftBlock=GetBlockById(block.data.left);
+        const rightBlock=GetBlockById(block.data.right);
+
+        const leftValue = EvaluateExpression(leftBlock);
+        const rightValue = EvaluateExpression(rightBlock);
         return leftValue === rightValue;
     }
 
     else if (block.type === "neq") {
         validateOperands(block);
-        const leftValue = EvaluateExpression(block.data.left);
-        const rightValue = EvaluateExpression(block.data.right);
+        const leftBlock=GetBlockById(block.data.left);
+        const rightBlock=GetBlockById(block.data.right);
+
+        const leftValue = EvaluateExpression(leftBlock);
+        const rightValue = EvaluateExpression(rightBlock);
         return leftValue !== rightValue;
     }
 
     else if (block.type === "gte") {
         validateOperands(block);
-        const leftValue = EvaluateExpression(block.data.left);
-        const rightValue = EvaluateExpression(block.data.right);
+        const leftBlock=GetBlockById(block.data.left);
+        const rightBlock=GetBlockById(block.data.right);
+
+        const leftValue = EvaluateExpression(leftBlock);
+        const rightValue = EvaluateExpression(rightBlock);
         return leftValue >= rightValue;
     }
 
     else if (block.type === "lte") {
         validateOperands(block);
-        const leftValue = EvaluateExpression(block.data.left);
-        const rightValue = EvaluateExpression(block.data.right);
+        const leftBlock=GetBlockById(block.data.left);
+        const rightBlock=GetBlockById(block.data.right);
+
+        const leftValue = EvaluateExpression(leftBlock);
+        const rightValue = EvaluateExpression(rightBlock);
         return leftValue <= rightValue;
     }
 
     else if (block.type === "and") {
         validateOperands(block);
-        const leftValue = EvaluateCondition(block.data.left);
-        const rightValue = EvaluateCondition(block.data.right);
+        const leftBlock=GetBlockById(block.data.left);
+        const rightBlock=GetBlockById(block.data.right);
+
+        const leftValue = EvaluateExpression(leftBlock);
+        const rightValue = EvaluateExpression(rightBlock);
         return leftValue && rightValue;
     }
 
     else if (block.type === "or") {
         validateOperands(block);
-        const leftValue = EvaluateCondition(block.data.left);
-        const rightValue = EvaluateCondition(block.data.right);
+        const leftBlock=GetBlockById(block.data.left);
+        const rightBlock=GetBlockById(block.data.right);
+
+        const leftValue = EvaluateExpression(leftBlock);
+        const rightValue = EvaluateExpression(rightBlock);
         return leftValue || rightValue;
     }
 
@@ -205,7 +247,8 @@ function EvaluateCondition(block) {
             highlightErrorBlock(block.id);
             throw new Error(`Операнд не заполнен`);
         }
-        const operandValue = EvaluateCondition(block.data.operand);
+        const operandBlock =GetBlockById(block.data.operand);
+        const operandValue = EvaluateCondition(operandBlock);
         return !operandValue;
     }
 }
@@ -223,12 +266,13 @@ function ExecuteBlock(block) {
                 highlightErrorBlock(block.id);
                 throw new Error(`Не заполнено значение для присваивания`);
             }
-            const value = EvaluateExpression(block.data.value);
+            const valueBlock=GetBlockById(block.data.value);
+            const value = EvaluateExpression(valueBlock);
             SetVariable(block.data.variable, value);
             break;
         case "if":
             validateCondition(block);
-            if (EvaluateCondition(block.data.condition)) {
+            if (EvaluateCondition(GetBlockById(block.data.value))) {
                 block.data.thenBlocks.forEach(id =>{
                     const childBlock = GetBlockById(id);
                     if (childBlock) ExecuteBlock(childBlock);
@@ -237,7 +281,8 @@ function ExecuteBlock(block) {
             break;
         case "ifElse":
             validateCondition(block);
-            if (EvaluateCondition(block.data.condition)) {
+
+            if (EvaluateCondition(GetBlockById(block.data.value))) {
                 block.data.thenBlocks.forEach(id =>{
                     const childBlock = GetBlockById(id);
                     if (childBlock) ExecuteBlock(childBlock);
@@ -252,7 +297,7 @@ function ExecuteBlock(block) {
             break;
         case "while":
             validateCondition(block);
-            while (EvaluateCondition(block.data.condition)){
+            while (EvaluateCondition(GetBlockById(block.data.value))){
                 block.data.bodyBlocks.forEach(id =>{
                     const childBlock = GetBlockById(id);
                     if (childBlock) ExecuteBlock(childBlock);
@@ -302,7 +347,7 @@ function ExecuteBlock(block) {
                 highlightErrorBlock(block.id);
                 throw new Error(`Индекс вне границ массива`);
             }
-            arrays[arrayName][index] = EvaluateExpression(block.data.value);
+            arrays[arrayName][index] = EvaluateExpression(GetBlockById(block.data.value));
             break;
     }
 }
