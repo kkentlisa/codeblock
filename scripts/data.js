@@ -307,7 +307,7 @@ function DisconnectFromSlot(blockId){
     }
 
     for (let slotName in parentBlock.data){
-        if (parentBlock.data[slotName]?.id === block.id){
+        if (parentBlock.data[slotName] === block.id){
             parentBlock.data[slotName] = null;
             block.parent = null;
             SaveBlocksToStorage();
