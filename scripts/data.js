@@ -222,20 +222,26 @@ function ResetAllBlocks(){
     ClearOutputPanel()
 }
 
-function AddToBody(parentId, childId){
+function AddToBody(parentId, childId, slotType){
     const parentBlock = GetBlockById(parentId);
     const childBlock = GetBlockById(childId);
     if (!parentBlock || !childBlock){
         return;
     }
-    if (parentBlock.type === "if"){
+    if (parentBlock.type === "if" && slotType === "then"){
         parentBlock.data.thenBlocks.push(childId);
     }
-    else if (parentBlock.type === "ifElse"){
+    else if (parentBlock.type === "ifElse" && slotType === "then"){
         parentBlock.data.thenBlocks.push(childId);
+    }
+    else if (parentBlock.type === "ifElse" && slotType === "else"){
+        parentBlock.data.elseBlocks.push(childId);
     }
     else if (parentBlock.type === "while"){
         parentBlock.data.bodyBlocks.push(childId);
+    }
+    else{
+        return;
     }
     childBlock.parent = parentId;
     SaveBlocksToStorage();
@@ -273,29 +279,6 @@ function RemoveFromBody(parentId, childId){
     SaveBlocksToStorage();
 }
 
-function IsSlotFree(parentId, slotName){
-    const parentBlock = GetBlockById(parentId);
-    if (!parentBlock){
-        return false;
-    }
-    return parentBlock.data[slotName] === null;
-}
-
-function GetNestingLevel(blockId){
-        const block = GetBlockById(blockId);
-        if (!block){
-            return;
-        }
-        let level = 0;
-        let current = block;
-
-        while(current.parent !== null){
-            current = GetBlockById(current.parent);
-            level++;
-        }
-        return level;
-}
-
 function DisconnectFromSlot(blockId){
     const block = GetBlockById(blockId);
     if (!block || !block.parent){
@@ -314,19 +297,4 @@ function DisconnectFromSlot(blockId){
             return;
         }
     }
-}
-
-function IsBlockInSlot(blockId){
-    const block = GetBlockById(blockId);
-    if (!block) return false;
-    if (block.parent !== null){
-        const parent = GetBlockById(block.parent);
-        if (!parent) return false;
-        for (let slotName in parent.data){
-            if (parent.data[slotName]?.id === block.id){
-                return true;
-            }
-        }
-    }
-    return false;
 }
