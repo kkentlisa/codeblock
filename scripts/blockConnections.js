@@ -1,47 +1,36 @@
-function canConnect(parentBlock, childBlock) {
-    if (childBlock.type === 'start') return false;
-    if (parentBlock.type === 'print') return false;
-    if (parentBlock.child !== null) return false;
-    if (childBlock.parent !== null) return false;
+function canConnect(previousBlock, nextBlock) {
+    if (nextBlock.type === 'start') return false;
+    if (previousBlock.type === 'print') return false;
+    if (previousBlock.next !== null) return false;
+    if (nextBlock.previous !== null) return false;
+
     return true;
 }
 
-function connectBlocks(parentId, childId) {
-    const parent = GetBlockById(parentId);
-    const child = GetBlockById(childId);
+function connectBlocks(previousId, nextId) {
+    const previous = GetBlockById(previousId);
+    const next = GetBlockById(nextId);
 
-    if (!parent || !child) return;
+    if (!previous || !next) return;
+    if (!canConnect(previous, next)) return;
 
-    if (!canConnect(parent, child)) return;
+    previous.next = nextId;
+    next.previous = previousId;
 
-    if (child.parent !== null) {
-        const oldParent = GetBlockById(child.parent);
-        if (oldParent) {
-            oldParent.child = null;
-        }
-    }
-    if (parent.child !== null) {
-        const oldChild=GetBlockById(parent.child);
-        if (oldChild ) {
-            oldChild.parent = null;
-        }
-    }
-
-    parent.child = childId;
-    child.parent = parentId;
-
+    SaveBlocksToStorage();
 }
 
 function disconnectBlock(blockId) {
     const block = GetBlockById(blockId);
     if (!block) return;
 
-    if (block.parent !== null) {
-        const parent = GetBlockById(block.parent);
-        if (parent) {
-            parent.child = null;
+    if (block.previous !== null) {
+        const previousBlock = GetBlockById(block.previous);
+        if (previousBlock) {
+            previousBlock.next = null;
         }
-        block.parent = null;
+        block.previous = null;
+        SaveBlocksToStorage();
     }
 }
 
@@ -110,8 +99,8 @@ function getBlockGroup(blockId, direction = 'all') {
 
     if (direction === 'all'||  direction === 'up') {
         let current = block;
-        while (current.parent !== null) {
-            current =GetBlockById(current.parent);
+        while (current.previous !== null) {
+            current =GetBlockById(current.previous);
             if (current) group.push(current);
         }
     }
@@ -119,8 +108,8 @@ function getBlockGroup(blockId, direction = 'all') {
     group.push(block);
     if (direction === 'all' || direction === 'down') {
         let current = block;
-        while (current.child !== null) {
-            current = GetBlockById(current.child);
+        while (current.next !== null) {
+            current = GetBlockById(current.next);
             if (current) group.push(current);
         }
     }

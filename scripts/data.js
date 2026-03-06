@@ -170,6 +170,8 @@ function CreateBlock(type, x, y){
         position: {x: x, y: y},
         parent: null,
         child: null,
+        previous: null,
+        next: null,
         data: data
     }
 
@@ -183,13 +185,25 @@ function GetBlockById(id){
 }
 
 function DeleteBlock(id){
-    const previousBlock = blocksInWorkSpace.find(block => block.child === id);
-    if (previousBlock) {
-        previousBlock.child = null;
+    const blockToDelete=GetBlockById(id);
+    if (!blockToDelete) return;
+
+    if(blockToDelete.parent !== null) DisconnectFromSlot(id);
+
+    if (blockToDelete.previous !== null){
+        const prevBlock=GetBlockById(blockToDelete.previous);
+        if (prevBlock) prevBlock.next = null;
     }
-    const nextBlock = blocksInWorkSpace.find(block => block.parent === id);
-    if (nextBlock) {
-        nextBlock.parent = null;
+    if (blockToDelete.next !== null){
+        const nextBlock=GetBlockById(blockToDelete.next);
+        if (nextBlock) nextBlock.previous = null;
+    }
+    for (let slot in blockToDelete.data) {
+        const childId = blockToDelete.data[slot];
+        if (childId) {
+            const child = GetBlockById(childId);
+            if (child) child.parent = null;
+        }
     }
 
     const index = blocksInWorkSpace.findIndex(block => block.id === id);
@@ -298,7 +312,7 @@ function GetNestingLevel(blockId){
 
 function DisconnectFromSlot(blockId){
     const block = GetBlockById(blockId);
-    if (!block || !block.parent){
+    if (!block || block.parent===null){
         return;
     }
     const parentBlock = GetBlockById(block.parent);
@@ -323,7 +337,7 @@ function IsBlockInSlot(blockId){
         const parent = GetBlockById(block.parent);
         if (!parent) return false;
         for (let slotName in parent.data){
-            if (parent.data[slotName]?.id === block.id){
+            if (parent.data[slotName] === block.id){
                 return true;
             }
         }
