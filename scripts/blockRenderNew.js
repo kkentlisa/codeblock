@@ -51,6 +51,36 @@ function renderBlock(blockData){
     label.textContent=window.typeNames[blockData.type] || blockData.type;
     blockBody.appendChild(label);
 
+    if(blockData.data.name!==undefined || blockData.data.variable!==undefined){
+        const nameInput=document.createElement('input');
+        nameInput.type='text';
+        nameInput.placeholder = 'имя переменной';
+        nameInput.className='block-input-name';
+
+        const key = blockData.data.name !== undefined? 'name':'variable';
+        nameInput.value=blockData.data[key];
+
+        nameInput.oninput=(e)=>{
+            blockData.data[key] = e.target.value;
+            SaveBlocksToStorage();
+        };
+        blockBody.appendChild(nameInput);
+    }
+
+    else if(blockData.data.value!==undefined){
+        const valueInput = document.createElement('input');
+        valueInput.type='text';
+        valueInput.placeholder='значение переменной';
+        valueInput.className='block-input-value';
+        valueInput.value=blockData.data.value;
+
+        valueInput.oninput=(e)=>{
+            blockData.data.value = e.target.value;
+            SaveBlocksToStorage();
+        };
+        blockBody.appendChild(valueInput);
+    }
+
     const slots = BLOCK_SLOTS[blockData.type] || [];
     slots.forEach(slotName => {
         const slotElement = document.createElement('div');
