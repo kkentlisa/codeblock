@@ -387,13 +387,13 @@ function RunProgram(){
     variables = {};
     arrays = {};
 
-    let currentBlockId = startBlock.child;
+    let currentBlockId = startBlock.next;
 
     while (currentBlockId) {
         const currentBlock = GetBlockById(currentBlockId);
         if (!currentBlock) return;
 
         ExecuteBlock(currentBlock);
-        currentBlockId = currentBlock.child;
+        currentBlockId = currentBlock.next;
     }
 }
