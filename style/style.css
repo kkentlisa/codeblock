@@ -109,6 +109,13 @@ h2{
     background-color: plum;
     border: 3px solid #cd00cd;
 }
+.blockPanelButton[data-type="arrayDeclare"],
+.blockPanelButton[data-type="arrayAssignByIndex"],
+.blockPanelButton[data-type="arrayGet"],
+.blockPanelButton[data-type="arrayLength"]{
+    background-color: pink;
+    border: 3px solid deeppink;
+}
 .blockPanelButton:hover{
     color: white;
     transform: scale(1.05) translateY(-2px);
@@ -147,6 +154,12 @@ h2{
 .blockPanelButton:hover[data-type="or"],
 .blockPanelButton:hover[data-type="not"]{
     background-color: #cd00cd;
+}
+.blockPanelButton:hover[data-type="arrayDeclare"],
+.blockPanelButton:hover[data-type="arrayAssignByIndex"],
+.blockPanelButton:hover[data-type="arrayGet"],
+.blockPanelButton:hover[data-type="arrayLength"]{
+    background-color: deeppink;
 }
 .workSpace{
     position: relative;

@@ -11,6 +11,7 @@
     min-width: 100px;
     width: auto;
     height: auto;
+    gap: 5px;
 }
 .block-start,
 .block-input,
@@ -87,6 +88,15 @@
     height: auto;
     line-height: 28px;
 }
+.block-arrayDeclare,
+.block-arrayAssignByIndex,
+.block-arrayGet,
+.block-arrayLength{
+    border: 2px solid deeppink;
+    background-color: pink;
+    text-align: center;
+
+}
 .block-container{
     position: absolute;
     background-color: transparent;
@@ -112,6 +122,7 @@
 }
 .block-container:hover .block {
     border-width: 3px;
+    z-index: 100;
 }
 .block-error .block{
     animation: colorPulse 1.75s infinite;
