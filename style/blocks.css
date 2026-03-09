@@ -40,6 +40,7 @@
     border: 2px solid gold;
     background-color: palegoldenrod;
     flex-direction: column;
+    align-items: stretch;
 }
 .block-add,
 .block-subtract,
