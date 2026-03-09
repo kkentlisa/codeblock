@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1342561b-33e6-413e-b067-332512edd1ac" name="Changes" comment="изменила отрисовку блоков, обновила стили, добавила блоки массивов">
+      <change afterPath="$PROJECT_DIR$/unnamed.patch" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;steldii&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/kkentlisa/codeblock&quot;,
+    &quot;accountId&quot;: &quot;24a10d9e-d6b2-4a26-94bd-50e93e9554fc&quot;
+  }
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="39h5qokk1SoXNOWDKBC8a6I6W87" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "JavaScript Debug.main.html.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Node.js.data.js.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "git-widget-placeholder": "liza",
+    "ignore.virus.scanning.warn.message": "true",
+    "javascript.preferred.runtime.type.id": "node",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.splitter.proportion": "0.28134558",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Лиза\WebstormProjects\codeblock1\image" />
+      <recent name="C:\Users\Лиза\WebstormProjects\codeblock1\style" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-WS-253.30387.83" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1342561b-33e6-413e-b067-332512edd1ac" name="Changes" comment="" />
+      <created>1771135656167</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1771135656167</updated>
+      <workItem from="1771135657401" duration="12578000" />
+      <workItem from="1771176779071" duration="1313000" />
+      <workItem from="1771221592475" duration="5099000" />
+      <workItem from="1771228067794" duration="171308000" />
+    </task>
+    <task id="LOCAL-00001" summary="Исправила прокрутку блоков, убрала выделение при перемещении, обновила стили">
+      <option name="closed" value="true" />
+      <created>1771998309879</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1771998309879</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Сделала дырки">
+      <option name="closed" value="true" />
+      <created>1772513631277</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1772513631277</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Сделала дырки">
+      <option name="closed" value="true" />
+      <created>1772514952245</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1772514952245</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Сделала дырки, добавила стили для них">
+      <option name="closed" value="true" />
+      <created>1772534990969</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1772534990969</updated>
+    </task>
+    <task id="LOCAL-00005" summary="обновила стили блоков">
+      <option name="closed" value="true" />
+      <created>1772586782884</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1772586782884</updated>
+    </task>
+    <task id="LOCAL-00006" summary="обновила стили блоков">
+      <option name="closed" value="true" />
+      <created>1772587332088</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1772587332088</updated>
+    </task>
+    <task id="LOCAL-00007" summary="обновила стили блоков">
+      <option name="closed" value="true" />
+      <created>1772593993610</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1772593993610</updated>
+    </task>
+    <task id="LOCAL-00008" summary="обновила стили блоков, кнопки удаления">
+      <option name="closed" value="true" />
+      <created>1772777032290</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1772777032290</updated>
+    </task>
+    <task id="LOCAL-00009" summary="добавила анимацию блока ошибки">
+      <option name="closed" value="true" />
+      <created>1772819178209</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1772819178209</updated>
+    </task>
+    <task id="LOCAL-00010" summary="добавила анимацию блока ошибки">
+      <option name="closed" value="true" />
+      <created>1772819389223</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1772819389223</updated>
+    </task>
+    <task id="LOCAL-00011" summary="добавила анимацию блока ошибки">
+      <option name="closed" value="true" />
+      <created>1772820613675</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1772820613675</updated>
+    </task>
+    <task id="LOCAL-00012" summary="изменила отрисовку блоков, обновила стили, добавила блоки массивов">
+      <option name="closed" value="true" />
+      <created>1772995494594</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1772995494594</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Исправила прокрутку блоков, убрала выделение при перемещении, обновила стили" />
+    <MESSAGE value="Сделала дырки" />
+    <MESSAGE value="Сделала дырки, добавила стили для них" />
+    <MESSAGE value="обновила стили блоков" />
+    <MESSAGE value="обновила стили блоков, кнопки удаления" />
+    <MESSAGE value="добавила анимацию блока ошибки" />
+    <MESSAGE value="изменила отриовку блоков, обновила стили, добавила блоки массивов" />
+    <MESSAGE value="изменила отрисовку блоков, обновила стили, добавила блоки массивов" />
+    <option name="LAST_COMMIT_MESSAGE" value="изменила отрисовку блоков, обновила стили, добавила блоки массивов" />
+  </component>
+</project>
