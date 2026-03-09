@@ -58,9 +58,6 @@ function renderBlock(blockData){
             case 'slot':
                 renderSlot(blockBody, blockData, element.slotName, element.placeholder);
                 break;
-            case 'body':
-                renderBody(blockBody, blockData, element.part);
-                break;
         }
     });
 
@@ -95,18 +92,18 @@ function renderText(container, content) {
 }
 
 function renderInput(container, blockData, key, placeholder) {
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.placeholder = placeholder;
-    input.className = `blocks-input`;
-    input.value = blockData.data[key] || '';
+    const span = document.createElement('span');
+    span.type = 'text';
+    span.placeholder = placeholder;
+    span.className = `blocks-input`;
+    span.value = blockData.data[key] || '';
 
-    input.oninput = (e) => {
+    span.oninput = (e) => {
         blockData.data[key] = e.target.value;
         SaveBlocksToStorage();
     };
 
-    container.appendChild(input);
+    container.appendChild(span);
 }
 
 function renderSlot(container, blockData, slotName, placeholder) {
@@ -133,24 +130,6 @@ function renderSlot(container, blockData, slotName, placeholder) {
     container.appendChild(slotContainer);
 }
 
-function renderBody(container, blockData, part = 'body') {
-    const bodyContainer = document.createElement('div');
-    bodyContainer.className = `body-${part}`;
-    bodyContainer.dataset.parentId = blockData.id;
-    bodyContainer.dataset.bodyPart = part;
-
-    const firstChildId = blockData.data[part];
-
-    if (firstChildId) {
-        const childBlockData = GetBlockById(firstChildId);
-        if (childBlockData) {
-            const childElement = renderBlock(childBlockData);
-            bodyContainer.appendChild(childElement);
-        }
-    }
-    container.appendChild(bodyContainer);
-}
-
 function getBlockStructure(blockData) {
     const structures = {
         'start': {
@@ -161,24 +140,24 @@ function getBlockStructure(blockData) {
         'input': {
             elements: [
                 { type: 'text', content: 'Ввод' },
-                { type: 'input', key: 'value', placeholder: 'Имя переменной' }
+                { type: 'input', key: 'value', placeholder: 'значение' }
             ]
         },
         'print': {
             elements: [
                 { type: 'text', content: 'Вывод' },
-                { type: 'input', key: 'value', placeholder: 'переменная' }
+                { type: 'slot', slotName: 'value', placeholder: 'переменная' }
             ]
         },
         'variableInit': {
             elements: [
                 { type: 'text', content: 'Новая переменная' },
-                { type: 'input', key: 'name', placeholder: 'Имя переменной' }
+                { type: 'input', key: 'name', placeholder: 'имя переменной' }
             ]
         },
         'assignValue': {
             elements: [
-                { type: 'input', key: 'variable', placeholder: 'переменная' },
+                { type: 'input', key: 'variable', placeholder: 'Переменная' },
                 { type: 'text', content: '=' },
                 { type: 'slot', slotName: 'value', placeholder: 'значение' }
             ]
@@ -186,7 +165,7 @@ function getBlockStructure(blockData) {
         'arrayDeclare': {
             elements: [
                 { type: 'text', content: 'Новый массив' },
-                { type: 'input', key: 'name', placeholder: 'Имя массива' },
+                { type: 'input', key: 'name', placeholder: 'имя массива' },
                 { type: 'text', content: 'размером' },
                 { type: 'input', key: 'size', placeholder: 'размер' }
             ]
