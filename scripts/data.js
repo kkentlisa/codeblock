@@ -27,7 +27,8 @@ const BLOCK_SLOTS = {
     'or': ['left', 'right'],
     'not': ['operand'],
     'arrayAssignByIndex': ['index', 'value'],
-    'arrayGet': ['index']
+    'arrayGet': ['index'],
+    'print': ['value']
 }
 
 function CreateBlock(type, x, y){
@@ -46,7 +47,7 @@ function CreateBlock(type, x, y){
     }
 
     else if (type === "print"){
-        data.variable = "";
+        data.value = null;
     }
 
     else if (type === "variableInit"){

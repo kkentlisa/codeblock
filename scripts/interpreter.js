@@ -37,17 +37,17 @@ function EvaluateExpression(block) {
             highlightErrorBlock(block.id);
             throw new Error(`Не введено значение`);
         }
-        if (isNaN(value)) {
-            const variableValue =  GetVariable(value);
-            if (variableValue === undefined){
-                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: переменная "${value}" не найдена`);
-                highlightErrorBlock(block.id);
-                throw new Error(`Переменная "${value}" не найдена`);
-            }
+
+        if (!isNaN(value)) {
+            return Number(value);
+        }
+
+        const variableValue = GetVariable(value);
+        if (variableValue !== undefined) {
             return variableValue;
         }
-        else
-            return Number(value);
+
+        return value;
     }
 
     else if (block.type === "add") {
@@ -320,20 +320,13 @@ function ExecuteBlock(block) {
             }
             break;
         case "print": {
-            if (block.data.variable === ""){
-                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя переменной`);
+            if (block.data.value === null){
+                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не задано значение для вывода`);
                 highlightErrorBlock(block.id);
-                throw new Error(`Не указано имя переменной`);
+                throw new Error(`Не задано значение для вывода`);
             }
-            const value = GetVariable(block.data.variable);
-            if (value === undefined){
-                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: переменная "${block.data.variable}" не найдена`);
-                highlightErrorBlock(block.id);
-                throw new Error(`Переменная "${block.data.variable}" не найдена`);
-            }
-            else {
-                LogToOutputPanel(String(value));
-            }
+            const value = EvaluateExpression(GetBlockById(block.data.value));
+            LogToOutputPanel(String(value));
             break;
         }
         case "arrayDeclare":
