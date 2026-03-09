@@ -47,7 +47,20 @@ function renderBlock(blockData){
 
     const blockStructure = getBlockStructure(blockData);
 
+    let currentLine = document.createElement('div');
+    currentLine.className = 'block-line';
+    blockBody.appendChild(currentLine);
+
     blockStructure.elements.forEach(element => {
+        if (element.type === 'break') {
+            currentLine = document.createElement('div');
+            currentLine.className = 'block-line';
+            blockBody.appendChild(currentLine);
+        }
+        else {
+            const elementContainer = document.createElement('div');
+            elementContainer.className = 'block-element';
+        }
         switch (element.type) {
             case 'text':
                 renderText(blockBody, element.content);
@@ -99,7 +112,15 @@ function renderInput(container, blockData, key, placeholder) {
     span.dataset.placeholder = placeholder;
 
     span.oninput = (e) => {
-        blockData.data[key] = e.target.textContent;
+        const text = e.target.textContent.trim();
+        blockData.data[key] = text;
+        SaveBlocksToStorage();
+    };
+    span.onblur = (e) => {
+        const text = e.target.textContent.trim();
+        if (text === '') {
+            blockData.data[key] = '';
+        }
         SaveBlocksToStorage();
     };
 
@@ -201,6 +222,7 @@ function getBlockStructure(blockData) {
                 { type: 'text', content: 'если' },
                 { type: 'slot', slotName: 'condition', placeholder: 'условие' },
                 { type: 'text', content: 'то' },
+                { type: 'break' },
                 { type: 'slot', slotName: 'then', placeholder: 'тело'}
             ]
         },
@@ -209,8 +231,10 @@ function getBlockStructure(blockData) {
                 { type: 'text', content: 'если' },
                 { type: 'slot', slotName: 'condition', placeholder: 'условие' },
                 { type: 'text', content: 'то' },
+                { type: 'break' },
                 { type: 'body', part: 'then' },
                 { type: 'text', content: 'иначе' },
+                { type: 'break' },
                 { type: 'slot', slotName: 'then', placeholder: 'тело'},
             ]
         },
@@ -219,6 +243,7 @@ function getBlockStructure(blockData) {
                 { type: 'text', content: 'пока' },
                 { type: 'slot', slotName: 'condition', placeholder: 'условие' },
                 { type: 'text', content: 'выполнять' },
+                { type: 'break' },
                 { type: 'slot', slotName: 'then', placeholder: 'тело' }
             ]
         },
