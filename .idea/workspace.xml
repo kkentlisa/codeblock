@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1342561b-33e6-413e-b067-332512edd1ac" name="Changes" comment="изменила отрисовку блоков, обновила стили, добавила блоки массивов">
-      <change afterPath="$PROJECT_DIR$/unnamed.patch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/main.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/blockRender.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/blockRender.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/style/blocks-input.css" beforeDir="false" afterPath="$PROJECT_DIR$/style/blocks-input.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +94,7 @@
       <workItem from="1771135657401" duration="12578000" />
       <workItem from="1771176779071" duration="1313000" />
       <workItem from="1771221592475" duration="5099000" />
-      <workItem from="1771228067794" duration="171308000" />
+      <workItem from="1771228067794" duration="177185000" />
     </task>
     <task id="LOCAL-00001" summary="Исправила прокрутку блоков, убрала выделение при перемещении, обновила стили">
       <option name="closed" value="true" />

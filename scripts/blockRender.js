@@ -188,7 +188,7 @@ function getBlockStructure(blockData) {
                 { type: 'text', content: 'Новый массив' },
                 { type: 'input', key: 'name', placeholder: 'Имя массива' },
                 { type: 'text', content: 'размером' },
-                { type: 'slot', slotName: 'size', placeholder: 'размер' }
+                { type: 'input', slotName: 'size', placeholder: 'размер' }
             ]
         },
         'arrayAssignByIndex': {

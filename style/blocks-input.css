@@ -62,5 +62,15 @@
 .slot-condition:hover{
     border-width: 2px;
 }
+.body,
+.body-then,
+.body-else{
+    display: flex;
+    flex-direction: column;
+    background-color: transparent;
+    position: relative;
+    min-height: 40px;
+    min-width: 100px;
+}
 
 
