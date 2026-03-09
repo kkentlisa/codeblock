@@ -18,6 +18,25 @@ function connectToSlot(parentId, childId, slotName) {
     SaveBlocksToStorage();
 }
 
+function connectToBodySlot(parentId, childId, slotName) {
+    const parent = GetBlockById(parentId);
+    const child = GetBlockById(childId);
+    if (!parent || !child) return;
+
+    AddToBody(parentId, childId, slotName);
+
+    const childElement = document.querySelector(`[data-id="${childId}"]`);
+    if (childElement) {
+        const rect = childElement.getBoundingClientRect();
+        if (!parent.slotSizes) parent.slotSizes = {};
+        parent.slotSizes[slotName] = {
+            width: rect.width,
+            height: rect.height
+        };
+    }
+    SaveBlocksToStorage();
+}
+
 function findSlotByPosition(containerId, movedBlockId, slotName) {
     const movedElement = document.querySelector(`[data-id="${movedBlockId}"]`);
     const containerElement = document.querySelector(`[data-id="${containerId}"]`);
