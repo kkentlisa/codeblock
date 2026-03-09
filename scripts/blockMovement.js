@@ -22,7 +22,17 @@ function setupDraggable(element) {
                 const wsRect = workspace.getBoundingClientRect();
 
                 if(block.parent !== null){
-                    DisconnectFromSlot(blockId);
+                    const parent = GetBlockById(block.parent);
+                    if (parent) {
+                        if (parent.data.thenBlocks?.includes(blockId) ||
+                            parent.data.elseBlocks?.includes(blockId) ||
+                        parent.data.bodyBlocks?.includes(blockId) ){
+                            RemoveFromBody(block.parent, blockId);
+                        }
+                    else{
+                            DisconnectFromSlot(blockId);
+                        }
+                    }
                 }
                 else{
                     disconnectBlock(blockId);
