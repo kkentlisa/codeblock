@@ -93,13 +93,13 @@ function renderText(container, content) {
 
 function renderInput(container, blockData, key, placeholder) {
     const span = document.createElement('span');
-    span.type = 'text';
-    span.placeholder = placeholder;
+    span.contentEditable = 'true';
     span.className = `blocks-input`;
-    span.value = blockData.data[key] || '';
+    span.textContent = blockData.data[key] || '';
+    span.dataset.placeholder = placeholder;
 
     span.oninput = (e) => {
-        blockData.data[key] = e.target.value;
+        blockData.data[key] = e.target.textContent;
         SaveBlocksToStorage();
     };
 
@@ -201,7 +201,7 @@ function getBlockStructure(blockData) {
                 { type: 'text', content: 'если' },
                 { type: 'slot', slotName: 'condition', placeholder: 'условие' },
                 { type: 'text', content: 'то' },
-                { type: 'body' }
+                { type: 'slot', slotName: 'then', placeholder: 'тело'}
             ]
         },
         'if-else': {
@@ -211,7 +211,7 @@ function getBlockStructure(blockData) {
                 { type: 'text', content: 'то' },
                 { type: 'body', part: 'then' },
                 { type: 'text', content: 'иначе' },
-                { type: 'body', part: 'else' }
+                { type: 'slot', slotName: 'then', placeholder: 'тело'},
             ]
         },
         'while': {
@@ -219,7 +219,7 @@ function getBlockStructure(blockData) {
                 { type: 'text', content: 'пока' },
                 { type: 'slot', slotName: 'condition', placeholder: 'условие' },
                 { type: 'text', content: 'выполнять' },
-                { type: 'body' }
+                { type: 'slot', slotName: 'then', placeholder: 'тело' }
             ]
         },
         'add': {
