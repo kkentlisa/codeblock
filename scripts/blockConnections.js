@@ -43,24 +43,28 @@ function checkForConnection(movedBlockId, e) {
 
     const movedRect = movedElement.getBoundingClientRect();
 
-    if (VALUE_BLOCKS.includes(movedBlock.type)) {
-        let connected = false;
-        for (const otherBlock of blocksInWorkSpace) {
-            if (otherBlock.id === movedBlockId) continue;
+    for (const otherBlock of blocksInWorkSpace) {
+        if (otherBlock.id === movedBlockId) continue;
 
-            const slots = BLOCK_SLOTS[otherBlock.type] || [];
+        const slots = BLOCK_SLOTS[otherBlock.type] || [];
 
-            for (const slotName of slots) {
-                const isOverThisSlot = findSlotByPosition(otherBlock.id, movedBlock.id, slotName);
+        for (const slotName of slots) {
+            const isOverThisSlot = findSlotByPosition(otherBlock.id, movedBlock.id, slotName);
 
-                if (isOverThisSlot && IsSlotFree(otherBlock.id, slotName)) {
-                    connectToSlot(otherBlock.id, movedBlock.id, slotName);
-                    connected = true;
-                    break;
+            if (isOverThisSlot) {
+                if (['then', 'else', 'body'].includes(slotName)) {
+                    if (movedBlock.type !== "start" && !VALUE_BLOCKS.includes(movedBlock.type)) {
+                        connectToBodySlot(otherBlock.id, movedBlock.id, slotName);
+                        return;
+                    }
+                }
+                else {
+                    if (IsSlotFree(otherBlock.id, slotName) && VALUE_BLOCKS.includes(movedBlock.type)) {
+                        connectToSlot(otherBlock.id, movedBlock.id, slotName);
+                        return;
+                    }
                 }
             }
-
-            if (connected) break;
         }
     }
     if (!VALUE_BLOCKS.includes(movedBlock.type)) {
@@ -92,27 +96,3 @@ function checkForConnection(movedBlockId, e) {
     }
 }
 
-function getBlockGroup(blockId, direction = 'all') {
-    const group = [];
-    const block = GetBlockById(blockId);
-    if (!block) return group;
-
-    if (direction === 'all'||  direction === 'up') {
-        let current = block;
-        while (current.previous !== null) {
-            current =GetBlockById(current.previous);
-            if (current) group.push(current);
-        }
-    }
-
-    group.push(block);
-    if (direction === 'all' || direction === 'down') {
-        let current = block;
-        while (current.next !== null) {
-            current = GetBlockById(current.next);
-            if (current) group.push(current);
-        }
-    }
-
-    return group;
-}
