@@ -25,7 +25,7 @@
 .slot-operand,
 .slot-value,
 .slot-condition,
-.slot-size{
+.slot-index{
     position: relative;
     top: 0;
     transform: none;
@@ -59,7 +59,8 @@
 .slot-right:hover,
 .slot-operand:hover,
 .slot-value:hover,
-.slot-condition:hover{
+.slot-condition:hover,
+.slot-index:hover{
     border-width: 2px;
 }
 .body,

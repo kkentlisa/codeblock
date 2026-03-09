@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1342561b-33e6-413e-b067-332512edd1ac" name="Changes" comment="изменила отрисовку блоков, обновила стили, добавила блоки массивов">
+    <list default="true" id="1342561b-33e6-413e-b067-332512edd1ac" name="Changes" comment="обновила стили">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/main.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/blockRender.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/blockRender.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/style/blocks-input.css" beforeDir="false" afterPath="$PROJECT_DIR$/style/blocks-input.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/style/blocks.css" beforeDir="false" afterPath="$PROJECT_DIR$/style/blocks.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +93,7 @@
       <workItem from="1771135657401" duration="12578000" />
       <workItem from="1771176779071" duration="1313000" />
       <workItem from="1771221592475" duration="5099000" />
-      <workItem from="1771228067794" duration="177185000" />
+      <workItem from="1771228067794" duration="181182000" />
     </task>
     <task id="LOCAL-00001" summary="Исправила прокрутку блоков, убрала выделение при перемещении, обновила стили">
       <option name="closed" value="true" />
@@ -192,7 +191,23 @@
       <option name="project" value="LOCAL" />
       <updated>1772995494594</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="обновила стили">
+      <option name="closed" value="true" />
+      <created>1773053214872</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1773053214872</updated>
+    </task>
+    <task id="LOCAL-00014" summary="обновила стили">
+      <option name="closed" value="true" />
+      <created>1773053310320</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1773053310320</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -207,6 +222,7 @@
     <MESSAGE value="добавила анимацию блока ошибки" />
     <MESSAGE value="изменила отриовку блоков, обновила стили, добавила блоки массивов" />
     <MESSAGE value="изменила отрисовку блоков, обновила стили, добавила блоки массивов" />
-    <option name="LAST_COMMIT_MESSAGE" value="изменила отрисовку блоков, обновила стили, добавила блоки массивов" />
+    <MESSAGE value="обновила стили" />
+    <option name="LAST_COMMIT_MESSAGE" value="обновила стили" />
   </component>
 </project>
