@@ -339,6 +339,11 @@ function DisconnectFromSlot(blockId){
         if (parentBlock.data[slotName] === block.id){
             parentBlock.data[slotName] = null;
             block.parent = null;
+
+            if (parentBlock.slotSizes && parentBlock.slotSizes[slotName]){
+                delete parentBlock.slotSizes[slotName];
+            }
+
             SaveBlocksToStorage();
             return;
         }
