@@ -167,7 +167,7 @@ function getBlockStructure(blockData) {
         'print': {
             elements: [
                 { type: 'text', content: 'Вывод' },
-                { type: 'input', key: 'variable', placeholder: 'переменная' }
+                { type: 'input', key: 'value', placeholder: 'переменная' }
             ]
         },
         'variableInit': {
