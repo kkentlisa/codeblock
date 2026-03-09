@@ -14,7 +14,7 @@ function GetVariable(name) {
 }
 
 function validateOperands(block){
-    if (!block.data.left || !block.data.right) {
+    if (block.data.left === null || block.data.right === null) {
         LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не все операнды заполнены`);
         highlightErrorBlock(block.id);
         throw new Error(`Не все операнды заполнены`);
@@ -22,7 +22,7 @@ function validateOperands(block){
 }
 
 function validateCondition(block){
-    if (!block.data.condition) {
+    if (block.data.condition === null) {
         LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не заполнено условие`);
         highlightErrorBlock(block.id);
         throw new Error(`Не заполнено условие`);
@@ -32,7 +32,7 @@ function validateCondition(block){
 function EvaluateExpression(block) {
     if (block.type === "input") {
         const value = block.data.value;
-        if (!value){
+        if (value === ""){
             LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не введено значение`);
             highlightErrorBlock(block.id);
             throw new Error(`Не введено значение`);
@@ -118,7 +118,7 @@ function EvaluateExpression(block) {
     }
     else if (block.type === "arrayGet") {
         const arrayName = block.data.name;
-        if (!arrayName) {
+        if (arrayName === "") {
             LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя массива`);
             highlightErrorBlock(block.id);
             throw new Error(`Не указано имя массива`);
@@ -128,7 +128,7 @@ function EvaluateExpression(block) {
             highlightErrorBlock(block.id);
             throw new Error(`Массив ${arrayName} не найден`);
         }
-        if (!block.data.index) {
+        if (block.data.index === null) {
             LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указан индекс для чтения из массива`);
             highlightErrorBlock(block.id);
             throw new Error(`Не указан индекс для записи в массив`);
@@ -151,7 +151,7 @@ function EvaluateExpression(block) {
     }
     else if (block.type === "arrayLength") {
         const arrayName = block.data.name;
-        if (!arrayName) {
+        if (arrayName === "") {
             LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя массива`);
             highlightErrorBlock(block.id);
             throw new Error(`Не указано имя массива`);
@@ -187,6 +187,7 @@ function EvaluateCondition(block) {
     }
 
     else if (block.type === "eq") {
+        validateOperands(block);
         const leftBlock=GetBlockById(block.data.left);
         const rightBlock=GetBlockById(block.data.right);
 
@@ -246,7 +247,7 @@ function EvaluateCondition(block) {
     }
 
     else if (block.type === "not") {
-        if (!block.data.operand) {
+        if (block.data.operand === null) {
             LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: операнд не заполнен`);
             highlightErrorBlock(block.id);
             throw new Error(`Операнд не заполнен`);
@@ -262,7 +263,7 @@ function ExecuteBlock(block) {
 
     switch (block.type) {
         case "variableInit":
-            if (!block.data.name){
+            if (block.data.name === ""){
                 LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя переменной`);
                 highlightErrorBlock(block.id);
                 throw new Error(`Не указано имя переменной`);
@@ -270,12 +271,12 @@ function ExecuteBlock(block) {
             SetVariable(block.data.name, block.data.value);
             break;
         case "assignValue":
-            if (!block.data.variable){
+            if (block.data.variable === ""){
                 LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя переменной`);
                 highlightErrorBlock(block.id);
                 throw new Error(`Не указано имя переменной`);
             }
-            if (!block.data.value) {
+            if (block.data.value === null) {
                 LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не заполнено значение для присваивания`);
                 highlightErrorBlock(block.id);
                 throw new Error(`Не заполнено значение для присваивания`);
@@ -319,7 +320,7 @@ function ExecuteBlock(block) {
             }
             break;
         case "print": {
-            if (!block.data.variable){
+            if (block.data.variable === ""){
                 LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя переменной`);
                 highlightErrorBlock(block.id);
                 throw new Error(`Не указано имя переменной`);
@@ -336,11 +337,16 @@ function ExecuteBlock(block) {
             break;
         }
         case "arrayDeclare":
+            if (block.data.name === ""){
+                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя массива`);
+                highlightErrorBlock(block.id);
+                throw new Error(`Не указано имя массива`);
+            }
             arrays[block.data.name] = new Array(block.data.size).fill(0);
             break;
         case "arrayAssignByIndex":
             const arrayName = block.data.name;
-            if (!arrayName) {
+            if (arrayName === "") {
                 LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя массива`);
                 highlightErrorBlock(block.id);
                 throw new Error(`Не указано имя массива`);
@@ -350,7 +356,7 @@ function ExecuteBlock(block) {
                 highlightErrorBlock(block.id);
                 throw new Error(`Массив ${arrayName} не найден`);
             }
-            if (!block.data.index) {
+            if (block.data.index === null) {
                 LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указан индекс для записи в массив`);
                 highlightErrorBlock(block.id);
                 throw new Error(`Не указан индекс для записи в массив`);
@@ -381,7 +387,7 @@ function RunProgram(){
     const startBlock = blocksInWorkSpace.find(b => b.type === "start");
     if (!startBlock) {
         LogToOutputPanel("Нет стартового блока!");
-        return;
+        throw new Error(`Нет стартового блока`);
     }
 
     variables = {};

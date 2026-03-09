@@ -161,19 +161,19 @@ function getBlockStructure(blockData) {
         'input': {
             elements: [
                 { type: 'text', content: 'Ввод' },
-                { type: 'input', key: 'variable', placeholder: 'Имя переменной' }
+                { type: 'input', key: 'value', placeholder: 'Имя переменной' }
             ]
         },
         'print': {
             elements: [
                 { type: 'text', content: 'Вывод' },
-                { type: 'input', key: 'value', placeholder: 'переменная' }
+                { type: 'input', key: 'variable', placeholder: 'переменная' }
             ]
         },
         'variableInit': {
             elements: [
                 { type: 'text', content: 'Новая переменная' },
-                { type: 'input', key: 'variable', placeholder: 'Имя переменной' }
+                { type: 'input', key: 'name', placeholder: 'Имя переменной' }
             ]
         },
         'assignValue': {
@@ -188,7 +188,7 @@ function getBlockStructure(blockData) {
                 { type: 'text', content: 'Новый массив' },
                 { type: 'input', key: 'name', placeholder: 'Имя массива' },
                 { type: 'text', content: 'размером' },
-                { type: 'slot', slotName: 'size', placeholder: 'размер' }
+                { type: 'input', key: 'size', placeholder: 'размер' }
             ]
         },
         'arrayAssignByIndex': {
@@ -203,7 +203,7 @@ function getBlockStructure(blockData) {
         },
         'arrayGet': {
             elements: [
-                { type: 'input', slotName: 'name', placeholder: 'массив' },
+                { type: 'input', key: 'name', placeholder: 'массив' },
                 { type: 'text', content: '[' },
                 { type: 'slot', slotName: 'index', placeholder: 'индекс' },
                 { type: 'text', content: ']' }
