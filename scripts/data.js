@@ -2,10 +2,10 @@ let blocksInWorkSpace = [];
 let blockId = 0;
 
 const VALUE_CONTAINERS = ['assignValue','add', 'subtract', 'multiply', 'div',
-'mod', 'if', 'ifElse', 'while', 'gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not', 'arrayGet', 'arrayAssignByIndex'];
+    'mod', 'if', 'ifElse', 'while', 'gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not', 'arrayGet', 'arrayAssignByIndex'];
 const BODY_CONTAINERS = ['if', 'ifElse', 'while'];
 const VALUE_BLOCKS = ['input', 'add', 'subtract', 'multiply', 'div', 'mod',
-'gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not', 'arrayGet', 'arrayLength'];
+    'gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not', 'arrayGet', 'arrayLength'];
 
 const BLOCK_SLOTS = {
     'assignValue': ['value'],
@@ -14,9 +14,9 @@ const BLOCK_SLOTS = {
     'multiply': ['left', 'right'],
     'div': ['left', 'right'],
     'mod': ['left', 'right'],
-    'if': ['condition'],
-    'ifElse': ['condition'],
-    'while': ['condition'],
+    'if': ['condition', 'then'],
+    'ifElse': ['condition', 'then', 'else'],
+    'while': ['condition', 'body'],
     'gt': ['left', 'right'],
     'lt': ['left', 'right'],
     'eq': ['left', 'right'],
@@ -27,7 +27,8 @@ const BLOCK_SLOTS = {
     'or': ['left', 'right'],
     'not': ['operand'],
     'arrayAssignByIndex': ['index', 'value'],
-    'arrayGet': ['index']
+    'arrayGet': ['index'],
+    'print': ['value']
 }
 
 function CreateBlock(type, x, y){
@@ -46,7 +47,7 @@ function CreateBlock(type, x, y){
     }
 
     else if (type === "print"){
-        data.variable = "";
+        data.value = null;
     }
 
     else if (type === "variableInit"){
@@ -188,7 +189,19 @@ function DeleteBlock(id){
     const blockToDelete=GetBlockById(id);
     if (!blockToDelete) return;
 
-    if(blockToDelete.parent !== null) DisconnectFromSlot(id);
+    if(blockToDelete.parent !== null) {
+        const parent = GetBlockById(blockToDelete.parent);
+        if (parent) {
+            if (parent.data.thenBlocks?.includes(id) ||
+                parent.data.elseBlocks?.includes(id) ||
+                parent.data.bodyBlocks?.includes(id) ){
+                RemoveFromBody(blockToDelete.parent, id);
+            }
+            else{
+                DisconnectFromSlot(id);
+            }
+        }
+    }
 
     if (blockToDelete.previous !== null){
         const prevBlock=GetBlockById(blockToDelete.previous);
@@ -204,6 +217,25 @@ function DeleteBlock(id){
             const child = GetBlockById(childId);
             if (child) child.parent = null;
         }
+    }
+
+    if (blockToDelete.data.thenBlocks){
+        blockToDelete.data.thenBlocks.forEach(childId => {
+            const child = GetBlockById(childId);
+            if (child) child.parent = null;
+        })
+    }
+    if (blockToDelete.data.elseBlocks){
+        blockToDelete.data.elseBlocks.forEach(childId => {
+            const child = GetBlockById(childId);
+            if (child) child.parent = null;
+        })
+    }
+    if (blockToDelete.data.bodyBlocks){
+        blockToDelete.data.bodyBlocks.forEach(childId => {
+            const child = GetBlockById(childId);
+            if (child) child.parent = null;
+        })
     }
 
     const index = blocksInWorkSpace.findIndex(block => block.id === id);
@@ -307,6 +339,11 @@ function DisconnectFromSlot(blockId){
         if (parentBlock.data[slotName] === block.id){
             parentBlock.data[slotName] = null;
             block.parent = null;
+
+            if (parentBlock.slotSizes && parentBlock.slotSizes[slotName]){
+                delete parentBlock.slotSizes[slotName];
+            }
+
             SaveBlocksToStorage();
             return;
         }
