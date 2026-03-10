@@ -68,7 +68,12 @@ function renderBlock(blockData){
                     renderInput(elementContainer, blockData, element.key, element.placeholder);
                     break;
                 case 'slot':
-                    renderSlot(elementContainer, blockData, element.slotName, element.placeholder);
+                    if(['then', 'else', 'body'].includes(element.slotName)) {
+                        renderSlotInBody(elementContainer, blockData, element.slotName, element.placeholder);
+                    }
+                    else {
+                        renderSlot(elementContainer, blockData, element.slotName, element.placeholder);
+                    }
                     break;
             }
             currentLine.appendChild(elementContainer);
@@ -148,6 +153,32 @@ function renderSlot(container, blockData, slotName, placeholder) {
             const childElement = renderBlock(childBlockData);
             slotContainer.appendChild(childElement);
         }
+    }
+    container.appendChild(slotContainer);
+}
+function renderSlotInBody(container, blockData, slotName, placeholder) {
+    const slotContainer = document.createElement('div');
+    slotContainer.className = `slot-body slot-${slotName}`;
+    slotContainer.dataset.slot = slotName;
+    slotContainer.dataset.parentId = blockData.id;
+
+    const arrayName = slotName+ 'Blocks';
+    const childIds=blockData.data[arrayName];
+
+    if(!childIds||childIds.length===0){
+        const placeholderEl = document.createElement('div');
+        placeholderEl.className = 'slot-placeholder';
+        placeholderEl.textContent = placeholder || `[${slotName}]`;
+        slotContainer.appendChild(placeholderEl);
+    }
+    else{
+        childIds.forEach(childId=>{
+            const childBlockData = GetBlockById(childId);
+            if(childBlockData){
+                const childElement = renderBlock(childBlockData);
+                slotContainer.appendChild(childElement);
+            }
+        })
     }
     container.appendChild(slotContainer);
 }
@@ -237,7 +268,7 @@ function getBlockStructure(blockData) {
                 { type: 'break'},
                 { type: 'text', content: 'иначе' },
                 { type: 'break' },
-                { type: 'slot', slotName: 'then', placeholder: ' '},
+                { type: 'slot', slotName: 'else', placeholder: ' '},
             ]
         },
         'while': {
@@ -246,7 +277,7 @@ function getBlockStructure(blockData) {
                 { type: 'slot', slotName: 'condition', placeholder: 'условие' },
                 { type: 'text', content: 'выполнять' },
                 { type: 'break' },
-                { type: 'slot', slotName: 'then', placeholder: ' ' }
+                { type: 'slot', slotName: 'body', placeholder: ' ' }
             ]
         },
         'add': {
