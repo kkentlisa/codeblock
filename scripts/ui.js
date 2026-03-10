@@ -70,8 +70,14 @@ function ClearOutputPanel(){
 }
 
 function highlightErrorBlock(blockId){
-    const block = document.querySelector(`[data-id="${blockId}"]`);
+    const container = document.querySelector(`[data-id="${blockId}"]`);
+    if (!container) return;
+
+    const block = container.querySelector('.block');
     if (block){
         block.classList.add('block-error');
+    }
+    else{
+        container.classList.add('block-error');
     }
 }
