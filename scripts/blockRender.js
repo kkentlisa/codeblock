@@ -60,19 +60,20 @@ function renderBlock(blockData){
         else {
             const elementContainer = document.createElement('div');
             elementContainer.className = 'block-element';
+            switch (element.type) {
+                case 'text':
+                    renderText(elementContainer, element.content);
+                    break;
+                case 'input':
+                    renderInput(elementContainer, blockData, element.key, element.placeholder);
+                    break;
+                case 'slot':
+                    renderSlot(elementContainer, blockData, element.slotName, element.placeholder);
+                    break;
+            }
+            currentLine.appendChild(elementContainer);
         }
-        switch (element.type) {
-            case 'text':
-                renderText(blockBody, element.content);
-                break;
-            case 'input':
-                renderInput(blockBody, blockData, element.key, element.placeholder);
-                break;
-            case 'slot':
-                renderSlot(blockBody, blockData, element.slotName, element.placeholder);
-                break;
-        }
-    });
+        });
 
     const deleteBtn = document.createElement('span');
     deleteBtn.className = 'delete-btn';
@@ -223,7 +224,7 @@ function getBlockStructure(blockData) {
                 { type: 'slot', slotName: 'condition', placeholder: 'условие' },
                 { type: 'text', content: 'то' },
                 { type: 'break' },
-                { type: 'slot', slotName: 'then', placeholder: 'тело'}
+                { type: 'slot', slotName: 'then', placeholder: ' '}
             ]
         },
         'if-else': {
@@ -232,10 +233,11 @@ function getBlockStructure(blockData) {
                 { type: 'slot', slotName: 'condition', placeholder: 'условие' },
                 { type: 'text', content: 'то' },
                 { type: 'break' },
-                { type: 'body', part: 'then' },
+                { type: 'slot', slotName: 'then', placeholder: ' '},
+                { type: 'break'},
                 { type: 'text', content: 'иначе' },
                 { type: 'break' },
-                { type: 'slot', slotName: 'then', placeholder: 'тело'},
+                { type: 'slot', slotName: 'then', placeholder: ' '},
             ]
         },
         'while': {
@@ -244,7 +246,7 @@ function getBlockStructure(blockData) {
                 { type: 'slot', slotName: 'condition', placeholder: 'условие' },
                 { type: 'text', content: 'выполнять' },
                 { type: 'break' },
-                { type: 'slot', slotName: 'then', placeholder: 'тело' }
+                { type: 'slot', slotName: 'then', placeholder: ' ' }
             ]
         },
         'add': {

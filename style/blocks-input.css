@@ -31,11 +31,13 @@
     align-items: center;
     gap: 5px;
     flex-wrap: wrap;
+    background-color: transparent;
 }
-
 .block-element {
     display: inline-flex;
     align-items: center;
+    background-color: transparent;
+    flex: 1;
 }
 .slot-left,
 .slot-right,
