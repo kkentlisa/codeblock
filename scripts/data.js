@@ -2,8 +2,8 @@ let blocksInWorkSpace = [];
 let blockId = 0;
 
 const VALUE_CONTAINERS = ['assignValue','add', 'subtract', 'multiply', 'div',
-    'mod', 'if', 'ifElse', 'while', 'gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not', 'arrayGet', 'arrayAssignByIndex'];
-const BODY_CONTAINERS = ['if', 'ifElse', 'while'];
+    'mod', 'if', 'if-else', 'while', 'gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not', 'arrayGet', 'arrayAssignByIndex'];
+const BODY_CONTAINERS = ['if', 'if-else', 'while'];
 const VALUE_BLOCKS = ['input', 'add', 'subtract', 'multiply', 'div', 'mod',
     'gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not', 'arrayGet', 'arrayLength'];
 
@@ -15,7 +15,7 @@ const BLOCK_SLOTS = {
     'div': ['left', 'right'],
     'mod': ['left', 'right'],
     'if': ['condition', 'then'],
-    'ifElse': ['condition', 'then', 'else'],
+    'if-else': ['condition', 'then', 'else'],
     'while': ['condition', 'body'],
     'gt': ['left', 'right'],
     'lt': ['left', 'right'],
@@ -90,7 +90,7 @@ function CreateBlock(type, x, y){
         data.thenBlocks = [];
     }
 
-    else if (type === "ifElse"){
+    else if (type === "if-else"){
         data.condition = null;
         data.thenBlocks = [];
         data.elseBlocks = [];
@@ -277,10 +277,10 @@ function AddToBody(parentId, childId, slotType){
     if (parentBlock.type === "if" && slotType === "then"){
         parentBlock.data.thenBlocks.push(childId);
     }
-    else if (parentBlock.type === "ifElse" && slotType === "then"){
+    else if (parentBlock.type === "if-else" && slotType === "then"){
         parentBlock.data.thenBlocks.push(childId);
     }
-    else if (parentBlock.type === "ifElse" && slotType === "else"){
+    else if (parentBlock.type === "if-else" && slotType === "else"){
         parentBlock.data.elseBlocks.push(childId);
     }
     else if (parentBlock.type === "while"){
@@ -305,7 +305,7 @@ function RemoveFromBody(parentId, childId){
             parentBlock.data.thenBlocks.splice(index, 1);
         }
     }
-    else if (parentBlock.type === "ifElse"){
+    else if (parentBlock.type === "if-else"){
         const thenIndex = parentBlock.data.thenBlocks.indexOf(childId);
         if (thenIndex !== -1){
             parentBlock.data.thenBlocks.splice(thenIndex, 1);

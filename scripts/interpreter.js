@@ -294,7 +294,7 @@ function ExecuteBlock(block) {
                 });
             }
             break;
-        case "ifElse":
+        case "if-else":
             validateCondition(block);
 
             if (EvaluateCondition(GetBlockById(block.data.condition))) {
