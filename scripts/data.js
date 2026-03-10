@@ -275,16 +275,24 @@ function AddToBody(parentId, childId, slotType){
         return;
     }
     if (parentBlock.type === "if" && slotType === "then"){
-        parentBlock.data.thenBlocks.push(childId);
+        if (!parentBlock.data.thenBlocks.includes(childId)) {
+            parentBlock.data.thenBlocks.push(childId);
+        }
     }
     else if (parentBlock.type === "if-else" && slotType === "then"){
-        parentBlock.data.thenBlocks.push(childId);
+        if (!parentBlock.data.thenBlocks.includes(childId)) {
+            parentBlock.data.thenBlocks.push(childId);
+        }
     }
     else if (parentBlock.type === "if-else" && slotType === "else"){
-        parentBlock.data.elseBlocks.push(childId);
+        if (!parentBlock.data.elseBlocks.includes(childId)) {
+            parentBlock.data.elseBlocks.push(childId);
+        }
     }
     else if (parentBlock.type === "while"){
-        parentBlock.data.bodyBlocks.push(childId);
+        if (!parentBlock.data.bodyBlocks.includes(childId)) {
+            parentBlock.data.bodyBlocks.push(childId);
+        }
     }
     else{
         return;
