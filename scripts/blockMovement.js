@@ -9,18 +9,20 @@ function setupDraggable(element) {
             })
         ],
         onstart: function(e) {
+            const target = e.target;
             const blockId = parseInt(e.target.dataset.id);
             const block = GetBlockById(blockId);
             if (!block) return;
 
             isDragging = true;
 
+            const rect=target.getBoundingClientRect();
+            const wsRect=workspace.getBoundingClientRect();
+
+            const currentX=rect.left - wsRect.left;
+            const currentY=rect.top- wsRect.top;
+
             if (block.parent !== null || block.previous !== null) {
-
-                const rect = e.target.getBoundingClientRect();
-                const workspace = document.querySelector('.workSpace');
-                const wsRect = workspace.getBoundingClientRect();
-
                 if(block.parent !== null){
                     const parent = GetBlockById(block.parent);
                     if (parent) {
@@ -38,15 +40,15 @@ function setupDraggable(element) {
                     disconnectBlock(blockId);
                 }
 
-                workspace.appendChild(e.target);
+                if(target.parentNode !== workspace) workspace.appendChild(target);
 
-                block.position.x = rect.left - wsRect.left;
-                block.position.y = rect.top - wsRect.top;
+                block.position.x = currentX;
+                block.position.y = currentY;
 
-                e.target.style.position = 'absolute';
-                e.target.style.margin = '0';
-                e.target.style.left = block.position.x + 'px';
-                e.target.style.top = block.position.y + 'px';
+                target.style.position = 'absolute';
+                target.style.left = block.position.x + 'px';
+                target.style.top = block.position.y + 'px';
+                target.style.zIndex = '1000';
             }
         },
 

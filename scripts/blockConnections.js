@@ -64,6 +64,9 @@ function checkForConnection(movedBlockId, e) {
                         connectToSlot(otherBlock.id, movedBlock.id, slotName);
                         return;
                     }
+                    else{
+                        continue;
+                    }
                 }
                 else {
                     if (IsSlotFree(otherBlock.id, slotName) && VALUE_BLOCKS.includes(movedBlock.type)) {
