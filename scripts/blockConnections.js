@@ -58,6 +58,13 @@ function checkForConnection(movedBlockId, e) {
                         return;
                     }
                 }
+                else if (slotName === 'condition') {
+                    const BOOLEAN_BLOCKS = ['gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not'];
+                    if (IsSlotFree(otherBlock.id, slotName) && BOOLEAN_BLOCKS.includes(movedBlock.type)) {
+                        connectToSlot(otherBlock.id, movedBlock.id, slotName);
+                        return;
+                    }
+                }
                 else {
                     if (IsSlotFree(otherBlock.id, slotName) && VALUE_BLOCKS.includes(movedBlock.type)) {
                         connectToSlot(otherBlock.id, movedBlock.id, slotName);
