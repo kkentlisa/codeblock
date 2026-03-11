@@ -45,7 +45,9 @@
 .slot-value,
 .slot-condition,
 .slot-index,
-.slot-then{
+.slot-then,
+.slot-else,
+.slot-body{
     position: relative;
     top: 0;
     transform: none;
@@ -61,8 +63,23 @@
     border-radius: 16px;
     transition: all 0.2s ease;
 }
-.slot-then{
+.slot-then,
+.slot-else,
+.slot-body{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     width: 100%;
+    gap: 0;
+}
+.slot-then > .block-container,
+.slot-else > .block-container,
+.slot-body > .block-container {
+    position: relative !important;
+    left: 0 !important;
+    top: 0 !important;
+    display: block;
+    width: fit-content;
 }
 .slot-left{
     left: 0;

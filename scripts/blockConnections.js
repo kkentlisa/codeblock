@@ -17,6 +17,18 @@ function connectBlocks(previousId, nextId) {
     previous.next = nextId;
     next.previous = previousId;
 
+    if(previous.parent !== null){
+        const parent = GetBlockById(previous.parent);
+        if(parent){
+            if(parent.data.thenBlocks && parent.data.thenBlocks.includes(previousId)){
+                AddToBody(parent.id, next.id, 'then');
+            } else if(!parent.data.elseBlocks && parent.data.elseBlocks.includes(previousId)){
+                AddToBody(parent.id, next.id, 'else');
+            } else if(!parent.data.bodyBlocks && parent.data.bodyBlocks.includes(previousId)){
+                AddToBody(parent.id, next.id, 'body');
+            }
+        }
+    }
     SaveBlocksToStorage();
 }
 
