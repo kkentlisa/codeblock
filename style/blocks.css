@@ -8,7 +8,8 @@
     font-size: 11px;
     min-height: 36px;
     min-width: 100px;
-    width: auto;
+    width: max-content;
+    flex-shrink: 0;
     height: auto;
     gap: 5px;
 }
@@ -104,6 +105,8 @@
     display: inline-block;
     place-items: center;
     user-select: none;
+    width: max-content;
+    white-space: nowrap;
 }
 .delete-btn{
     position: absolute;

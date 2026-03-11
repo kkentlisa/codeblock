@@ -274,15 +274,16 @@ function AddToBody(parentId, childId, slotType){
     if (!parentBlock || !childBlock){
         return;
     }
-    while (childBlock) {
+    
+    while(childBlock) {
         if (parentBlock.type === "if" && slotType === "then") {
-            if(!parentBlock.data.thenBlocks.includes(childBlock.id)) parentBlock.data.thenBlocks.push(childBlock.id);
+            if(!parentBlock.data.thenBlocks.includes(childId)) parentBlock.data.thenBlocks.push(childId);
         } else if (parentBlock.type === "if-else" && slotType === "then") {
-            if(!parentBlock.data.thenBlocks.includes(childBlock.id)) parentBlock.data.thenBlocks.push(childBlock.id);
+            if(!parentBlock.data.thenBlocks.includes(childId)) parentBlock.data.thenBlocks.push(childId);
         } else if (parentBlock.type === "if-else" && slotType === "else") {
-            if(!parentBlock.data.elseBlocks.includes(childBlock.id)) parentBlock.data.elseBlocks.push(childBlock.id);
+            if(!parentBlock.data.elseBlocks.includes(childId)) parentBlock.data.elseBlocks.push(childId);
         } else if (parentBlock.type === "while") {
-            if(!parentBlock.data.bodyBlocks.includes(childBlock.id)) parentBlock.data.bodyBlocks.push(childBlock.id);
+            if(!parentBlock.data.bodyBlocks.includes(childId)) parentBlock.data.bodyBlocks.push(childId);
         }
         childBlock.parent = parentId;
         childBlock = GetBlockById(childBlock.next);
@@ -296,23 +297,23 @@ function RemoveFromBody(parentId, childId){
     if (!parentBlock || !childBlock){
         return;
     }
-    while (childBlock) {
+    while(childBlock) {
         if (parentBlock.type === "if") {
-            const index = parentBlock.data.thenBlocks.indexOf(childBlock.id);
+            const index = parentBlock.data.thenBlocks.indexOf(childId);
             if (index !== -1) {
                 parentBlock.data.thenBlocks.splice(index, 1);
             }
         } else if (parentBlock.type === "if-else") {
-            const thenIndex = parentBlock.data.thenBlocks.indexOf(childBlock.id);
+            const thenIndex = parentBlock.data.thenBlocks.indexOf(childId);
             if (thenIndex !== -1) {
                 parentBlock.data.thenBlocks.splice(thenIndex, 1);
             }
-            const elseIndex = parentBlock.data.elseBlocks.indexOf(childBlock.id);
+            const elseIndex = parentBlock.data.elseBlocks.indexOf(childId);
             if (elseIndex !== -1) {
                 parentBlock.data.elseBlocks.splice(elseIndex, 1);
             }
         } else if (parentBlock.type === "while") {
-            const index = parentBlock.data.bodyBlocks.indexOf(childBlock.id);
+            const index = parentBlock.data.bodyBlocks.indexOf(childId);
             if (index !== -1) {
                 parentBlock.data.bodyBlocks.splice(index, 1);
             }
