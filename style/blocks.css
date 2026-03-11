@@ -128,7 +128,7 @@
     border-width: 3px;
     z-index: 100;
 }
-.block-error .block{
+.block-error{
     animation: colorPulse 1.75s infinite;
 }
 @keyframes colorPulse {
