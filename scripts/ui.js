@@ -20,13 +20,18 @@ function BlockButtonClick(){
 
 function GetRandomPositionInWorkspace(){
     const workspace = document.querySelector('.workSpace');
-
     const rect = workspace.getBoundingClientRect();
-
     const padding = 20;
 
+    let maxY = padding;
+    blocksInWorkSpace.forEach((block) => {
+        if (block.position.y > maxY) {
+            maxY = block.position.y;
+        }
+    });
+
     const x = padding + Math.random()*(rect.width - 2 * padding - 100);
-    const y = padding + Math.random()*(rect.height - 2 * padding - 50);
+    const y = maxY + 70;
 
     return {x, y};
 

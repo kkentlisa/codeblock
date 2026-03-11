@@ -245,7 +245,7 @@ function getBlockStructure(blockData) {
             elements: [
                 { type: 'text', content: 'длина' },
                 { type: 'text', content: '(' },
-                { type: 'input', slotName: 'name', placeholder: 'массив' },
+                { type: 'input', key: 'name', placeholder: 'массив' },
                 { type: 'text', content: ')' }
             ]
         },
