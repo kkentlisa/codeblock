@@ -13,7 +13,6 @@ function BlockButtonClick(){
             const blockElement = renderBlock(newBlock);
 
             workspace.appendChild(blockElement);
-            setupDraggable(blockElement);
         })
     });
 
