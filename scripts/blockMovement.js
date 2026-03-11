@@ -2,12 +2,6 @@ function setupDraggable(element) {
     let isDragging = false;
 
     interact(element).draggable({
-        modifiers: [
-            interact.modifiers.restrictRect({
-                restriction: 'parent',
-                endOnly: false
-            })
-        ],
         onstart: function(e) {
             const target = e.target;
             const blockId = parseInt(e.target.dataset.id);
