@@ -274,16 +274,16 @@ function AddToBody(parentId, childId, slotType){
     if (!parentBlock || !childBlock){
         return;
     }
-    
+
     while(childBlock) {
         if (parentBlock.type === "if" && slotType === "then") {
-            if(!parentBlock.data.thenBlocks.includes(childId)) parentBlock.data.thenBlocks.push(childId);
+            if(!parentBlock.data.thenBlocks.includes(childBlock.id)) parentBlock.data.thenBlocks.push(childBlock.id);
         } else if (parentBlock.type === "if-else" && slotType === "then") {
-            if(!parentBlock.data.thenBlocks.includes(childId)) parentBlock.data.thenBlocks.push(childId);
+            if(!parentBlock.data.thenBlocks.includes(childBlock.id)) parentBlock.data.thenBlocks.push(childBlock.id);
         } else if (parentBlock.type === "if-else" && slotType === "else") {
-            if(!parentBlock.data.elseBlocks.includes(childId)) parentBlock.data.elseBlocks.push(childId);
+            if(!parentBlock.data.elseBlocks.includes(childBlock.id)) parentBlock.data.elseBlocks.push(childBlock.id);
         } else if (parentBlock.type === "while") {
-            if(!parentBlock.data.bodyBlocks.includes(childId)) parentBlock.data.bodyBlocks.push(childId);
+            if(!parentBlock.data.bodyBlocks.includes(childBlock.id)) parentBlock.data.bodyBlocks.push(childBlock.id);
         }
         childBlock.parent = parentId;
         childBlock = GetBlockById(childBlock.next);
@@ -299,21 +299,21 @@ function RemoveFromBody(parentId, childId){
     }
     while(childBlock) {
         if (parentBlock.type === "if") {
-            const index = parentBlock.data.thenBlocks.indexOf(childId);
+            const index = parentBlock.data.thenBlocks.indexOf(childBlock.id);
             if (index !== -1) {
                 parentBlock.data.thenBlocks.splice(index, 1);
             }
         } else if (parentBlock.type === "if-else") {
-            const thenIndex = parentBlock.data.thenBlocks.indexOf(childId);
+            const thenIndex = parentBlock.data.thenBlocks.indexOf(childBlock.id);
             if (thenIndex !== -1) {
                 parentBlock.data.thenBlocks.splice(thenIndex, 1);
             }
-            const elseIndex = parentBlock.data.elseBlocks.indexOf(childId);
+            const elseIndex = parentBlock.data.elseBlocks.indexOf(childBlock.id);
             if (elseIndex !== -1) {
                 parentBlock.data.elseBlocks.splice(elseIndex, 1);
             }
         } else if (parentBlock.type === "while") {
-            const index = parentBlock.data.bodyBlocks.indexOf(childId);
+            const index = parentBlock.data.bodyBlocks.indexOf(childBlock.id);
             if (index !== -1) {
                 parentBlock.data.bodyBlocks.splice(index, 1);
             }
