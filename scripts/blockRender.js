@@ -92,7 +92,7 @@ function renderBlock(blockData){
     container.appendChild(deleteBtn);
     container.appendChild(blockBody);
 
-    if(blockData.next !== null){
+    if(blockData.parent == null && blockData.next !== null){
         const nextBlockData = GetBlockById(blockData.next);
         if(nextBlockData){
             const nextElement = renderBlock(nextBlockData);
