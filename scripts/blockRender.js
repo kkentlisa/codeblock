@@ -99,6 +99,21 @@ function renderBlock(blockData){
             container.appendChild(nextElement);
         }
     }
+
+    container.addEventListener('mouseover', (e) => {
+        e.stopPropagation();
+
+        document.querySelectorAll('.block-container.hovered').forEach(element => {
+            element.classList.remove('hovered');
+        });
+
+        container.classList.add('hovered');
+    });
+    container.addEventListener('mouseout', (e) => {
+        e.stopPropagation();
+        container.classList.remove('hovered');
+    })
+
     setupDraggable(container);
     return container;
 }

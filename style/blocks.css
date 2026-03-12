@@ -120,11 +120,11 @@
     padding: 2px 5px 2px 5px;
     margin: 0 -5px;
 }
-.block-container:hover > .delete-btn {
+.block-container.hovered > .delete-btn {
     opacity: 1;
     cursor: pointer;
 }
-.block-container:hover .block {
+.block-container.hovered .block {
     border-width: 3px;
     z-index: 100;
 }
