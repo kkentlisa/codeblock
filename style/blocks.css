@@ -3,34 +3,34 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 15px;
-    padding: 2px 5px;
-    font-size: 11px;
-    min-height: 36px;
-    min-width: 100px;
+    border-radius: 1.5vh;
+    padding: 0.2vh 0.5vh;
+    font-size: 1.6vh;
+    min-height: 3.6vh;
+    min-width: 10vh;
     width: max-content;
     flex-shrink: 0;
     height: auto;
-    gap: 5px;
+    gap: 0.5vh;
 }
 .block-start,
 .block-input,
 .block-print{
-    border: 2px solid #ff033e;
+    border: 0.3vh solid #ff033e;
     background-color: lightcoral;
     text-align: center;
-    line-height: 25px;
+    line-height: 2.5vh;
 }
 .block-variableInit{
-    border: 2px solid orangered;
+    border: 0.3vh solid orangered;
     background-color: lightsalmon;
     text-align: center;
 }
 .block-assignValue{
-    border: 2px solid orangered;
+    border: 0.3vh solid orangered;
     background-color: lightsalmon;
     text-align: center;
-    min-width: 30px;
+    min-width: 3vh;
     width: auto;
     height: auto;
     padding-left: 0;
@@ -38,7 +38,7 @@
 .block-if,
 .block-if-else,
 .block-while{
-    border: 2px solid gold;
+    border: 0.3vh solid gold;
     background-color: palegoldenrod;
     flex-direction: column;
     align-items: stretch;
@@ -48,16 +48,16 @@
 .block-multiply,
 .block-div,
 .block-mod{
-    border: 2px solid limegreen;
+    border: 0.3vh solid limegreen;
     background-color: lightgreen;
     text-align: center;
     width: auto;
     height: auto;
-    line-height: 23px;
-    font-size: 15px;
+    line-height: 2.3vh;
+    font-size: 1.5vw;
 }
 .block-mod{
-    font-size: 11px;
+    font-size: 1vw;
 }
 .block-gt,
 .block-lt,
@@ -65,39 +65,38 @@
 .block-neq,
 .block-gte,
 .block-lte{
-    border: 2px solid dodgerblue;
+    border: 0.3vh solid dodgerblue;
     background-color: lightskyblue;
     text-align: center;
     width: auto;
     height: auto;
-    line-height: 23px;
-    font-size: 15px;
+    line-height: 2.3vh;
+    font-size: 1.5vw;
 }
 .block-and,
 .block-or{
-    border: 2px solid #cd00cd;
+    border: 0.3vh solid #cd00cd;
     background-color: plum;
     text-align: center;
     width: auto;
     height: auto;
-    line-height: 28px;
+    line-height: 2.8vh;
 }
 .block-not{
-    border: 2px solid #cd00cd;
+    border: 0.3vh solid #cd00cd;
     background-color: plum;
-    min-width: 65px;
+    min-width: 6.5vh;
     width: auto;
     height: auto;
-    line-height: 28px;
+    line-height: 2.8vh;
 }
 .block-arrayDeclare,
 .block-arrayAssignByIndex,
 .block-arrayGet,
 .block-arrayLength{
-    border: 2px solid deeppink;
+    border: 0.3vh solid deeppink;
     background-color: pink;
     text-align: center;
-
 }
 .block-container{
     position: absolute;
@@ -112,21 +111,21 @@
     position: absolute;
     background-color: red;
     color: white;
-    right: -23px;
+    right: -3.5vh;
     top: 50%;
     transform: translateY(-55%);
     border-radius: 50%;
     opacity: 0;
-    padding: 2px 5px 2px 5px;
-    margin: 0 -5px;
+    padding: 0.1vh 0.5vh;
+    margin: 0 -0.5vh;
 }
 .block-container.hovered > .delete-btn {
     opacity: 1;
     cursor: pointer;
 }
 .block-container.hovered .block {
-    border-width: 3px;
-    z-index: 100;
+    border-width: 0.3vh;
+    z-index: 1000;
 }
 .block-error{
     animation: colorPulse 1.75s infinite;

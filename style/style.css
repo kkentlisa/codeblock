@@ -2,7 +2,7 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    border-radius: 10px;
+    border-radius: 1vh;
     background-color: #1a1a1a;
 }
 body {
@@ -14,8 +14,8 @@ main{
     display: grid;
     grid-template-rows: auto 1fr;
     height: 100vh;
-    gap: 10px;
-    padding: 10px;
+    gap: 1vh;
+    padding: 1vh;
 }
 h1{
     grid-row-start: 1;
@@ -26,7 +26,7 @@ h1 span:not(:first-child) {
     transition: transform 0.2s ease;
 }
 h1 span:not(:first-child):hover {
-    transform: scale(1.1) translateY(-10px);
+    transform: scale(1.1) translateY(-1vh);
 }
 .code{
     display: grid;
@@ -35,11 +35,11 @@ h1 span:not(:first-child):hover {
     grid-row: auto;
     grid-template-columns: 25% 1fr;
     grid-auto-rows: 1fr 1fr 1fr 1fr;
-    gap: 10px;
+    gap: 1vh;
     min-height: 0;
 }
 .blockPanel{
-    border: 2px solid dodgerblue;
+    border: 0.3vh solid dodgerblue;
     grid-row: 1/span 4;
     background-color: rgba(30, 144, 255, 0.15);
     display: flex;
@@ -58,13 +58,13 @@ h2{
     text-align: center;
     color: white;
     background-color: transparent;
-    font-size: 20px;
+    font-size: 2.6vh;
 }
 .blockPanelButton{
     color: black;
-    margin: 10px;
-    padding: 10px;
-    border-radius: 15px;
+    margin: 1vh;
+    padding: 1vh;
+    border-radius: 1.5vh;
     text-align: center;
     font-family: "Comic Sans MS";
     user-select: none;
@@ -73,18 +73,18 @@ h2{
 .blockPanelButton[data-type="input"],
 .blockPanelButton[data-type="print"] {
     background-color: lightcoral;
-    border: 3px solid #ff033e;
+    border: 0.3vh solid #ff033e;
 }
 .blockPanelButton[data-type="variableInit"],
 .blockPanelButton[data-type="assignValue"] {
     background-color: lightsalmon;
-    border: 3px solid orangered;
+    border: 0.3vh solid orangered;
 }
 .blockPanelButton[data-type="if"],
 .blockPanelButton[data-type="if-else"],
 .blockPanelButton[data-type="while"]{
     background-color: palegoldenrod;
-    border: 3px solid gold;
+    border: 0.3vh solid gold;
 }
 .blockPanelButton[data-type="add"],
 .blockPanelButton[data-type="subtract"],
@@ -92,7 +92,7 @@ h2{
 .blockPanelButton[data-type="div"],
 .blockPanelButton[data-type="mod"]{
     background-color: lightgreen;
-    border: 3px solid limegreen;
+    border: 0.3vh solid limegreen;
 }
 .blockPanelButton[data-type="gt"],
 .blockPanelButton[data-type="lt"],
@@ -101,24 +101,24 @@ h2{
 .blockPanelButton[data-type="gte"],
 .blockPanelButton[data-type="lte"]{
     background-color: lightblue;
-    border: 3px solid dodgerblue;
+    border: 0.3vh solid dodgerblue;
 }
 .blockPanelButton[data-type="and"],
 .blockPanelButton[data-type="or"],
 .blockPanelButton[data-type="not"]{
     background-color: plum;
-    border: 3px solid #cd00cd;
+    border: 0.3vh solid #cd00cd;
 }
 .blockPanelButton[data-type="arrayDeclare"],
 .blockPanelButton[data-type="arrayAssignByIndex"],
 .blockPanelButton[data-type="arrayGet"],
 .blockPanelButton[data-type="arrayLength"]{
     background-color: pink;
-    border: 3px solid deeppink;
+    border: 0.3vh solid deeppink;
 }
 .blockPanelButton:hover{
     color: white;
-    transform: scale(1.05) translateY(-2px);
+    transform: scale(1.05) translateY(-0.2vh);
     cursor: pointer;
 }
 .blockPanelButton:hover[data-type="start"],
@@ -163,7 +163,7 @@ h2{
 }
 .workSpace{
     position: relative;
-    border: 2px solid deeppink;
+    border: 0.3vh solid deeppink;
     grid-column: 2;
     grid-row: 1/span 3;
     background-color: rgba(255, 20, 147, 0.1);
@@ -174,25 +174,25 @@ h2{
 }
 .blockWorkSpaceButton{
     position: fixed;
-    top: 65px;
-    right: 10px;
+    top: 8.6vh;
+    right: 1.5vh;
     background-color: transparent;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 0.6vh;
     width: auto;
     z-index: 1000;
-    padding: 6px;
+    padding: 0.6vh;
 }
 .workSpaceButton {
     position: relative;
     background-color: white;
     border-radius: 50%;
-    width: 34px;
-    height: 34px;
-    border: 2px solid deeppink;
+    width: 4.3vh;
+    height: 4.3vh;
+    border: 0.3vh solid deeppink;
     background-position: center;
-    background-size: 24px;
+    background-size: 3.4vh;
     background-repeat: no-repeat;
     display: flex;
 }
@@ -204,26 +204,26 @@ h2{
 }
 .blockButtonDelete, .blockButtonRun{
     position: absolute;
-    right: 45px;
+    right: 5.9vh;
     color: black;
     background-color: white;
-    padding: 1px;
-    width: 80px;
-    height: 20px;
-    border: 2px solid deeppink;
-    font-size: 10px;
+    padding: 0.1vh;
+    width: 9.5vh;
+    height: 2vh;
+    border: 0.2vh solid deeppink;
+    font-size: 1.3vh;
     text-align: center;
     opacity: 0;
 }
 .blockButtonDelete{
-    top: 13px;
+    top: 1.8vh;
 }
 .blockButtonRun{
-    top: 53px;
+    top: 6.8vh;
 }
 .workSpaceButton:hover{
     cursor: pointer;
-    border-width: 3px;
+    border-width: 0.3vh;
     transform: scale(1.05);
 }
 .workSpaceButton[data-type="delete"]:hover{
@@ -239,22 +239,21 @@ h2{
     opacity: 1;
 }
 .outputPanel{
-    border: 2px solid limegreen;
+    border: 0.3vh solid limegreen;
     grid-column: 2;
     grid-row: 4/span 1;
     background-color: rgba(50, 205, 50, 0.15);
     color: white;
     overflow-y: scroll;
     scroll-behavior: smooth;
-    padding: 0 5px;
+    padding: 0 0.5vh;
 }
 .outputPanel p {
     background-color: transparent !important;;
 }
 h3{
     text-align: left;
-    font-size: 16px;
+    font-size: 2vh;
     background-color: transparent;
-    margin: 5px 10px;
-
+    margin: 0.5vh 1vh;
 }
