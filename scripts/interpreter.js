@@ -142,7 +142,7 @@ function EvaluateExpression(block) {
             highlightErrorBlock(block.id);
             throw new Error(`Индекс должен быть целым числом`);
         }
-        if (index < 0 || index > arrays[arrayName].length - 1) {
+        if (index < 0 || index >= arrays[arrayName].length) {
             LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: индекс вне границ массива`);
             highlightErrorBlock(block.id);
             throw new Error(`Индекс вне границ массива`);
@@ -335,7 +335,13 @@ function ExecuteBlock(block) {
                 highlightErrorBlock(block.id);
                 throw new Error(`Не указано имя массива`);
             }
-            arrays[block.data.name] = new Array(block.data.size).fill(0);
+            const size = Number(block.data.size);
+            if (size <= 0 || isNaN(size)) {
+                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не корректный размер массива`);
+                highlightErrorBlock(block.id);
+                throw new Error(`Не корректный размер массива`);
+            }
+            arrays[block.data.name] = new Array(size).fill(0);
             break;
         case "arrayAssignByIndex":
             const arrayName = block.data.name;
@@ -360,7 +366,7 @@ function ExecuteBlock(block) {
                 highlightErrorBlock(block.id);
                 throw new Error(`Индекс должен быть целым числом`);
             }
-            if (index < 0 || index > arrays[arrayName].length - 1) {
+            if (index < 0 || index >= arrays[arrayName].length) {
                 LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: индекс вне границ массива`);
                 highlightErrorBlock(block.id);
                 throw new Error(`Индекс вне границ массива`);
