@@ -80,21 +80,26 @@ function renderBlock(blockData){
         }
         });
 
-    const deleteBtn = document.createElement('span');
-    deleteBtn.className = 'delete-btn';
-    deleteBtn.textContent = '⛌';
-    deleteBtn.onclick = (e) => {
-        e.stopPropagation();
-        DeleteBlock(blockData.id);
-        renderAllBlocks(blocksInWorkSpace);
-    };
-
-    container.appendChild(deleteBtn);
+    if(blockData.parent === null) {
+        const deleteBtn = document.createElement('span');
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.textContent = '⛌';
+        deleteBtn.onclick = (e) => {
+            e.stopPropagation();
+            DeleteBlock(blockData.id);
+            renderAllBlocks(blocksInWorkSpace);
+        };
+        container.appendChild(deleteBtn);
+    }
+    
     container.appendChild(blockBody);
 
     if(blockData.parent == null && blockData.next !== null){
         const nextBlockData = GetBlockById(blockData.next);
         if(nextBlockData){
+            container.style.display = 'flex';
+            container.style.flexDirection = 'column';
+            container.style.alignItems = 'flex-start';
             const nextElement = renderBlock(nextBlockData);
             container.appendChild(nextElement);
         }
