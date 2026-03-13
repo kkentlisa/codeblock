@@ -1,3 +1,5 @@
+const SLOT_THRESHOLD=30;
+
 function connectToSlot(parentId, childId, slotName) {
     const parent = getBlockById(parentId);
     const child = getBlockById(childId);
@@ -37,7 +39,6 @@ function findSlotByPosition(containerId, movedBlockId, slotName) {
 
     const distanceX= Math.abs(movedCenterX-slotCenterX);
     const distanceY= Math.abs(movedCenterY-slotCenterY);
-    const SLOT_THRESHOLD=30;
 
     return (distanceX<SLOT_THRESHOLD && distanceY<SLOT_THRESHOLD);
 }

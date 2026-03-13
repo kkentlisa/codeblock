@@ -1,3 +1,5 @@
+const CONNECTION_THRESHOLD = 30;
+
 function canConnect(previousBlock, nextBlock) {
     if (nextBlock.type === 'start') return false;
     if (previousBlock.type === 'print') return false;
@@ -85,8 +87,6 @@ function checkForConnection(movedBlockId, e) {
             const otherRect = otherElement.getBoundingClientRect();
             const verticalProximity = Math.abs(movedRect.top - otherRect.bottom);
             const horizontalProximity = Math.abs(movedRect.left - otherRect.left);
-
-            const CONNECTION_THRESHOLD = 30;
 
             if (verticalProximity < CONNECTION_THRESHOLD &&
                 horizontalProximity < CONNECTION_THRESHOLD &&

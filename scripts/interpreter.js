@@ -1,3 +1,5 @@
+const MAX_ITERATIONS = 10000;
+
 let variables = {};
 let arrays = {};
 
@@ -308,7 +310,6 @@ function executeBlock(block) {
             validateCondition(block);
 
             let iterations = 0;
-            const MAX_ITERATIONS = 10000;
             while (evaluateCondition(getBlockById(block.data.condition))) {
                 iterations ++;
                 if (iterations > MAX_ITERATIONS) {
