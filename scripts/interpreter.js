@@ -129,7 +129,7 @@ function evaluateExpression(block) {
 
         return leftValue % rightValue;
     }
-    else if (["gt", "lt", "eq", "neq", "gte", "lte", "and", "or", "not"].includes(block.type)) {
+    else if (BOOLEAN_BLOCKS.includes(block.type)) {
         return evaluateCondition(block);
     }
     else if (block.type === "arrayGet") {
