@@ -312,7 +312,16 @@ function ExecuteBlock(block) {
             break;
         case "while":
             validateCondition(block);
+
+            let iterations = 0;
+            const MAX_ITERATIONS = 10000;
             while (EvaluateCondition(GetBlockById(block.data.condition))) {
+                iterations ++;
+                if (iterations > MAX_ITERATIONS) {
+                    LogToOutputPanel(`Превышен лимит итераций в блоке ${GetBlockName(block)}`);
+                    highlightErrorBlock(block.id);
+                    throw new Error(`Превышен лимит итераций`);
+                }
                 block.data.bodyBlocks.forEach(id =>{
                     const childBlock = GetBlockById(id);
                     if (childBlock) ExecuteBlock(childBlock);
@@ -383,22 +392,27 @@ function RunProgram(){
 
     ClearOutputPanel();
 
-    const startBlock = blocksInWorkSpace.find(b => b.type === "start");
-    if (!startBlock) {
-        LogToOutputPanel("Нет стартового блока!");
-        throw new Error(`Нет стартового блока`);
+    try {
+        const startBlock = blocksInWorkSpace.find(b => b.type === "start");
+        if (!startBlock) {
+            LogToOutputPanel("Нет стартового блока!");
+            return;
+        }
+
+        variables = {};
+        arrays = {};
+
+        let currentBlockId = startBlock.next;
+
+        while (currentBlockId) {
+            const currentBlock = GetBlockById(currentBlockId);
+            if (!currentBlock) return;
+
+            ExecuteBlock(currentBlock);
+            currentBlockId = currentBlock.next;
+        }
     }
-
-    variables = {};
-    arrays = {};
-
-    let currentBlockId = startBlock.next;
-
-    while (currentBlockId) {
-        const currentBlock = GetBlockById(currentBlockId);
-        if (!currentBlock) return;
-
-        ExecuteBlock(currentBlock);
-        currentBlockId = currentBlock.next;
+    catch (error){
+        LogToOutputPanel(`Программа завершена с ошибкой!`);
     }
 }
