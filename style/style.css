@@ -21,11 +21,17 @@ h1{
     grid-row-start: 1;
     text-align: center;
 }
-h1 span:not(:first-child) {
+.logo-сode{color: #ffffff;}
+.logo-b{color: #ff033e;}
+.logo-l{color: yellow;}
+.logo-o{color: greenyellow;}
+.logo-n{color: dodgerblue;}
+.logo-d{color: #cd00cd;}
+.logo span:not(:first-child) {
     display: inline-block;
     transition: transform 0.2s ease;
 }
-h1 span:not(:first-child):hover {
+.logo span:not(:first-child):hover {
     transform: scale(1.1) translateY(-1vh);
 }
 .code{
@@ -66,8 +72,13 @@ h2{
     padding: 1vh;
     border-radius: 1.5vh;
     text-align: center;
-    font-family: "Comic Sans MS";
+    font-family: "Comic Sans MS", serif;
     user-select: none;
+}
+@media (max-width: 500px){
+    .blockPanelButton{
+        font-size: 1.5vh;
+    }
 }
 .blockPanelButton[data-type="start"],
 .blockPanelButton[data-type="input"],

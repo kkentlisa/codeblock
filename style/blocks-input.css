@@ -69,6 +69,8 @@
 .slot-then,
 .slot-else,
 .slot-body{
+    background-color: transparent;
+    border: 0.1vh dashed dimgray;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
