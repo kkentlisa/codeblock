@@ -6,15 +6,6 @@ function connectToSlot(parentId, childId, slotName) {
     parent.data[slotName] = childId;
     child.parent = parentId;
 
-    const childElement = document.querySelector(`[data-id="${childId}"]`);
-    if (childElement) {
-        const rect = childElement.getBoundingClientRect();
-        if (!parent.slotSizes) parent.slotSizes = {};
-        parent.slotSizes[slotName] = {
-            width: rect.width,
-            height: rect.height
-        };
-    }
     saveBlocksToStorage();
 }
 
@@ -25,15 +16,6 @@ function connectToBodySlot(parentId, childId, slotName) {
 
     addToBody(parentId, childId, slotName);
 
-    const childElement = document.querySelector(`[data-id="${childId}"]`);
-    if (childElement) {
-        const rect = childElement.getBoundingClientRect();
-        if (!parent.slotSizes) parent.slotSizes = {};
-        parent.slotSizes[slotName] = {
-            width: rect.width,
-            height: rect.height
-        };
-    }
     saveBlocksToStorage();
 }
 
