@@ -111,8 +111,8 @@
     position: absolute;
     background-color: red;
     color: white;
-    right: -3.5vh;
-    top: 50%;
+    right: -3.0vh;
+    top: 1.8vh;
     transform: translateY(-55%);
     border-radius: 50%;
     opacity: 0;
