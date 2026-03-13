@@ -58,7 +58,6 @@ function checkForConnection(movedBlockId, e) {
                     }
                 }
                 else if (slotName === 'condition') {
-                    const BOOLEAN_BLOCKS = ['gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not'];
                     if (isSlotFree(otherBlock.id, slotName) && BOOLEAN_BLOCKS.includes(movedBlock.type)) {
                         connectToSlot(otherBlock.id, movedBlock.id, slotName);
                         return;

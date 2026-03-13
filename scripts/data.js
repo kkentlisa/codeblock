@@ -3,6 +3,7 @@ let blockId = 0;
 
 const VALUE_BLOCKS = ['input', 'add', 'subtract', 'multiply', 'div', 'mod',
     'gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not', 'arrayGet', 'arrayLength'];
+const BOOLEAN_BLOCKS = ['gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not'];
 
 const BLOCK_SLOTS = {
     'assignValue': ['value'],
@@ -167,7 +168,6 @@ function createBlock(type, x, y){
         type: type,
         position: {x: x, y: y},
         parent: null,
-        child: null,
         previous: null,
         next: null,
         data: data
