@@ -86,7 +86,7 @@ function renderBlock(blockData){
         deleteBtn.textContent = '⛌';
         deleteBtn.onclick = (e) => {
             e.stopPropagation();
-            DeleteBlock(blockData.id);
+            deleteBlock(blockData.id);
             renderAllBlocks(blocksInWorkSpace);
         };
         container.appendChild(deleteBtn);
@@ -95,7 +95,7 @@ function renderBlock(blockData){
     container.appendChild(blockBody);
 
     if(blockData.parent == null && blockData.next !== null){
-        const nextBlockData = GetBlockById(blockData.next);
+        const nextBlockData = getBlockById(blockData.next);
         if(nextBlockData){
             container.style.display = 'flex';
             container.style.flexDirection = 'column';
@@ -140,14 +140,14 @@ function renderInput(container, blockData, key, placeholder) {
     span.oninput = (e) => {
         const text = e.target.textContent.trim();
         blockData.data[key] = text;
-        SaveBlocksToStorage();
+        saveBlocksToStorage();
     };
     span.onblur = (e) => {
         const text = e.target.textContent.trim();
         if (text === '') {
             blockData.data[key] = '';
         }
-        SaveBlocksToStorage();
+        saveBlocksToStorage();
     };
 
     container.appendChild(span);
@@ -168,7 +168,7 @@ function renderSlot(container, blockData, slotName, placeholder) {
         slotContainer.appendChild(placeholderEl);
     } else {
         slotContainer.dataset.childId = childId;
-        const childBlockData = GetBlockById(childId);
+        const childBlockData = getBlockById(childId);
         if(childBlockData) {
             const childElement = renderBlock(childBlockData);
             slotContainer.appendChild(childElement);
@@ -193,7 +193,7 @@ function renderSlotInBody(container, blockData, slotName, placeholder) {
     }
     else{
         childIds.forEach(childId=>{
-            const childBlockData = GetBlockById(childId);
+            const childBlockData = getBlockById(childId);
             if(childBlockData){
                 const childElement = renderBlock(childBlockData);
                 slotContainer.appendChild(childElement);

@@ -1,9 +1,6 @@
 let blocksInWorkSpace = [];
 let blockId = 0;
 
-const VALUE_CONTAINERS = ['assignValue','add', 'subtract', 'multiply', 'div',
-    'mod', 'if', 'if-else', 'while', 'gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not', 'arrayGet', 'arrayAssignByIndex'];
-const BODY_CONTAINERS = ['if', 'if-else', 'while'];
 const VALUE_BLOCKS = ['input', 'add', 'subtract', 'multiply', 'div', 'mod',
     'gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not', 'arrayGet', 'arrayLength'];
 
@@ -31,13 +28,13 @@ const BLOCK_SLOTS = {
     'print': ['value']
 }
 
-function CreateBlock(type, x, y){
+function createBlock(type, x, y){
     let data = {};
 
     if (type === "start"){
         const existingStart = blocksInWorkSpace.find(b => b.type === "start");
         if (existingStart){
-            LogToOutputPanel("Стартовый блок уже существует!");
+            logToOutputPanel("Стартовый блок уже существует!");
             return null;
         }
     }
@@ -177,63 +174,50 @@ function CreateBlock(type, x, y){
     }
 
     blocksInWorkSpace.push(newBlock);
-    SaveBlocksToStorage();
+    saveBlocksToStorage();
     return newBlock;
 }
 
-function GetBlockById(id){
+function getBlockById(id){
     return blocksInWorkSpace.find(block => block.id === id);
 }
 
-function DeleteBlock(id){
-    const blockToDelete=GetBlockById(id);
+function deleteBlock(id){
+    const blockToDelete=getBlockById(id);
     if (!blockToDelete) return;
 
-    if(blockToDelete.parent !== null) {
-        const parent = GetBlockById(blockToDelete.parent);
-        if (parent) {
-            if (parent.data.thenBlocks?.includes(id) ||
-                parent.data.elseBlocks?.includes(id) ||
-                parent.data.bodyBlocks?.includes(id) ){
-                RemoveFromBody(blockToDelete.parent, id);
-            }
-            else{
-                DisconnectFromSlot(id);
-            }
-        }
-    }
-
     if (blockToDelete.previous !== null){
-        const prevBlock=GetBlockById(blockToDelete.previous);
+        const prevBlock=getBlockById(blockToDelete.previous);
         if (prevBlock) prevBlock.next = null;
     }
     if (blockToDelete.next !== null){
-        const nextBlock=GetBlockById(blockToDelete.next);
+        const nextBlock=getBlockById(blockToDelete.next);
         if (nextBlock) nextBlock.previous = null;
     }
+
     for (let slot in blockToDelete.data) {
         const childId = blockToDelete.data[slot];
         if (childId) {
-            const child = GetBlockById(childId);
+            const child = getBlockById(childId);
             if (child) child.parent = null;
         }
     }
 
     if (blockToDelete.data.thenBlocks){
         blockToDelete.data.thenBlocks.forEach(childId => {
-            const child = GetBlockById(childId);
+            const child = getBlockById(childId);
             if (child) child.parent = null;
         })
     }
     if (blockToDelete.data.elseBlocks){
         blockToDelete.data.elseBlocks.forEach(childId => {
-            const child = GetBlockById(childId);
+            const child = getBlockById(childId);
             if (child) child.parent = null;
         })
     }
     if (blockToDelete.data.bodyBlocks){
         blockToDelete.data.bodyBlocks.forEach(childId => {
-            const child = GetBlockById(childId);
+            const child = getBlockById(childId);
             if (child) child.parent = null;
         })
     }
@@ -241,15 +225,15 @@ function DeleteBlock(id){
     const index = blocksInWorkSpace.findIndex(block => block.id === id);
     if (index !== -1){
         blocksInWorkSpace.splice(index, 1);
-        SaveBlocksToStorage();
+        saveBlocksToStorage();
     }
 }
 
-function SaveBlocksToStorage(){
+function saveBlocksToStorage(){
     sessionStorage.setItem("blocksInWorkSpace", JSON.stringify(blocksInWorkSpace));
 }
 
-function LoadBlocksFromStorage(){
+function loadBlocksFromStorage(){
     const blocks = sessionStorage.getItem("blocksInWorkSpace");
     if (blocks){
         blocksInWorkSpace = JSON.parse(blocks);
@@ -260,17 +244,17 @@ function LoadBlocksFromStorage(){
     }
 }
 
-function ResetAllBlocks(){
+function resetAllBlocks(){
     blocksInWorkSpace = [];
     blockId = 0;
 
     sessionStorage.removeItem("blocksInWorkSpace");
-    ClearOutputPanel()
+    clearOutputPanel()
 }
 
-function AddToBody(parentId, childId, slotType){
-    const parentBlock = GetBlockById(parentId);
-    let childBlock = GetBlockById(childId);
+function addToBody(parentId, childId, slotType){
+    const parentBlock = getBlockById(parentId);
+    let childBlock = getBlockById(childId);
     if (!parentBlock || !childBlock){
         return;
     }
@@ -286,14 +270,14 @@ function AddToBody(parentId, childId, slotType){
             if(!parentBlock.data.bodyBlocks.includes(childBlock.id)) parentBlock.data.bodyBlocks.push(childBlock.id);
         }
         childBlock.parent = parentId;
-        childBlock = GetBlockById(childBlock.next);
+        childBlock = getBlockById(childBlock.next);
     }
-    SaveBlocksToStorage();
+    saveBlocksToStorage();
 }
 
-function RemoveFromBody(parentId, childId){
-    const parentBlock = GetBlockById(parentId);
-    let childBlock = GetBlockById(childId);
+function removeFromBody(parentId, childId){
+    const parentBlock = getBlockById(parentId);
+    let childBlock = getBlockById(childId);
     if (!parentBlock || !childBlock){
         return;
     }
@@ -319,17 +303,17 @@ function RemoveFromBody(parentId, childId){
             }
         }
         childBlock.parent = null;
-        childBlock = GetBlockById(childBlock.next);
+        childBlock = getBlockById(childBlock.next);
     }
-    SaveBlocksToStorage();
+    saveBlocksToStorage();
 }
 
-function DisconnectFromSlot(blockId){
-    const block = GetBlockById(blockId);
+function disconnectFromSlot(blockId){
+    const block = getBlockById(blockId);
     if (!block || block.parent===null){
         return;
     }
-    const parentBlock = GetBlockById(block.parent);
+    const parentBlock = getBlockById(block.parent);
     if (!parentBlock){
         return
     }
@@ -343,29 +327,14 @@ function DisconnectFromSlot(blockId){
                 delete parentBlock.slotSizes[slotName];
             }
 
-            SaveBlocksToStorage();
+            saveBlocksToStorage();
             return;
         }
     }
 }
 
-function IsBlockInSlot(blockId){
-    const block = GetBlockById(blockId);
-    if (!block) return false;
-    if (block.parent !== null){
-        const parent = GetBlockById(block.parent);
-        if (!parent) return false;
-        for (let slotName in parent.data){
-            if (parent.data[slotName] === block.id){
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-function IsSlotFree(parentId, slotName){
-    const parentBlock = GetBlockById(parentId);
+function isSlotFree(parentId, slotName){
+    const parentBlock = getBlockById(parentId);
     if (!parentBlock){
         return false;
     }

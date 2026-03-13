@@ -1,4 +1,4 @@
-function BlockButtonClick(){
+function blockButtonClick(){
     const buttons = document.querySelectorAll('.blockPanelButton');
 
     buttons.forEach(function(button){
@@ -6,9 +6,9 @@ function BlockButtonClick(){
 
             const type = button.dataset.type;
 
-            const {x, y} = GetRandomPositionInWorkspace();
+            const {x, y} = getRandomPositionInWorkspace();
 
-            const newBlock = CreateBlock(type, x, y);
+            const newBlock = createBlock(type, x, y);
 
             const blockElement = renderBlock(newBlock);
 
@@ -18,7 +18,7 @@ function BlockButtonClick(){
 
 }
 
-function GetRandomPositionInWorkspace(){
+function getRandomPositionInWorkspace(){
     const workspace = document.querySelector('.workSpace');
     const rect = workspace.getBoundingClientRect();
     const padding = 20;
@@ -37,29 +37,29 @@ function GetRandomPositionInWorkspace(){
 
 }
 
-function ResetButtonClick(){
+function resetButtonClick(){
     const resetButton = document.querySelector('.workSpaceButton[data-type="delete"]');
     resetButton.addEventListener("click", function(){
-        ResetAllBlocks();
+        resetAllBlocks();
         renderAllBlocks(blocksInWorkSpace);
     });
 }
 
-function RunButtonClick(){
+function runButtonClick(){
     const runButton = document.querySelector('.workSpaceButton[data-type="run"]');
-    runButton.addEventListener("click", RunProgram);
+    runButton.addEventListener("click", runProgram);
 }
 
 
 window.addEventListener('load', function() {
-    LoadBlocksFromStorage();
+    loadBlocksFromStorage();
     renderAllBlocks(blocksInWorkSpace);
-    BlockButtonClick();
-    ResetButtonClick();
-    RunButtonClick();
+    blockButtonClick();
+    resetButtonClick();
+    runButtonClick();
 })
 
-function LogToOutputPanel(message){
+function logToOutputPanel(message){
     const outputPanel = document.querySelector('.outputPanel');
 
     const messageElement = document.createElement('p');
@@ -67,7 +67,7 @@ function LogToOutputPanel(message){
     outputPanel.appendChild(messageElement);
 }
 
-function ClearOutputPanel(){
+function clearOutputPanel(){
     const outputPanel = document.querySelector('.outputPanel');
     outputPanel.innerHTML = '<h3>Консоль вывода</h3>';
 

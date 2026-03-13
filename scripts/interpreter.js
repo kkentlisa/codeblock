@@ -1,21 +1,21 @@
 let variables = {};
 let arrays = {};
 
-function GetBlockName(block) {
+function getBlockName(block) {
     return window.typeNames?.[block.type];
 }
 
-function SetVariable(name, value) {
+function setVariable(name, value) {
     variables[name] = value;
 }
 
-function GetVariable(name) {
+function getVariable(name) {
     return variables[name];
 }
 
 function validateOperands(block){
     if (block.data.left === null || block.data.right === null) {
-        LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не все операнды заполнены`);
+        logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: не все операнды заполнены`);
         highlightErrorBlock(block.id);
         throw new Error(`Не все операнды заполнены`);
     }
@@ -23,17 +23,31 @@ function validateOperands(block){
 
 function validateCondition(block){
     if (block.data.condition === null) {
-        LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не заполнено условие`);
+        logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: не заполнено условие`);
         highlightErrorBlock(block.id);
         throw new Error(`Не заполнено условие`);
     }
 }
 
-function EvaluateExpression(block) {
+function validateArrays(block){
+    const arrayName = block.data.name;
+    if (arrayName === "") {
+        logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: не указано имя массива`);
+        highlightErrorBlock(block.id);
+        throw new Error(`Не указано имя массива`);
+    }
+    if (!arrays[arrayName]) {
+        logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: массив ${arrayName} не найден`);
+        highlightErrorBlock(block.id);
+        throw new Error(`Массив ${arrayName} не найден`);
+    }
+}
+
+function evaluateExpression(block) {
     if (block.type === "input") {
         const value = block.data.value;
         if (value === ""){
-            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не введено значение`);
+            logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: не введено значение`);
             highlightErrorBlock(block.id);
             throw new Error(`Не введено значение`);
         }
@@ -42,7 +56,7 @@ function EvaluateExpression(block) {
             return Number(value);
         }
 
-        const variableValue = GetVariable(value);
+        const variableValue = getVariable(value);
         if (variableValue !== undefined) {
             return variableValue;
         }
@@ -52,44 +66,44 @@ function EvaluateExpression(block) {
 
     else if (block.type === "add") {
         validateOperands(block);
-        const leftBlock=GetBlockById(block.data.left);
-        const rightBlock=GetBlockById(block.data.right);
+        const leftBlock=getBlockById(block.data.left);
+        const rightBlock=getBlockById(block.data.right);
 
-        const leftValue = EvaluateExpression(leftBlock);
-        const rightValue = EvaluateExpression(rightBlock);
+        const leftValue = evaluateExpression(leftBlock);
+        const rightValue = evaluateExpression(rightBlock);
         return leftValue + rightValue;
     }
 
     else if (block.type === "subtract") {
         validateOperands(block);
-        const leftBlock=GetBlockById(block.data.left);
-        const rightBlock=GetBlockById(block.data.right);
+        const leftBlock=getBlockById(block.data.left);
+        const rightBlock=getBlockById(block.data.right);
 
-        const leftValue = EvaluateExpression(leftBlock);
-        const rightValue = EvaluateExpression(rightBlock);
+        const leftValue = evaluateExpression(leftBlock);
+        const rightValue = evaluateExpression(rightBlock);
         return leftValue - rightValue;
     }
 
     else if (block.type === "multiply") {
         validateOperands(block);
-        const leftBlock=GetBlockById(block.data.left);
-        const rightBlock=GetBlockById(block.data.right);
+        const leftBlock=getBlockById(block.data.left);
+        const rightBlock=getBlockById(block.data.right);
 
-        const leftValue = EvaluateExpression(leftBlock);
-        const rightValue = EvaluateExpression(rightBlock);
+        const leftValue = evaluateExpression(leftBlock);
+        const rightValue = evaluateExpression(rightBlock);
         return leftValue * rightValue;
     }
 
     else if (block.type === "div") {
         validateOperands(block);
-        const leftBlock=GetBlockById(block.data.left);
-        const rightBlock=GetBlockById(block.data.right);
+        const leftBlock=getBlockById(block.data.left);
+        const rightBlock=getBlockById(block.data.right);
 
-        const leftValue = EvaluateExpression(leftBlock);
-        const rightValue = EvaluateExpression(rightBlock);
+        const leftValue = evaluateExpression(leftBlock);
+        const rightValue = evaluateExpression(rightBlock);
 
         if (rightValue === 0) {
-            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: деление на 0`);
+            logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: деление на 0`);
             highlightErrorBlock(block.id);
             throw new Error(`Деление на 0`);
         }
@@ -99,14 +113,14 @@ function EvaluateExpression(block) {
 
     else if (block.type === "mod") {
         validateOperands(block);
-        const leftBlock=GetBlockById(block.data.left);
-        const rightBlock=GetBlockById(block.data.right);
+        const leftBlock=getBlockById(block.data.left);
+        const rightBlock=getBlockById(block.data.right);
 
-        const leftValue = EvaluateExpression(leftBlock);
-        const rightValue = EvaluateExpression(rightBlock);
+        const leftValue = evaluateExpression(leftBlock);
+        const rightValue = evaluateExpression(rightBlock);
 
         if (rightValue === 0) {
-            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: деление на 0`);
+            logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: деление на 0`);
             highlightErrorBlock(block.id);
             throw new Error(`Деление на 0`);
         }
@@ -114,199 +128,179 @@ function EvaluateExpression(block) {
         return leftValue % rightValue;
     }
     else if (["gt", "lt", "eq", "neq", "gte", "lte", "and", "or", "not"].includes(block.type)) {
-        return EvaluateCondition(block);
+        return evaluateCondition(block);
     }
     else if (block.type === "arrayGet") {
-        const arrayName = block.data.name;
-        if (arrayName === "") {
-            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя массива`);
-            highlightErrorBlock(block.id);
-            throw new Error(`Не указано имя массива`);
-        }
-        if (!arrays[arrayName]) {
-            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: массив ${arrayName} не найден`);
-            highlightErrorBlock(block.id);
-            throw new Error(`Массив ${arrayName} не найден`);
-        }
+        validateArrays(block);
         if (block.data.index === null) {
-            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указан индекс для чтения из массива`);
+            logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: не указан индекс для чтения из массива`);
             highlightErrorBlock(block.id);
-            throw new Error(`Не указан индекс для записи в массив`);
+            throw new Error(`Не указан индекс для чтения из массива`);
         }
 
-        const indexBlock = GetBlockById(block.data.index);
-        const index = EvaluateExpression(indexBlock);
+        const indexBlock = getBlockById(block.data.index);
+        const index = evaluateExpression(indexBlock);
 
         if (!Number.isInteger(index)) {
-            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: индекс должен быть целым числом`);
+            logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: индекс должен быть целым числом`);
             highlightErrorBlock(block.id);
             throw new Error(`Индекс должен быть целым числом`);
         }
-        if (index < 0 || index >= arrays[arrayName].length) {
-            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: индекс вне границ массива`);
+        if (index < 0 || index >= arrays[block.data.name].length) {
+            logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: индекс вне границ массива`);
             highlightErrorBlock(block.id);
             throw new Error(`Индекс вне границ массива`);
         }
-        return arrays[arrayName][index];
+        return arrays[block.data.name][index];
     }
     else if (block.type === "arrayLength") {
-        const arrayName = block.data.name;
-        if (arrayName === "") {
-            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя массива`);
-            highlightErrorBlock(block.id);
-            throw new Error(`Не указано имя массива`);
-        }
-        if (!arrays[arrayName]) {
-            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: массив ${arrayName} не найден`);
-            highlightErrorBlock(block.id);
-            throw new Error(`Массив ${arrayName} не найден`);
-        }
-        return arrays[arrayName].length;
+        validateArrays(block);
+        return arrays[block.data.name].length;
     }
 }
 
-function EvaluateCondition(block) {
+function evaluateCondition(block) {
     if (block.type === "gt") {
         validateOperands(block);
-        const leftBlock=GetBlockById(block.data.left);
-        const rightBlock=GetBlockById(block.data.right);
+        const leftBlock=getBlockById(block.data.left);
+        const rightBlock=getBlockById(block.data.right);
 
-        const leftValue = EvaluateExpression(leftBlock);
-        const rightValue = EvaluateExpression(rightBlock);
+        const leftValue = evaluateExpression(leftBlock);
+        const rightValue = evaluateExpression(rightBlock);
         return leftValue > rightValue;
     }
 
     else if (block.type === "lt") {
         validateOperands(block);
-        const leftBlock=GetBlockById(block.data.left);
-        const rightBlock=GetBlockById(block.data.right);
+        const leftBlock=getBlockById(block.data.left);
+        const rightBlock=getBlockById(block.data.right);
 
-        const leftValue = EvaluateExpression(leftBlock);
-        const rightValue = EvaluateExpression(rightBlock);
+        const leftValue = evaluateExpression(leftBlock);
+        const rightValue = evaluateExpression(rightBlock);
         return leftValue < rightValue;
     }
 
     else if (block.type === "eq") {
         validateOperands(block);
-        const leftBlock=GetBlockById(block.data.left);
-        const rightBlock=GetBlockById(block.data.right);
+        const leftBlock=getBlockById(block.data.left);
+        const rightBlock=getBlockById(block.data.right);
 
-        const leftValue = EvaluateExpression(leftBlock);
-        const rightValue = EvaluateExpression(rightBlock);
+        const leftValue = evaluateExpression(leftBlock);
+        const rightValue = evaluateExpression(rightBlock);
         return leftValue === rightValue;
     }
 
     else if (block.type === "neq") {
         validateOperands(block);
-        const leftBlock=GetBlockById(block.data.left);
-        const rightBlock=GetBlockById(block.data.right);
+        const leftBlock=getBlockById(block.data.left);
+        const rightBlock=getBlockById(block.data.right);
 
-        const leftValue = EvaluateExpression(leftBlock);
-        const rightValue = EvaluateExpression(rightBlock);
+        const leftValue = evaluateExpression(leftBlock);
+        const rightValue = evaluateExpression(rightBlock);
         return leftValue !== rightValue;
     }
 
     else if (block.type === "gte") {
         validateOperands(block);
-        const leftBlock=GetBlockById(block.data.left);
-        const rightBlock=GetBlockById(block.data.right);
+        const leftBlock=getBlockById(block.data.left);
+        const rightBlock=getBlockById(block.data.right);
 
-        const leftValue = EvaluateExpression(leftBlock);
-        const rightValue = EvaluateExpression(rightBlock);
+        const leftValue = evaluateExpression(leftBlock);
+        const rightValue = evaluateExpression(rightBlock);
         return leftValue >= rightValue;
     }
 
     else if (block.type === "lte") {
         validateOperands(block);
-        const leftBlock=GetBlockById(block.data.left);
-        const rightBlock=GetBlockById(block.data.right);
+        const leftBlock=getBlockById(block.data.left);
+        const rightBlock=getBlockById(block.data.right);
 
-        const leftValue = EvaluateExpression(leftBlock);
-        const rightValue = EvaluateExpression(rightBlock);
+        const leftValue = evaluateExpression(leftBlock);
+        const rightValue = evaluateExpression(rightBlock);
         return leftValue <= rightValue;
     }
 
     else if (block.type === "and") {
         validateOperands(block);
-        const leftBlock=GetBlockById(block.data.left);
-        const rightBlock=GetBlockById(block.data.right);
+        const leftBlock=getBlockById(block.data.left);
+        const rightBlock=getBlockById(block.data.right);
 
-        const leftValue = EvaluateExpression(leftBlock);
-        const rightValue = EvaluateExpression(rightBlock);
+        const leftValue = evaluateExpression(leftBlock);
+        const rightValue = evaluateExpression(rightBlock);
         return leftValue && rightValue;
     }
 
     else if (block.type === "or") {
         validateOperands(block);
-        const leftBlock=GetBlockById(block.data.left);
-        const rightBlock=GetBlockById(block.data.right);
+        const leftBlock=getBlockById(block.data.left);
+        const rightBlock=getBlockById(block.data.right);
 
-        const leftValue = EvaluateExpression(leftBlock);
-        const rightValue = EvaluateExpression(rightBlock);
+        const leftValue = evaluateExpression(leftBlock);
+        const rightValue = evaluateExpression(rightBlock);
         return leftValue || rightValue;
     }
 
     else if (block.type === "not") {
         if (block.data.operand === null) {
-            LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: операнд не заполнен`);
+            logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: операнд не заполнен`);
             highlightErrorBlock(block.id);
             throw new Error(`Операнд не заполнен`);
         }
-        const operandBlock =GetBlockById(block.data.operand);
-        const operandValue = EvaluateCondition(operandBlock);
+        const operandBlock =getBlockById(block.data.operand);
+        const operandValue = evaluateCondition(operandBlock);
         return !operandValue;
     }
 }
 
-function ExecuteBlock(block) {
+function executeBlock(block) {
     if (!block) return;
 
     switch (block.type) {
         case "variableInit":
             if (block.data.name === ""){
-                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя переменной`);
+                logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: не указано имя переменной`);
                 highlightErrorBlock(block.id);
                 throw new Error(`Не указано имя переменной`);
             }
-            SetVariable(block.data.name, block.data.value);
+            setVariable(block.data.name, block.data.value);
             break;
         case "assignValue":
             if (block.data.variable === ""){
-                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя переменной`);
+                logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: не указано имя переменной`);
                 highlightErrorBlock(block.id);
                 throw new Error(`Не указано имя переменной`);
             }
             if (block.data.value === null) {
-                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не заполнено значение для присваивания`);
+                logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: не заполнено значение для присваивания`);
                 highlightErrorBlock(block.id);
                 throw new Error(`Не заполнено значение для присваивания`);
             }
-            const valueBlock=GetBlockById(block.data.value);
-            const value = EvaluateExpression(valueBlock);
-            SetVariable(block.data.variable, value);
+            const valueBlock=getBlockById(block.data.value);
+            const value = evaluateExpression(valueBlock);
+            setVariable(block.data.variable, value);
             break;
         case "if":
             validateCondition(block);
-            if (EvaluateCondition(GetBlockById(block.data.condition))) {
+            if (evaluateCondition(getBlockById(block.data.condition))) {
                 block.data.thenBlocks.forEach(id =>{
-                    const childBlock = GetBlockById(id);
-                    if (childBlock) ExecuteBlock(childBlock);
+                    const childBlock = getBlockById(id);
+                    if (childBlock) executeBlock(childBlock);
                 });
             }
             break;
         case "if-else":
             validateCondition(block);
 
-            if (EvaluateCondition(GetBlockById(block.data.condition))) {
+            if (evaluateCondition(getBlockById(block.data.condition))) {
                 block.data.thenBlocks.forEach(id =>{
-                    const childBlock = GetBlockById(id);
-                    if (childBlock) ExecuteBlock(childBlock);
+                    const childBlock = getBlockById(id);
+                    if (childBlock) executeBlock(childBlock);
                 });
             }
             else {
                 block.data.elseBlocks.forEach(id =>{
-                    const childBlock = GetBlockById(id);
-                    if (childBlock) ExecuteBlock(childBlock);
+                    const childBlock = getBlockById(id);
+                    if (childBlock) executeBlock(childBlock);
                 });
             }
             break;
@@ -315,87 +309,77 @@ function ExecuteBlock(block) {
 
             let iterations = 0;
             const MAX_ITERATIONS = 10000;
-            while (EvaluateCondition(GetBlockById(block.data.condition))) {
+            while (evaluateCondition(getBlockById(block.data.condition))) {
                 iterations ++;
                 if (iterations > MAX_ITERATIONS) {
-                    LogToOutputPanel(`Превышен лимит итераций в блоке ${GetBlockName(block)}`);
+                    logToOutputPanel(`Превышен лимит итераций в блоке ${getBlockName(block)}`);
                     highlightErrorBlock(block.id);
                     throw new Error(`Превышен лимит итераций`);
                 }
                 block.data.bodyBlocks.forEach(id =>{
-                    const childBlock = GetBlockById(id);
-                    if (childBlock) ExecuteBlock(childBlock);
+                    const childBlock = getBlockById(id);
+                    if (childBlock) executeBlock(childBlock);
                 });
             }
             break;
         case "print": {
             if (block.data.value === null){
-                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не задано значение для вывода`);
+                logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: не задано значение для вывода`);
                 highlightErrorBlock(block.id);
                 throw new Error(`Не задано значение для вывода`);
             }
-            const value = EvaluateExpression(GetBlockById(block.data.value));
-            LogToOutputPanel(String(value));
+            const value = evaluateExpression(getBlockById(block.data.value));
+            logToOutputPanel(String(value));
             break;
         }
         case "arrayDeclare":
             if (block.data.name === ""){
-                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя массива`);
+                logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: не указано имя массива`);
                 highlightErrorBlock(block.id);
                 throw new Error(`Не указано имя массива`);
             }
             const size = Number(block.data.size);
             if (size <= 0 || isNaN(size)) {
-                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не корректный размер массива`);
+                logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: не корректный размер массива`);
                 highlightErrorBlock(block.id);
                 throw new Error(`Не корректный размер массива`);
             }
             arrays[block.data.name] = new Array(size).fill(0);
             break;
         case "arrayAssignByIndex":
-            const arrayName = block.data.name;
-            if (arrayName === "") {
-                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указано имя массива`);
-                highlightErrorBlock(block.id);
-                throw new Error(`Не указано имя массива`);
-            }
-            if (!arrays[arrayName]) {
-                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: массив ${arrayName} не найден`);
-                highlightErrorBlock(block.id);
-                throw new Error(`Массив ${arrayName} не найден`);
-            }
+            validateArrays(block);
             if (block.data.index === null) {
-                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: не указан индекс для записи в массив`);
+                logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: не указан индекс для записи в массив`);
                 highlightErrorBlock(block.id);
                 throw new Error(`Не указан индекс для записи в массив`);
             }
-            const index = EvaluateExpression(GetBlockById(block.data.index));
+            const index = evaluateExpression(getBlockById(block.data.index));
             if (!Number.isInteger(index)) {
-                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: индекс должен быть целым числом`);
+                logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: индекс должен быть целым числом`);
                 highlightErrorBlock(block.id);
                 throw new Error(`Индекс должен быть целым числом`);
             }
-            if (index < 0 || index >= arrays[arrayName].length) {
-                LogToOutputPanel(`Ошибка в блоке ${GetBlockName(block)}: индекс вне границ массива`);
+            if (index < 0 || index >= arrays[block.data.name].length) {
+                logToOutputPanel(`Ошибка в блоке ${getBlockName(block)}: индекс вне границ массива`);
                 highlightErrorBlock(block.id);
                 throw new Error(`Индекс вне границ массива`);
             }
-            arrays[arrayName][index] = EvaluateExpression(GetBlockById(block.data.value));
+            arrays[block.data.name][index] = evaluateExpression(getBlockById(block.data.value));
             break;
     }
 }
 
-function RunProgram(){
+function runProgram(){
     document.querySelectorAll('.block-error').forEach((block) => {
         block.classList.remove('block-error');
     });
 
-    ClearOutputPanel();
+    clearOutputPanel();
 
     try {
         const startBlock = blocksInWorkSpace.find(b => b.type === "start");
         if (!startBlock) {
-            LogToOutputPanel("Нет стартового блока!");
+            logToOutputPanel("Нет стартового блока!");
             return;
         }
 
@@ -405,14 +389,14 @@ function RunProgram(){
         let currentBlockId = startBlock.next;
 
         while (currentBlockId) {
-            const currentBlock = GetBlockById(currentBlockId);
+            const currentBlock = getBlockById(currentBlockId);
             if (!currentBlock) return;
 
-            ExecuteBlock(currentBlock);
+            executeBlock(currentBlock);
             currentBlockId = currentBlock.next;
         }
     }
     catch (error){
-        LogToOutputPanel(`Программа завершена с ошибкой!`);
+        logToOutputPanel(`Программа завершена с ошибкой!`);
     }
 }

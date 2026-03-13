@@ -5,7 +5,7 @@ function setupDraggable(element) {
         onstart: function(e) {
             const target = e.target;
             const blockId = parseInt(e.target.dataset.id);
-            const block = GetBlockById(blockId);
+            const block = getBlockById(blockId);
             if (!block) return;
 
             isDragging = true;
@@ -18,15 +18,15 @@ function setupDraggable(element) {
 
             if (block.parent !== null || block.previous !== null) {
                 if(block.parent !== null){
-                    const parent = GetBlockById(block.parent);
+                    const parent = getBlockById(block.parent);
                     if (parent) {
                         if (parent.data.thenBlocks?.includes(blockId) ||
                             parent.data.elseBlocks?.includes(blockId) ||
                         parent.data.bodyBlocks?.includes(blockId) ){
-                            RemoveFromBody(block.parent, blockId);
+                            removeFromBody(block.parent, blockId);
                         }
                     else{
-                            DisconnectFromSlot(blockId);
+                            disconnectFromSlot(blockId);
                         }
                     }
                 }
@@ -50,7 +50,7 @@ function setupDraggable(element) {
             if (!isDragging) return;
             const target = e.target;
             const blockId = parseInt(target.dataset.id);
-            const block = GetBlockById(blockId);
+            const block = getBlockById(blockId);
 
             block.position.x += e.dx;
             block.position.y += e.dy;
@@ -63,7 +63,7 @@ function setupDraggable(element) {
 
             const blockId = parseInt(e.target.dataset.id);
             checkForConnection(blockId, e);
-            SaveBlocksToStorage();
+            saveBlocksToStorage();
             renderAllBlocks(blocksInWorkSpace);
         }
     });

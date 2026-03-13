@@ -1,6 +1,6 @@
 function connectToSlot(parentId, childId, slotName) {
-    const parent = GetBlockById(parentId);
-    const child = GetBlockById(childId);
+    const parent = getBlockById(parentId);
+    const child = getBlockById(childId);
     if (!parent || !child) return;
 
     parent.data[slotName] = childId;
@@ -15,15 +15,15 @@ function connectToSlot(parentId, childId, slotName) {
             height: rect.height
         };
     }
-    SaveBlocksToStorage();
+    saveBlocksToStorage();
 }
 
 function connectToBodySlot(parentId, childId, slotName) {
-    const parent = GetBlockById(parentId);
-    const child = GetBlockById(childId);
+    const parent = getBlockById(parentId);
+    const child = getBlockById(childId);
     if (!parent || !child) return;
 
-    AddToBody(parentId, childId, slotName);
+    addToBody(parentId, childId, slotName);
 
     const childElement = document.querySelector(`[data-id="${childId}"]`);
     if (childElement) {
@@ -34,7 +34,7 @@ function connectToBodySlot(parentId, childId, slotName) {
             height: rect.height
         };
     }
-    SaveBlocksToStorage();
+    saveBlocksToStorage();
 }
 
 function findSlotByPosition(containerId, movedBlockId, slotName) {

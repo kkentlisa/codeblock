@@ -8,33 +8,33 @@ function canConnect(previousBlock, nextBlock) {
 }
 
 function connectBlocks(previousId, nextId) {
-    const previous = GetBlockById(previousId);
-    const next = GetBlockById(nextId);
+    const previous = getBlockById(previousId);
+    const next = getBlockById(nextId);
 
     if (!previous || !next) return;
     if (!canConnect(previous, next)) return;
 
     previous.next = nextId;
     next.previous = previousId;
-    SaveBlocksToStorage();
+    saveBlocksToStorage();
 }
 
 function disconnectBlock(blockId) {
-    const block = GetBlockById(blockId);
+    const block = getBlockById(blockId);
     if (!block) return;
 
     if (block.previous !== null) {
-        const previousBlock = GetBlockById(block.previous);
+        const previousBlock = getBlockById(block.previous);
         if (previousBlock) {
             previousBlock.next = null;
         }
         block.previous = null;
-        SaveBlocksToStorage();
+        saveBlocksToStorage();
     }
 }
 
 function checkForConnection(movedBlockId, e) {
-    const movedBlock = GetBlockById(movedBlockId);
+    const movedBlock = getBlockById(movedBlockId);
     if (!movedBlock) return;
 
     const movedElement = document.querySelector(`[data-id="${movedBlockId}"]`);
@@ -59,7 +59,7 @@ function checkForConnection(movedBlockId, e) {
                 }
                 else if (slotName === 'condition') {
                     const BOOLEAN_BLOCKS = ['gt', 'lt', 'eq', 'neq', 'gte', 'lte', 'and', 'or', 'not'];
-                    if (IsSlotFree(otherBlock.id, slotName) && BOOLEAN_BLOCKS.includes(movedBlock.type)) {
+                    if (isSlotFree(otherBlock.id, slotName) && BOOLEAN_BLOCKS.includes(movedBlock.type)) {
                         connectToSlot(otherBlock.id, movedBlock.id, slotName);
                         return;
                     }
@@ -68,7 +68,7 @@ function checkForConnection(movedBlockId, e) {
                     }
                 }
                 else {
-                    if (IsSlotFree(otherBlock.id, slotName) && VALUE_BLOCKS.includes(movedBlock.type)) {
+                    if (isSlotFree(otherBlock.id, slotName) && VALUE_BLOCKS.includes(movedBlock.type)) {
                         connectToSlot(otherBlock.id, movedBlock.id, slotName);
                         return;
                     }
