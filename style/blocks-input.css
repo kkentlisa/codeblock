@@ -1,26 +1,29 @@
 .blocks-input{
     display: inline-block;
     background-color: white;
-    border: 1px solid #1a1a1a;
-    border-radius: 15px;
+    border: 0.1vh solid #1a1a1a;
+    border-radius: 1.5vh;
     color: #222323;
-    font-size: 10px;
+    font-size: 1.3vh;
     font-family: monospace;
-    margin: 3px 0 3px 5px;
-    padding: 4px;
+    margin: 0.3vh 0 0.3vh 0.5vh;
+    padding: 0.5vh;
     width: fit-content;
-    min-width: 50px;
+    min-width: 5vh;
     height: fit-content;
-    min-height: 20px;
+    min-height: 2vh;
 }
 .blocks-input:empty:before {
     content: attr(data-placeholder);
     background-color: transparent;
     color: dimgray;
 }
+.blocks-input:hover{
+    cursor: text;
+}
 .block-text{
     background-color: transparent;
-    padding: 2px;
+    padding: 0.2vh;
     position: relative;
     display: flex;
     flex-direction: row;
@@ -29,7 +32,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 5px;
+    gap: 0.5vh;
     flex-wrap: wrap;
     background-color: transparent;
 }
@@ -54,13 +57,13 @@
     display: flex;
     flex-direction: row;
     width: min-content;
-    min-width: 30px;
+    min-width: 3vw;
     height: min-content;
-    min-height: 25px;
+    min-height: 2.5vh;
     background-color: white;
     align-items: center;
-    border: 1px solid #1a1a1a;
-    border-radius: 16px;
+    border: 0.1vh solid #1a1a1a;
+    border-radius: 1.6vh;
     transition: all 0.2s ease;
 }
 .slot-then,
@@ -92,8 +95,9 @@
 .slot-placeholder{
     background-color: transparent;
     color: dimgray;
-    font-size: 10px;
+    font-size: 1.5vh;
     font-family: monospace;
+    margin: 0.5vh 0.5vh;
 }
 .blocks-input:hover,
 .slot-left:hover,
@@ -103,5 +107,5 @@
 .slot-condition:hover,
 .slot-index:hover,
 .slot-then:hover{
-    border-width: 2px;
+    border-width: 0.2vh;
 }
